@@ -12,8 +12,14 @@ using namespace Poco::Net;
 using namespace Poco::Util;
 
 class RequestHandlerFactory: public HTTPRequestHandlerFactory {
-    HTTPRequestHandler *createRequestHandler(const HTTPServerRequest &request) override {
-        return new PingRequestHandler();
+    HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request) override {
+        if (request.getURI() == "/user/register") {
+            return new RegisterUserRequestHandler();
+        } else if (request.getURI() == "/user/authorize") {
+            return new AuthorizeUserRequestHandler();
+        } else {
+            return new PingRequestHandler();
+        }
     }
 };
 
@@ -31,11 +37,17 @@ class WebServerApp: public ServerApplication
         auto* params = new HTTPServerParams;
         params->setMaxQueued(100);
         params->setMaxThreads(16);
+
+        SessionPoolManager::setConfigPath("config.properties");
+        if (!connectedToDatabase()) {
+            return Application::EXIT_DATAERR;
+        }
+
         HTTPServer srv(new RequestHandlerFactory, port, params);
         srv.start();
         logger().information("HTTP Server started on port %hu.", port);
         waitForTerminationRequest();
-        logger().information("Stopping HTTP Server...");
+        logger().information("Stopping HTTP server...");
         srv.stop();
 
         return Application::EXIT_OK;
