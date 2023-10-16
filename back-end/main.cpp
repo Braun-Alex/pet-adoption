@@ -1,4 +1,6 @@
 #include "handlers/pingRequestHandler.h"
+#include "handlers/registerRequestHandler.h"
+#include "handlers/authorizeRequestHandler.h"
 
 #include "Poco/Net/HTTPServer.h"
 #include "Poco/Net/HTTPRequestHandler.h"
@@ -6,6 +8,7 @@
 #include "Poco/Net/HTTPServerRequest.h"
 #include "Poco/Net/HTTPServerResponse.h"
 #include "Poco/Util/ServerApplication.h"
+#include "Poco/Net/SecureServerSocket.h"
 
 using namespace Poco;
 using namespace Poco::Net;
@@ -27,27 +30,47 @@ class WebServerApp: public ServerApplication
 {
     void initialize(Application& self) override
     {
+        initializeSSL();
         loadConfiguration();
         ServerApplication::initialize(self);
+    }
+
+    void uninitialize() override
+    {
+        uninitializeSSL();
+        ServerApplication::uninitialize();
     }
 
     int main(const std::vector<std::string>&) override
     {
         UInt16 port = static_cast<UInt16>(config().getUInt("port", 8080));
+
+        auto pContext = new Context(
+                Context::TLSV1_3_SERVER_USE,
+                "key.pem",
+                "certificate.pem",
+                "",
+                Context::VERIFY_ONCE,
+                9,
+                true
+        );
+
         auto* params = new HTTPServerParams;
-        params->setMaxQueued(100);
-        params->setMaxThreads(16);
+        params->setMaxQueued(MAX_SERVER_REQUEST_QUEUE_SIZE);
+        params->setMaxThreads(MAX_SERVER_THREAD_POOL_SIZE);
 
         SessionPoolManager::setConfigPath("config.properties");
         if (!connectedToDatabase()) {
             return Application::EXIT_DATAERR;
         }
 
-        HTTPServer srv(new RequestHandlerFactory, port, params);
+        SecureServerSocket svs(port, 64, pContext);
+        HTTPServer srv(new RequestHandlerFactory, svs, params);
+
         srv.start();
-        logger().information("HTTP Server started on port %hu.", port);
+        logger().information("HTTPS server started on port %hu.", port);
         waitForTerminationRequest();
-        logger().information("Stopping HTTP server...");
+        logger().information("Stopping HTTPS server...");
         srv.stop();
 
         return Application::EXIT_OK;

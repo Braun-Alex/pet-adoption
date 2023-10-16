@@ -1,8 +1,15 @@
 #include "initializers.h"
 
+using namespace Poco;
 using namespace Poco::Net;
 using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
+
+std::string hashData(const std::string& data) {
+    Poco::Crypto::DigestEngine engine("SHA256");
+    engine.update(data);
+    return Crypto::DigestEngine::digestToHex(engine.digest());
+}
 
 void setHeaderResponse(HTTPServerResponse& response) {
     response.setChunkedTransferEncoding(true);
