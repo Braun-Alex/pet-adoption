@@ -1,6 +1,6 @@
-#include "handlers/pingRequestHandler.h"
-#include "handlers/registerRequestHandler.h"
-#include "handlers/authorizeRequestHandler.h"
+#include "handlers/pingRequestHandler/pingRequestHandler.h"
+#include "handlers/registerRequestHandler/registerRequestHandler.h"
+#include "handlers/authorizeRequestHandler/authorizeRequestHandler.h"
 
 #include "Poco/Net/HTTPServer.h"
 #include "Poco/Net/HTTPRequestHandler.h"
@@ -57,7 +57,7 @@ class WebServerApp: public ServerApplication
 
         auto* params = new HTTPServerParams;
         params->setMaxQueued(MAX_SERVER_REQUEST_QUEUE_SIZE);
-        params->setMaxThreads(MAX_SERVER_THREAD_POOL_SIZE);
+        params->setMaxThreads(static_cast<int>(std::thread::hardware_concurrency()));
 
         SessionPoolManager::setConfigPath("config.properties");
         if (!connectedToDatabase()) {
