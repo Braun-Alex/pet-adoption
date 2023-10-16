@@ -3,12 +3,17 @@ project(server)
 
 set(CMAKE_CXX_STANDARD 23)
 set(HEADERS handlers/pingRequestHandler.h
+            handlers/registerRequestHandler.h
+            handlers/authorizeRequestHandler.h
             handlers/orm/user/User.h
             handlers/initializers/initializers.h
 )
-set(SOURCES handlers/pingRequestHandler.cpp main.cpp
+set(SOURCES handlers/pingRequestHandler.cpp
+            handlers/registerRequestHandler.cpp
+            handlers/authorizeRequestHandler.cpp
             handlers/orm/user/User.cpp
             handlers/initializers/initializers.cpp
+            main.cpp
 )
 
 include(FetchContent)
@@ -19,5 +24,6 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Poco)
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} PUBLIC Foundation Crypto Net Util
+
+target_link_libraries(${PROJECT_NAME} PUBLIC Foundation Crypto Net NetSSL Util
         JSON ActiveRecord DataPostgreSQL)
