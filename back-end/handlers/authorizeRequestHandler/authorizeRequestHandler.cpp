@@ -25,14 +25,10 @@ void AuthorizeUserRequestHandler::handleRequest(HTTPServerRequest& request,
         Poco::Data::Session session = getSessionPoolManager().getPool().get();
         Context::Ptr pContext = new Context(session);
         User::Ptr pUser = User::find(pContext, hashData(userEmail->second));
-        if (!pUser) {
-            response.setStatus(HTTPResponse::HTTP_UNAUTHORIZED);
+        if (pUser && pUser->password() == hashData(userPassword->second + pUser->salt())) {
+            response.setStatus(HTTPResponse::HTTP_OK);
         } else {
-            if (pUser->password() == hashData(userPassword->second + pUser->salt())) {
-                response.setStatus(HTTPResponse::HTTP_OK);
-            } else {
-                response.setStatus(HTTPResponse::HTTP_UNAUTHORIZED);
-            }
+            response.setStatus(HTTPResponse::HTTP_UNAUTHORIZED);
         }
     }
 
