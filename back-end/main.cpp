@@ -10,20 +10,27 @@
 #include "Poco/Util/ServerApplication.h"
 #include "Poco/Net/SecureServerSocket.h"
 
+#include <unordered_map>
+
 using namespace Poco;
 using namespace Poco::Net;
 using namespace Poco::Util;
 
 class RequestHandlerFactory: public HTTPRequestHandlerFactory {
-    HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request) override {
-        if (request.getURI() == "/user/register") {
-            return new RegisterUserRequestHandler();
-        } else if (request.getURI() == "/user/authorize") {
-            return new AuthorizeUserRequestHandler();
-        } else {
-            return new PingRequestHandler();
-        }
+public:
+    RequestHandlerFactory() {
+        handlers["/user/register"] = []() -> HTTPRequestHandler* { return new RegisterUserRequestHandler(); };
+        handlers["/user/register"] = []() -> HTTPRequestHandler* { return new AuthorizeUserRequestHandler(); };
     }
+    HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request) override {
+        auto handler = handlers.find(request.getURI());
+        if (handler != handlers.end()) {
+            return handler->second();
+        }
+        return new PingRequestHandler();
+    }
+private:
+    std::unordered_map<std::string, std::function<HTTPRequestHandler*()>> handlers;
 };
 
 class WebServerApp: public ServerApplication
