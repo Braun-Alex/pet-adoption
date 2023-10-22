@@ -20,7 +20,7 @@ class RequestHandlerFactory: public HTTPRequestHandlerFactory {
 public:
     RequestHandlerFactory() {
         handlers["/user/register"] = []() -> HTTPRequestHandler* { return new RegisterUserRequestHandler(); };
-        handlers["/user/register"] = []() -> HTTPRequestHandler* { return new AuthorizeUserRequestHandler(); };
+        handlers["/user/authorize"] = []() -> HTTPRequestHandler* { return new AuthorizeUserRequestHandler(); };
     }
     HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request) override {
         auto handler = handlers.find(request.getURI());
