@@ -2,13 +2,11 @@
 
 using namespace Poco::Net;
 using namespace Poco::Util;
-using namespace Poco::Data::Keywords;
 using namespace DatabaseSystem;
-using Poco::ActiveRecord::Context;
 
 void AuthorizeUserRequestHandler::handleRequest(HTTPServerRequest& request,
                                                 HTTPServerResponse& response) {
-    Application &app = Application::instance();
+    Application& app = Application::instance();
     const std::string &clientAddress = request.clientAddress().toString();
     app.logger().information("Request \"Sign in user\" from %s", clientAddress);
 
@@ -22,10 +20,8 @@ void AuthorizeUserRequestHandler::handleRequest(HTTPServerRequest& request,
     if (userEmail == form.end() || userPassword == form.end()) {
         response.setStatus(HTTPResponse::HTTP_BAD_REQUEST);
     } else {
-        Poco::Data::Session session = getSessionPoolManager().getPool().get();
-        Context::Ptr pContext = new Context(session);
-        User::Ptr pUser = User::find(pContext, hashData(userEmail->second));
-        if (pUser && pUser->password() == hashData(userPassword->second + pUser->salt())) {
+        AuthService service(userEmail->second, userPassword->second);
+        if (service.authorizeUser()) {
             response.setStatus(HTTPResponse::HTTP_OK);
         } else {
             response.setStatus(HTTPResponse::HTTP_UNAUTHORIZED);
