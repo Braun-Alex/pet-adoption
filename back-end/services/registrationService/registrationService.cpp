@@ -14,14 +14,13 @@ bool RegistrationService::registerUser() {
         User::Ptr pUser = User::find(pContext, hashData(_email));
         if (pUser) {
             return false;
-        } else {
-            std::string salt = generateSalt();
-            pUser = new User(hashData(_email));
-            pUser->password(hashData(_password + salt));
-            pUser->salt(salt);
-            pUser->create(pContext);
-            return true;
         }
+        std::string salt = generateSalt();
+        pUser = new User(hashData(_email));
+        pUser->password(hashData(_password + salt));
+        pUser->salt(salt);
+        pUser->create(pContext);
+        return true;
     } catch (const Exception& exception) {
         Application::instance().logger().error(exception.displayText());
         return false;

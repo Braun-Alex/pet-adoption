@@ -14,9 +14,8 @@ bool AuthService::authorizeUser() {
         User::Ptr pUser = User::find(pContext, hashData(_email));
         if (pUser && pUser->password() == hashData(_password + pUser->salt())) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     } catch (const Exception& exception) {
         Application::instance().logger().error(exception.displayText());
         return false;
