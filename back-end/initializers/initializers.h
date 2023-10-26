@@ -13,16 +13,19 @@
 #include "Poco/SingletonHolder.h"
 
 #include <thread>
+#include <random>
 
 using namespace Poco::Net;
 using namespace Poco::Data;
 
-const int SALT_SIZE = 32,
+const int SALT_LENGTH = 32,
           MAX_SERVER_REQUEST_QUEUE_SIZE = 300;
 
 const std::string CHARSET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 std::string hashData(const std::string& data);
+
+std::string generateSalt();
 
 void setHeaderResponse(HTTPServerResponse& response);
 

@@ -5,12 +5,16 @@ set(CMAKE_CXX_STANDARD 23)
 set(HEADERS handlers/pingRequestHandler/pingRequestHandler.h
         handlers/registerRequestHandler/registerRequestHandler.h
         handlers/authorizeRequestHandler/authorizeRequestHandler.h
+        services/registrationService/registrationService.h
+        services/authService/authService.h
         orm/user/User.h
         initializers/initializers.h
 )
 set(SOURCES handlers/pingRequestHandler/pingRequestHandler.cpp
         handlers/registerRequestHandler/registerRequestHandler.cpp
         handlers/authorizeRequestHandler/authorizeRequestHandler.cpp
+        services/registrationService/registrationService.cpp
+        services/authService/authService.cpp
         orm/user/User.cpp
         initializers/initializers.cpp
         main.cpp
