@@ -1,8 +1,8 @@
 #include "pingRequestHandler.h"
 #include "../../services/tokenService/tokenService.h"
+#include "../../services/cipherService/cipherService.h"
 
 #include "Poco/JWT/Token.h"
-#include "Poco/JWT/Serializer.h"
 
 using namespace Poco::Net;
 using namespace Poco::Util;
@@ -29,6 +29,10 @@ void PingRequestHandler::handleRequest(HTTPServerRequest& request,
         result.set("Refresh token", refreshToken);
         result.set("Verifying access token", TokenService::verifyToken(accessToken));
         result.set("Verifying refresh token", TokenService::verifyToken(refreshToken));
+        std::string nickname = "Alex_Braun";
+        std::string encryptedData = CipherService::encrypt(nickname, "AlAzazaAl123");
+        result.set("Encrypted nickname", encryptedData);
+        result.set("Decrypted nickname", CipherService::decrypt(encryptedData, "AlAzazaAl123"));
 
         std::ostream &answer = response.send();
         result.stringify(answer);
