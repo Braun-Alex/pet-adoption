@@ -7,6 +7,7 @@ set(HEADERS handlers/pingRequestHandler/pingRequestHandler.h
         handlers/authorizeRequestHandler/authorizeRequestHandler.h
         services/registrationService/registrationService.h
         services/authService/authService.h
+        services/tokenService/tokenService.h
         orm/user/User.h
         initializers/initializers.h
 )
@@ -15,6 +16,7 @@ set(SOURCES handlers/pingRequestHandler/pingRequestHandler.cpp
         handlers/authorizeRequestHandler/authorizeRequestHandler.cpp
         services/registrationService/registrationService.cpp
         services/authService/authService.cpp
+        services/tokenService/tokenService.cpp
         orm/user/User.cpp
         initializers/initializers.cpp
         main.cpp
@@ -29,5 +31,5 @@ FetchContent_MakeAvailable(Poco)
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} PUBLIC Foundation Crypto Net NetSSL Util
+target_link_libraries(${PROJECT_NAME} PUBLIC Foundation Crypto Net NetSSL JWT Util
         JSON ActiveRecord DataPostgreSQL)

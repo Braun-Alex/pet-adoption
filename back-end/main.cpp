@@ -6,7 +6,6 @@
 #include "Poco/Net/HTTPRequestHandler.h"
 #include "Poco/Net/HTTPRequestHandlerFactory.h"
 #include "Poco/Net/HTTPServerRequest.h"
-#include "Poco/Net/HTTPServerResponse.h"
 #include "Poco/Util/ServerApplication.h"
 #include "Poco/Net/SecureServerSocket.h"
 
@@ -70,6 +69,9 @@ class WebServerApp: public ServerApplication
         if (!connectedToDatabase()) {
             return Application::EXIT_DATAERR;
         }
+
+        KeyManager::setPrivateKeyPath("serverPrivateKey.pem");
+        KeyManager::setPublicKeyPath("serverPublicKey.pem");
 
         SecureServerSocket svs(port, 64, pContext);
         HTTPServer srv(new RequestHandlerFactory, svs, params);
