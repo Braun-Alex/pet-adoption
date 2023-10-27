@@ -14,6 +14,7 @@ std::string CipherService::encrypt(const std::string& data, const std::string& p
         return encode(initializationVector + cipher->encryptString(data));
     } catch (const Exception& exception) {
         Application::instance().logger().error(exception.displayText());
+        return "";
     }
 }
 
@@ -28,6 +29,7 @@ std::string CipherService::decrypt(const std::string& data, const std::string& p
         return cipher->decryptString(encryptedData);
     } catch (const Exception& exception) {
         Application::instance().logger().error(exception.displayText());
+        return "";
     }
 }
 

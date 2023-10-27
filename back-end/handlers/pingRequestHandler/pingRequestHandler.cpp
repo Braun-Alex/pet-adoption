@@ -1,6 +1,5 @@
 #include "pingRequestHandler.h"
 #include "../../services/tokenService/tokenService.h"
-#include "../../services/cipherService/cipherService.h"
 
 #include "Poco/JWT/Token.h"
 
@@ -21,8 +20,6 @@ void PingRequestHandler::handleRequest(HTTPServerRequest& request,
         Poco::JSON::Object result;
         result.set("Your IP address", clientAddress);
         result.set("Your URI", request.getURI());
-        result.set("Private key", KeyManager::getPrivateKeyPath());
-        result.set("Public key", KeyManager::getPublicKeyPath());
         std::string accessToken = TokenService::generateAccessToken("lamanasakasa@gmail.com");
         result.set("Access token", accessToken);
         std::string refreshToken = TokenService::generateRefreshToken("lamanasakasa@gmail.com");
