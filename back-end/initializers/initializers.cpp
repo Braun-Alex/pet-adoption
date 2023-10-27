@@ -2,6 +2,7 @@
 
 using namespace Poco;
 using namespace Poco::Net;
+using namespace Poco::Util;
 using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 
@@ -69,3 +70,22 @@ SessionPoolManager& getSessionPoolManager() {
     static Poco::SingletonHolder<SessionPoolManager> sh;
     return *sh.get();
 }
+
+void KeyManager::setPrivateKeyPath(const std::string& privateKeyPath) {
+    _privateKeyPath = privateKeyPath;
+}
+
+void KeyManager::setPublicKeyPath(const std::string& publicKeyPath) {
+    _publicKeyPath = publicKeyPath;
+}
+
+const std::string& KeyManager::getPrivateKeyPath() {
+    return _privateKeyPath;
+}
+
+const std::string& KeyManager::getPublicKeyPath() {
+    return _publicKeyPath;
+}
+
+std::string KeyManager::_privateKeyPath;
+std::string KeyManager::_publicKeyPath;

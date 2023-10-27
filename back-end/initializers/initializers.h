@@ -6,11 +6,13 @@
 #include "Poco/Util/ServerApplication.h"
 #include "Poco/Crypto/DigestEngine.h"
 #include "Poco/Crypto/CryptoStream.h"
+#include <Poco/Crypto/ECKey.h>
 #include "Poco/Data/PostgreSQL/Connector.h"
 #include "Poco/Data/Session.h"
 #include "Poco/Data/SessionPool.h"
 #include "Poco/Util/PropertyFileConfiguration.h"
 #include "Poco/SingletonHolder.h"
+#include "Poco/FileStream.h"
 
 #include <thread>
 #include <random>
@@ -33,8 +35,8 @@ bool connectedToDatabase();
 
 class SessionPoolManager {
 public:
-    static void setConfigPath(const std::string& path);
     SessionPoolManager();
+    static void setConfigPath(const std::string& path);
     Poco::Data::SessionPool& getPool();
 
 private:
@@ -47,3 +49,16 @@ private:
 };
 
 SessionPoolManager& getSessionPoolManager();
+
+class KeyManager {
+public:
+    KeyManager() = default;
+    static void setPrivateKeyPath(const std::string& privateKeyPath);
+    static void setPublicKeyPath(const std::string& publicKeyPath);
+    static const std::string& getPrivateKeyPath();
+    static const std::string& getPublicKeyPath();
+
+private:
+    static std::string _privateKeyPath;
+    static std::string _publicKeyPath;
+};
