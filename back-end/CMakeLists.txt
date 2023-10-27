@@ -8,6 +8,7 @@ set(HEADERS handlers/pingRequestHandler/pingRequestHandler.h
         services/registrationService/registrationService.h
         services/authService/authService.h
         services/tokenService/tokenService.h
+        services/cipherService/cipherService.h
         orm/user/User.h
         initializers/initializers.h
 )
@@ -17,6 +18,7 @@ set(SOURCES handlers/pingRequestHandler/pingRequestHandler.cpp
         services/registrationService/registrationService.cpp
         services/authService/authService.cpp
         services/tokenService/tokenService.cpp
+        services/cipherService/cipherService.cpp
         orm/user/User.cpp
         initializers/initializers.cpp
         main.cpp

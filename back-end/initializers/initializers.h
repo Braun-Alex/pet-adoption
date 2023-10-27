@@ -6,10 +6,11 @@
 #include "Poco/Util/ServerApplication.h"
 #include "Poco/Crypto/DigestEngine.h"
 #include "Poco/Crypto/CryptoStream.h"
-#include <Poco/Crypto/ECKey.h>
+#include "Poco/Crypto/ECKey.h"
 #include "Poco/Data/PostgreSQL/Connector.h"
 #include "Poco/Data/Session.h"
 #include "Poco/Data/SessionPool.h"
+#include "Poco/JSON/Object.h"
 #include "Poco/Util/PropertyFileConfiguration.h"
 #include "Poco/SingletonHolder.h"
 #include "Poco/FileStream.h"
@@ -27,7 +28,7 @@ const std::string CHARSET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXY
 
 std::string hashData(const std::string& data);
 
-std::string generateSalt();
+std::string generateSalt(size_t length);
 
 void setHeaderResponse(HTTPServerResponse& response);
 

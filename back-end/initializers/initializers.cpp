@@ -12,13 +12,13 @@ std::string hashData(const std::string& data) {
     return Crypto::DigestEngine::digestToHex(engine.digest());
 }
 
-std::string generateSalt() {
+std::string generateSalt(size_t length) {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(0, 255);
     std::string salt;
-    salt.reserve(SALT_LENGTH);
-    for (size_t i = 0; i < SALT_LENGTH; ++i) {
+    salt.reserve(length);
+    for (size_t i = 0; i < length; ++i) {
         salt += CHARSET[dist(gen) % CHARSET.size()];
     }
     return salt;

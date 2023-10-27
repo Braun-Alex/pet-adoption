@@ -14,7 +14,6 @@ using namespace Poco;
 
 class TokenService {
 public:
-    TokenService() = default;
     static std::string generateAccessToken(const std::string& id);
     static std::string generateRefreshToken(const std::string& id);
 
