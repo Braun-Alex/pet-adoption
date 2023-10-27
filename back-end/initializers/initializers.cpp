@@ -41,12 +41,11 @@ bool connectedToDatabase() {
     }
 }
 
+SessionPoolManager::SessionPoolManager(): _pool(initPool(_configPath)) {}
 
 void SessionPoolManager::setConfigPath(const std::string& path) {
     _configPath = path;
 }
-
-SessionPoolManager::SessionPoolManager(): _pool(initPool(_configPath)) {}
 
 SessionPool& SessionPoolManager::getPool() {
     return *_pool;
@@ -71,12 +70,18 @@ SessionPoolManager& getSessionPoolManager() {
     return *sh.get();
 }
 
+KeyManager::KeyManager(): _passphrase(initPassphrase(_passphrasePath)) {}
+
 void KeyManager::setPrivateKeyPath(const std::string& privateKeyPath) {
     _privateKeyPath = privateKeyPath;
 }
 
 void KeyManager::setPublicKeyPath(const std::string& publicKeyPath) {
     _publicKeyPath = publicKeyPath;
+}
+
+void KeyManager::setPassphrasePath(const std::string& passphrasePath) {
+    _passphrasePath = passphrasePath;
 }
 
 const std::string& KeyManager::getPrivateKeyPath() {
@@ -87,5 +92,35 @@ const std::string& KeyManager::getPublicKeyPath() {
     return _publicKeyPath;
 }
 
+const std::string& KeyManager::getPassphrase() const {
+    return _passphrase;
+}
+
+std::string KeyManager::initPassphrase(const std::string& passphrasePath) {
+    try {
+        Poco::FileInputStream fis(passphrasePath);
+        std::string passphrase;
+
+        while (!fis.eof()) {
+            char buffer[256];
+            fis.read(buffer, sizeof(buffer));
+            passphrase.append(buffer, fis.gcount());
+        }
+
+        fis.close();
+
+        return passphrase;
+    } catch (const Exception& exception) {
+        Application::instance().logger().error(exception.displayText());
+        return "";
+    }
+}
+
 std::string KeyManager::_privateKeyPath;
 std::string KeyManager::_publicKeyPath;
+std::string KeyManager::_passphrasePath;
+
+KeyManager& getKeyManager() {
+    static Poco::SingletonHolder<KeyManager> sh;
+    return *sh.get();
+}

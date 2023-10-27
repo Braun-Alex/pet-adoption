@@ -72,6 +72,7 @@ class WebServerApp: public ServerApplication
 
         KeyManager::setPrivateKeyPath("serverPrivateKey.pem");
         KeyManager::setPublicKeyPath("serverPublicKey.pem");
+        KeyManager::setPassphrasePath("serverPassphrase.key");
 
         SecureServerSocket svs(port, 64, pContext);
         HTTPServer srv(new RequestHandlerFactory, svs, params);

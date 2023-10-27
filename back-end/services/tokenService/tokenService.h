@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../../initializers/initializers.h"
+#include "../cipherService/cipherService.h"
 
 #include "Poco/JWT/Signer.h"
 #include "Poco/JWT/Token.h"

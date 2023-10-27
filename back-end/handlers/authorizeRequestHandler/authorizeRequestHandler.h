@@ -1,7 +1,16 @@
 #pragma once
 
 #include "../../services/authService/authService.h"
-#include "Poco/Net/HTMLForm.h"
+#include "../../services/tokenService/tokenService.h"
+#include "../../services/cipherService/cipherService.h"
+#include "Poco/URI.h"
+
+#include <map>
+
+const std::vector<std::string> queryParams = {
+        "userEmail",
+        "userPassword"
+};
 
 using namespace Poco::Net;
 

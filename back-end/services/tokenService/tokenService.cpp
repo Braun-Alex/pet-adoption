@@ -7,7 +7,7 @@ JWT::Token TokenService::getToken(const std::string& id, int expiration) {
     try {
         JWT::Token token;
         token.setType("JWT");
-        token.setSubject(id);
+        token.setSubject(CipherService::encrypt(id, getKeyManager().getPassphrase()));
         Timestamp currentTimestamp = Timestamp();
         token.setIssuedAt(currentTimestamp);
         token.setExpiration(currentTimestamp + expiration * Timestamp::resolution());

@@ -53,13 +53,25 @@ SessionPoolManager& getSessionPoolManager();
 
 class KeyManager {
 public:
-    KeyManager() = default;
+    KeyManager();
     static void setPrivateKeyPath(const std::string& privateKeyPath);
     static void setPublicKeyPath(const std::string& publicKeyPath);
+    static void setPassphrasePath(const std::string& passphrasePath);
+
     static const std::string& getPrivateKeyPath();
     static const std::string& getPublicKeyPath();
+    [[nodiscard]] const std::string& getPassphrase() const;
 
 private:
     static std::string _privateKeyPath;
     static std::string _publicKeyPath;
+    static std::string _passphrasePath;
+
+    static std::string initPassphrase(const std::string& passphrasePath);
+
+    const std::string _passphrase;
+
+    friend class Poco::SingletonHolder<KeyManager>;
 };
+
+KeyManager& getKeyManager();
