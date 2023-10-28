@@ -28,8 +28,8 @@ public:
 	const std::string& emailProof() const;
 	EmailVerification& emailProof(const std::string& value);
 
-	const Poco::Timestamp& expirationAt() const;
-	EmailVerification& expirationAt(const Poco::Timestamp& value);
+	const Poco::DateTime& expirationAt() const;
+	EmailVerification& expirationAt(const Poco::DateTime& value);
 
 	bool used() const;
 	EmailVerification& used(bool value);
@@ -45,7 +45,7 @@ public:
 
 private:
 	std::string _emailProof;
-	Poco::Timestamp _expirationAt;
+	Poco::DateTime _expirationAt;
 	bool _used = false;
 
 	friend class Poco::Data::TypeHandler<EmailVerification>;
@@ -65,13 +65,13 @@ inline EmailVerification& EmailVerification::emailProof(const std::string& value
 }
 
 
-inline const Poco::Timestamp& EmailVerification::expirationAt() const
+inline const Poco::DateTime& EmailVerification::expirationAt() const
 {
 	return _expirationAt;
 }
 
 
-inline EmailVerification& EmailVerification::expirationAt(const Poco::Timestamp& value)
+inline EmailVerification& EmailVerification::expirationAt(const Poco::DateTime& value)
 {
 	_expirationAt = value;
 	return *this;
@@ -110,21 +110,21 @@ public:
 	static void bind(std::size_t pos, const DatabaseSystem::EmailVerification& ar, AbstractBinder::Ptr pBinder, AbstractBinder::Direction dir)
 	{
 		TypeHandler<std::string>::bind(pos++, ar._emailProof, pBinder, dir);
-		TypeHandler<Poco::Timestamp>::bind(pos++, ar._expirationAt, pBinder, dir);
+		TypeHandler<Poco::DateTime>::bind(pos++, ar._expirationAt, pBinder, dir);
 		TypeHandler<bool>::bind(pos++, ar._used, pBinder, dir);
 }
 
 	static void extract(std::size_t pos, DatabaseSystem::EmailVerification& ar, const DatabaseSystem::EmailVerification& deflt, AbstractExtractor::Ptr pExtr)
 	{
 		TypeHandler<std::string>::extract(pos++, ar._emailProof, deflt._emailProof, pExtr);
-		TypeHandler<Poco::Timestamp>::extract(pos++, ar._expirationAt, deflt._expirationAt, pExtr);
+		TypeHandler<Poco::DateTime>::extract(pos++, ar._expirationAt, deflt._expirationAt, pExtr);
 		TypeHandler<bool>::extract(pos++, ar._used, deflt._used, pExtr);
 }
 
 	static void prepare(std::size_t pos, const DatabaseSystem::EmailVerification& ar, AbstractPreparator::Ptr pPrep)
 	{
 		TypeHandler<std::string>::prepare(pos++, ar._emailProof, pPrep);
-		TypeHandler<Poco::Timestamp>::prepare(pos++, ar._expirationAt, pPrep);
+		TypeHandler<Poco::DateTime>::prepare(pos++, ar._expirationAt, pPrep);
 		TypeHandler<bool>::prepare(pos++, ar._used, pPrep);
 	}
 };

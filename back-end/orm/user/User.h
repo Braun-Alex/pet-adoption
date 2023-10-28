@@ -55,8 +55,8 @@ public:
 	bool twoFactorAuthentication() const;
 	User& twoFactorAuthentication(bool value);
 
-	const Poco::Timestamp& registration() const;
-	User& registration(const Poco::Timestamp& value);
+	const Poco::DateTime& registration() const;
+	User& registration(const Poco::DateTime& value);
 
 	static Ptr find(Poco::ActiveRecord::Context::Ptr pContext, const ID& id);
 
@@ -78,7 +78,7 @@ private:
 	bool _verifiedEmail = false;
 	bool _verifiedPhoneNumber = false;
 	bool _twoFactorAuthentication = false;
-	Poco::Timestamp _registration;
+	Poco::DateTime _registration;
 
 	friend class Poco::Data::TypeHandler<User>;
 };
@@ -214,13 +214,13 @@ inline User& User::twoFactorAuthentication(bool value)
 }
 
 
-inline const Poco::Timestamp& User::registration() const
+inline const Poco::DateTime& User::registration() const
 {
 	return _registration;
 }
 
 
-inline User& User::registration(const Poco::Timestamp& value)
+inline User& User::registration(const Poco::DateTime& value)
 {
 	_registration = value;
 	return *this;
@@ -255,7 +255,7 @@ public:
 		TypeHandler<bool>::bind(pos++, ar._verifiedEmail, pBinder, dir);
 		TypeHandler<bool>::bind(pos++, ar._verifiedPhoneNumber, pBinder, dir);
 		TypeHandler<bool>::bind(pos++, ar._twoFactorAuthentication, pBinder, dir);
-		TypeHandler<Poco::Timestamp>::bind(pos++, ar._registration, pBinder, dir);
+		TypeHandler<Poco::DateTime>::bind(pos++, ar._registration, pBinder, dir);
 }
 
 	static void extract(std::size_t pos, DatabaseSystem::User& ar, const DatabaseSystem::User& deflt, AbstractExtractor::Ptr pExtr)
@@ -270,7 +270,7 @@ public:
 		TypeHandler<bool>::extract(pos++, ar._verifiedEmail, deflt._verifiedEmail, pExtr);
 		TypeHandler<bool>::extract(pos++, ar._verifiedPhoneNumber, deflt._verifiedPhoneNumber, pExtr);
 		TypeHandler<bool>::extract(pos++, ar._twoFactorAuthentication, deflt._twoFactorAuthentication, pExtr);
-		TypeHandler<Poco::Timestamp>::extract(pos++, ar._registration, deflt._registration, pExtr);
+		TypeHandler<Poco::DateTime>::extract(pos++, ar._registration, deflt._registration, pExtr);
 }
 
 	static void prepare(std::size_t pos, const DatabaseSystem::User& ar, AbstractPreparator::Ptr pPrep)
@@ -285,7 +285,7 @@ public:
 		TypeHandler<bool>::prepare(pos++, ar._verifiedEmail, pPrep);
 		TypeHandler<bool>::prepare(pos++, ar._verifiedPhoneNumber, pPrep);
 		TypeHandler<bool>::prepare(pos++, ar._twoFactorAuthentication, pPrep);
-		TypeHandler<Poco::Timestamp>::prepare(pos++, ar._registration, pPrep);
+		TypeHandler<Poco::DateTime>::prepare(pos++, ar._registration, pPrep);
 	}
 };
 

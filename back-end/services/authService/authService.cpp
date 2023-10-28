@@ -12,7 +12,7 @@ bool AuthService::authorizeUser() {
         Poco::Data::Session session = getSessionPoolManager().getPool().get();
         Context::Ptr pContext = new Context(session);
         User::Ptr pUser = User::find(pContext, hashData(_email));
-        if (pUser && pUser->password() == hashData(_password + pUser->salt())) {
+        if (pUser && pUser->hashedPassword() == hashData(_password + pUser->salt())) {
             return true;
         }
         return false;

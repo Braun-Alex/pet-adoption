@@ -10,7 +10,7 @@
 
 
 #include "Poco/ActiveRecord/ActiveRecord.h"
-#include "DatabaseSystem/Shelter.h"
+#include "../shelter/Shelter.h"
 
 
 namespace DatabaseSystem {
@@ -32,8 +32,8 @@ public:
 	const std::string& species() const;
 	Animal& species(const std::string& value);
 
-	const Poco::Timestamp& birthdate() const;
-	Animal& birthdate(const Poco::Timestamp& value);
+	const Poco::DateTime& birthdate() const;
+	Animal& birthdate(const Poco::DateTime& value);
 
 	const std::string& location() const;
 	Animal& location(const std::string& value);
@@ -85,7 +85,7 @@ public:
 private:
 	std::string _name;
 	std::string _species;
-	Poco::Timestamp _birthdate;
+	Poco::DateTime _birthdate;
 	std::string _location;
 	char _gender = 0;
 	std::string _breed;
@@ -129,13 +129,13 @@ inline Animal& Animal::species(const std::string& value)
 }
 
 
-inline const Poco::Timestamp& Animal::birthdate() const
+inline const Poco::DateTime& Animal::birthdate() const
 {
 	return _birthdate;
 }
 
 
-inline Animal& Animal::birthdate(const Poco::Timestamp& value)
+inline Animal& Animal::birthdate(const Poco::DateTime& value)
 {
 	_birthdate = value;
 	return *this;
@@ -318,7 +318,7 @@ public:
 	{
 		TypeHandler<std::string>::bind(pos++, ar._name, pBinder, dir);
 		TypeHandler<std::string>::bind(pos++, ar._species, pBinder, dir);
-		TypeHandler<Poco::Timestamp>::bind(pos++, ar._birthdate, pBinder, dir);
+		TypeHandler<Poco::DateTime>::bind(pos++, ar._birthdate, pBinder, dir);
 		TypeHandler<std::string>::bind(pos++, ar._location, pBinder, dir);
 		TypeHandler<char>::bind(pos++, ar._gender, pBinder, dir);
 		TypeHandler<std::string>::bind(pos++, ar._breed, pBinder, dir);
@@ -337,7 +337,7 @@ public:
 	{
 		TypeHandler<std::string>::extract(pos++, ar._name, deflt._name, pExtr);
 		TypeHandler<std::string>::extract(pos++, ar._species, deflt._species, pExtr);
-		TypeHandler<Poco::Timestamp>::extract(pos++, ar._birthdate, deflt._birthdate, pExtr);
+		TypeHandler<Poco::DateTime>::extract(pos++, ar._birthdate, deflt._birthdate, pExtr);
 		TypeHandler<std::string>::extract(pos++, ar._location, deflt._location, pExtr);
 		TypeHandler<char>::extract(pos++, ar._gender, deflt._gender, pExtr);
 		TypeHandler<std::string>::extract(pos++, ar._breed, deflt._breed, pExtr);
@@ -356,7 +356,7 @@ public:
 	{
 		TypeHandler<std::string>::prepare(pos++, ar._name, pPrep);
 		TypeHandler<std::string>::prepare(pos++, ar._species, pPrep);
-		TypeHandler<Poco::Timestamp>::prepare(pos++, ar._birthdate, pPrep);
+		TypeHandler<Poco::DateTime>::prepare(pos++, ar._birthdate, pPrep);
 		TypeHandler<std::string>::prepare(pos++, ar._location, pPrep);
 		TypeHandler<char>::prepare(pos++, ar._gender, pPrep);
 		TypeHandler<std::string>::prepare(pos++, ar._breed, pPrep);

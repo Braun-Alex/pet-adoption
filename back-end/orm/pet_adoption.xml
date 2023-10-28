@@ -4,7 +4,7 @@
         <property name="id" type="string" notNull="true" />
         <property name="name" type="string" notNull="true" />
         <property name="species" type="string" notNull="true" />
-        <property name="birthdate" type="timestamp" notNull="true" />
+        <property name="birthdate" type="dateTime" notNull="true" />
         <property name="location" type="string" notNull="true" />
         <property name="gender" type="char" notNull="true" />
         <property name="breed" type="string" notNull="false" />
@@ -31,7 +31,7 @@
         <property name="verifiedEmail" type="bool" notNull="true" />
         <property name="verifiedPhoneNumber" type="bool" notNull="true" />
         <property name="twoFactorAuthentication" type="bool" notNull="true" />
-        <property name="registration" type="timestamp" notNull="true" />
+        <property name="registration" type="dateTime" notNull="true" />
     </class>
 
     <class name="Shelter" key="name" table="shelters">
@@ -46,20 +46,20 @@
         <property name="headLastName" type="string" notNull="true" />
         <property name="verifiedEmail" type="bool" notNull="true" />
         <property name="verifiedPhoneNumber" type="bool" notNull="true" />
-        <property name="registration" type="timestamp" notNull="true" />
+        <property name="registration" type="dateTime" notNull="true" />
     </class>
 
     <class name="EmailVerification" key="proofOfAuthority" table="email_verification">
         <property name="proofOfAuthority" type="string" notNull="true" />
         <property name="emailProof" type="string" notNull="true" />
-        <property name="expirationAt" type="timestamp" notNull="true" />
+        <property name="expirationAt" type="dateTime" notNull="true" />
         <property name="used" type="bool" notNull="true" />
     </class>
 
     <class name="PhoneVerification" key="proofOfAuthority" table="phone_verification">
         <property name="proofOfAuthority" type="string" notNull="true" />
         <property name="phoneProof" type="string" notNull="true" />
-        <property name="expirationAt" type="timestamp" notNull="true" />
+        <property name="expirationAt" type="dateTime" notNull="true" />
         <property name="used" type="bool" notNull="true" />
     </class>
 
