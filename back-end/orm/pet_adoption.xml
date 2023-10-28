@@ -1,0 +1,67 @@
+<project namespace="DatabaseSystem">
+
+    <class name="Animal" key="id" table="animals">
+        <property name="id" type="string" notNull="true" />
+        <property name="name" type="string" notNull="true" />
+        <property name="species" type="string" notNull="true" />
+        <property name="birthdate" type="timestamp" notNull="true" />
+        <property name="location" type="string" notNull="true" />
+        <property name="gender" type="char" notNull="true" />
+        <property name="breed" type="string" notNull="false" />
+        <property name="color" type="string" notNull="false" />
+        <property name="sterilization" type="bool" notNull="true" />
+        <property name="vaccination" type="bool" notNull="true" />
+        <property name="story" type="string" notNull="false" />
+        <property name="character" type="string" notNull="false" />
+        <property name="wishes" type="string" notNull="false" />
+        <property name="salt" type="string" notNull="true" />
+        <property name="status" type="string" notNull="true" />
+        <property name="shelterName" type="string" notNull="true" references="Shelter" foreignKey="name"/>
+    </class>
+
+    <class name="User" key="hashedEmail" table="users">
+        <property name="hashedEmail" type="string" notNull="true" />
+        <property name="hashedPassword" type="string" notNull="true" />
+        <property name="salt" type="string" notNull="true" />
+        <property name="encryptedFirstName" type="string" notNull="true" />
+        <property name="encryptedLastName" type="string" notNull="true" />
+        <property name="encryptedPrivateKey" type="string" notNull="false" />
+        <property name="encryptedPhone" type="string" notNull="true" />
+        <property name="encryptedLocation" type="string" notNull="false" />
+        <property name="verifiedEmail" type="bool" notNull="true" />
+        <property name="verifiedPhoneNumber" type="bool" notNull="true" />
+        <property name="twoFactorAuthentication" type="bool" notNull="true" />
+        <property name="registration" type="timestamp" notNull="true" />
+    </class>
+
+    <class name="Shelter" key="name" table="shelters">
+        <property name="name" type="string" notNull="true" />
+        <property name="email" type="string" notNull="true" />
+        <property name="hashedPassword" type="string" notNull="true" />
+        <property name="salt" type="string" notNull="true" />
+        <property name="encryptedPrivateKey" type="string" notNull="true" />
+        <property name="phone" type="string" notNull="true" />
+        <property name="location" type="string" notNull="true" />
+        <property name="headFirstName" type="string" notNull="true" />
+        <property name="headLastName" type="string" notNull="true" />
+        <property name="verifiedEmail" type="bool" notNull="true" />
+        <property name="verifiedPhoneNumber" type="bool" notNull="true" />
+        <property name="registration" type="timestamp" notNull="true" />
+    </class>
+
+    <class name="EmailVerification" key="proofOfAuthority" table="email_verification">
+        <property name="proofOfAuthority" type="string" notNull="true" />
+        <property name="emailProof" type="string" notNull="true" />
+        <property name="expirationAt" type="timestamp" notNull="true" />
+        <property name="used" type="bool" notNull="true" />
+    </class>
+
+    <class name="PhoneVerification" key="proofOfAuthority" table="phone_verification">
+        <property name="proofOfAuthority" type="string" notNull="true" />
+        <property name="phoneProof" type="string" notNull="true" />
+        <property name="expirationAt" type="timestamp" notNull="true" />
+        <property name="used" type="bool" notNull="true" />
+    </class>
+
+</project>
+
