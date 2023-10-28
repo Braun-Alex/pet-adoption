@@ -9,7 +9,11 @@ set(HEADERS handlers/pingRequestHandler/pingRequestHandler.h
         services/authService/authService.h
         services/tokenService/tokenService.h
         services/cipherService/cipherService.h
+        orm/animal/Animal.h
         orm/user/User.h
+        orm/shelter/Shelter.h
+        orm/emailVerification/EmailVerification.h
+        orm/phoneVerification/PhoneVerification.h
         initializers/initializers.h
 )
 set(SOURCES handlers/pingRequestHandler/pingRequestHandler.cpp
@@ -19,7 +23,11 @@ set(SOURCES handlers/pingRequestHandler/pingRequestHandler.cpp
         services/authService/authService.cpp
         services/tokenService/tokenService.cpp
         services/cipherService/cipherService.cpp
+        orm/animal/Animal.cpp
         orm/user/User.cpp
+        orm/shelter/Shelter.cpp
+        orm/emailVerification/EmailVerification.cpp
+        orm/phoneVerification/PhoneVerification.cpp
         initializers/initializers.cpp
         main.cpp
 )

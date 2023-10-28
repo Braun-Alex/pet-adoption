@@ -55,8 +55,8 @@ public:
 	bool verifiedPhoneNumber() const;
 	Shelter& verifiedPhoneNumber(bool value);
 
-	const Poco::Timestamp& registration() const;
-	Shelter& registration(const Poco::Timestamp& value);
+	const Poco::DateTime& registration() const;
+	Shelter& registration(const Poco::DateTime& value);
 
 	static Ptr find(Poco::ActiveRecord::Context::Ptr pContext, const ID& id);
 
@@ -78,7 +78,7 @@ private:
 	std::string _headLastName;
 	bool _verifiedEmail = false;
 	bool _verifiedPhoneNumber = false;
-	Poco::Timestamp _registration;
+	Poco::DateTime _registration;
 
 	friend class Poco::Data::TypeHandler<Shelter>;
 };
@@ -214,13 +214,13 @@ inline Shelter& Shelter::verifiedPhoneNumber(bool value)
 }
 
 
-inline const Poco::Timestamp& Shelter::registration() const
+inline const Poco::DateTime& Shelter::registration() const
 {
 	return _registration;
 }
 
 
-inline Shelter& Shelter::registration(const Poco::Timestamp& value)
+inline Shelter& Shelter::registration(const Poco::DateTime& value)
 {
 	_registration = value;
 	return *this;
@@ -255,7 +255,7 @@ public:
 		TypeHandler<std::string>::bind(pos++, ar._headLastName, pBinder, dir);
 		TypeHandler<bool>::bind(pos++, ar._verifiedEmail, pBinder, dir);
 		TypeHandler<bool>::bind(pos++, ar._verifiedPhoneNumber, pBinder, dir);
-		TypeHandler<Poco::Timestamp>::bind(pos++, ar._registration, pBinder, dir);
+		TypeHandler<Poco::DateTime>::bind(pos++, ar._registration, pBinder, dir);
 }
 
 	static void extract(std::size_t pos, DatabaseSystem::Shelter& ar, const DatabaseSystem::Shelter& deflt, AbstractExtractor::Ptr pExtr)
@@ -270,7 +270,7 @@ public:
 		TypeHandler<std::string>::extract(pos++, ar._headLastName, deflt._headLastName, pExtr);
 		TypeHandler<bool>::extract(pos++, ar._verifiedEmail, deflt._verifiedEmail, pExtr);
 		TypeHandler<bool>::extract(pos++, ar._verifiedPhoneNumber, deflt._verifiedPhoneNumber, pExtr);
-		TypeHandler<Poco::Timestamp>::extract(pos++, ar._registration, deflt._registration, pExtr);
+		TypeHandler<Poco::DateTime>::extract(pos++, ar._registration, deflt._registration, pExtr);
 }
 
 	static void prepare(std::size_t pos, const DatabaseSystem::Shelter& ar, AbstractPreparator::Ptr pPrep)
@@ -285,7 +285,7 @@ public:
 		TypeHandler<std::string>::prepare(pos++, ar._headLastName, pPrep);
 		TypeHandler<bool>::prepare(pos++, ar._verifiedEmail, pPrep);
 		TypeHandler<bool>::prepare(pos++, ar._verifiedPhoneNumber, pPrep);
-		TypeHandler<Poco::Timestamp>::prepare(pos++, ar._registration, pPrep);
+		TypeHandler<Poco::DateTime>::prepare(pos++, ar._registration, pPrep);
 	}
 };
 

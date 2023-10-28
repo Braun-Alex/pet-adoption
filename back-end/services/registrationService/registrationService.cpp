@@ -17,7 +17,7 @@ bool RegistrationService::registerUser() {
         }
         std::string salt = generateSalt(SALT_LENGTH);
         pUser = new User(hashData(_email));
-        pUser->password(hashData(_password + salt));
+        pUser->hashedPassword(hashData(_password + salt));
         pUser->salt(salt);
         pUser->create(pContext);
         return true;
