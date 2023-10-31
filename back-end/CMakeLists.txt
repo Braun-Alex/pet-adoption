@@ -15,6 +15,14 @@ set(HEADERS handlers/pingRequestHandler/pingRequestHandler.h
         orm/emailVerification/EmailVerification.h
         orm/phoneVerification/PhoneVerification.h
         initializers/initializers.h
+
+        local-structs/localStructs.hpp
+        interfaces/UserControllerInterface.hpp
+        interfaces/UserServiceInterface.hpp
+        controllesrs/UserController.hpp
+        services/userServices/UserService.hpp
+
+
 )
 set(SOURCES handlers/pingRequestHandler/pingRequestHandler.cpp
         handlers/registerRequestHandler/registerRequestHandler.cpp
@@ -23,6 +31,10 @@ set(SOURCES handlers/pingRequestHandler/pingRequestHandler.cpp
         services/authService/authService.cpp
         services/tokenService/tokenService.cpp
         services/cipherService/cipherService.cpp
+
+        services/userServices/UserService.cpp
+        controllesrs/UserController.cpp
+
         orm/animal/Animal.cpp
         orm/user/User.cpp
         orm/shelter/Shelter.cpp
@@ -40,6 +52,17 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Poco)
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
+
+target_include_directories(
+        server
+        PUBLIC
+        ${CMAKE_SOURCE_DIR}/local-structs
+        ${CMAKE_SOURCE_DIR}/interfaces
+        ${CMAKE_SOURCE_DIR}/controllers
+        ${CMAKE_SOURCE_DIR}/initializers
+        ${CMAKE_SOURCE_DIR}/services/userService
+
+)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC Foundation Crypto Net NetSSL JWT Util
         JSON ActiveRecord DataPostgreSQL)
