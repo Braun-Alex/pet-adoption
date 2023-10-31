@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.26)
+cmake_minimum_required(VERSION 3.24)
 project(server)
 
 set(CMAKE_CXX_STANDARD 23)
 set(HEADERS handlers/pingRequestHandler/pingRequestHandler.h
-        handlers/registerRequestHandler/registerRequestHandler.h
+        handlers/registerRequestHandler/registerRequestHandler.hpp
         handlers/authorizeRequestHandler/authorizeRequestHandler.h
         services/registrationService/registrationService.h
         services/authService/authService.h
@@ -16,12 +16,12 @@ set(HEADERS handlers/pingRequestHandler/pingRequestHandler.h
         orm/phoneVerification/PhoneVerification.h
         initializers/initializers.h
 
+        
         local-structs/localStructs.hpp
         interfaces/UserControllerInterface.hpp
         interfaces/UserServiceInterface.hpp
-        controllesrs/UserController.hpp
-        services/userServices/UserService.hpp
-
+        controllers/UserController.hpp
+        services/userService/UserService.hpp
 
 )
 set(SOURCES handlers/pingRequestHandler/pingRequestHandler.cpp
@@ -32,8 +32,8 @@ set(SOURCES handlers/pingRequestHandler/pingRequestHandler.cpp
         services/tokenService/tokenService.cpp
         services/cipherService/cipherService.cpp
 
-        services/userServices/UserService.cpp
-        controllesrs/UserController.cpp
+        services/userService/UserService.cpp
+        controllers/UserController.cpp
 
         orm/animal/Animal.cpp
         orm/user/User.cpp
@@ -54,14 +54,10 @@ FetchContent_MakeAvailable(Poco)
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
 
 target_include_directories(
-        server
+        ${PROJECT_NAME}
         PUBLIC
-        ${CMAKE_SOURCE_DIR}/local-structs
-        ${CMAKE_SOURCE_DIR}/interfaces
-        ${CMAKE_SOURCE_DIR}/controllers
-        ${CMAKE_SOURCE_DIR}/initializers
-        ${CMAKE_SOURCE_DIR}/services/userService
-
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/services
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC Foundation Crypto Net NetSSL JWT Util

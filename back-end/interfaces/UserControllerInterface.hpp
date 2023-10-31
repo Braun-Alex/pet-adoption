@@ -1,6 +1,6 @@
 #pragma once
 
-#include <loca-structs/localStructs.h>
+#include "local-structs/localStructs.hpp"
 
 
 

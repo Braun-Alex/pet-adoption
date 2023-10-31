@@ -1,4 +1,4 @@
-#include "registerRequestHandler.h"
+#include "registerRequestHandler.hpp"
 
 using namespace Poco::Net;
 using namespace Poco::Util;

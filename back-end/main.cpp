@@ -1,5 +1,5 @@
 #include "handlers/pingRequestHandler/pingRequestHandler.h"
-#include "handlers/registerRequestHandler/registerRequestHandler.h"
+#include "handlers/registerRequestHandler/registerRequestHandler.hpp"
 #include "handlers/authorizeRequestHandler/authorizeRequestHandler.h"
 
 #include "Poco/Net/HTTPServer.h"
@@ -9,7 +9,7 @@
 #include "Poco/Util/ServerApplication.h"
 #include "Poco/Net/SecureServerSocket.h"
 
-#include <userService/UserService.hpp>
+#include "userService/UserService.hpp"
 
 #include <unordered_map>
 
@@ -19,7 +19,7 @@ using namespace Poco::Util;
 
 class RequestHandlerFactory: public HTTPRequestHandlerFactory {
 public:
-    RequestHandlerFactory(): pUserService_(new UserService()) {
+    RequestHandlerFactory()/*: pUserService_(new UserService())*/ {
         // handlers["/user/register"] = []() -> HTTPRequestHandler* { return new RegisterUserRequestHandler(); };
         // handlers["/user/authorize"] = []() -> HTTPRequestHandler* { return new AuthorizeUserRequestHandler(); };
         handlers["/user/register"] = pUserService_->registerUser();
