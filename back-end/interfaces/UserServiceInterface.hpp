@@ -1,7 +1,7 @@
 #pragma once
 
-#include "loca-structs/localStructs.h"
-#include "Poco/Net/HTTPRequestHandler.h"
+#include "local-structs/localStructs.hpp"
+#include "Poco/Net/HTTPRequestHandler.hpp"
 #include "Poco/Net/HTMLForm.h"
 
 class UserServiceInterface{

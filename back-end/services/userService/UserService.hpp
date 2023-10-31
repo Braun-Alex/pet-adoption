@@ -1,9 +1,9 @@
 #pragma once
 #include <memory>
 
-#include <interfaces/UserServiceInterface.h>
+#include "interfaces/UserServiceInterface.hpp"
 //#include <interfaces/UserControllerInterface.h>
-#include <controllers/UserController.h>
+#include "controllers/UserController.hpp"
 
 class UserService: UserServiceInterface
 {
