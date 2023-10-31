@@ -19,7 +19,7 @@ using namespace Poco::Util;
 
 class RequestHandlerFactory: public HTTPRequestHandlerFactory {
 public:
-    RequestHandlerFactory()/*: pUserService_(new UserService())*/ {
+    RequestHandlerFactory(): pUserService_(new UserService()) {
         // handlers["/user/register"] = []() -> HTTPRequestHandler* { return new RegisterUserRequestHandler(); };
         // handlers["/user/authorize"] = []() -> HTTPRequestHandler* { return new AuthorizeUserRequestHandler(); };
         handlers["/user/register"] = pUserService_->registerUser();

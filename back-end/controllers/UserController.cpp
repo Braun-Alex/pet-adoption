@@ -1,19 +1,24 @@
 #include "UserController.hpp"
-#include "initializers.h"
+#include "initializers/initializers.h"
 
 
 UserController::UserController(/*const Poco::Data::Session session, Context::Ptr pContext*/){
-    std::cout<<__FUNXTION__<<": UserController constructor called\n";
-    Poco::Data::Session session = getSessionPoolManager().getPool().get();
-    session_ = session;
-    context_ = new Context(session);
+    std::cout<<": UserController constructor called\n";
+    // Poco::Data::Session session = getSessionPoolManager().getPool().get();
+    // session_ = session;
+
+    session_ = getSessionPoolManager().getPool().get();
+
+    pContext_ = new Context(session_);
 }
 
-UserController::registerUser(const LocalStructs::User& user){
-    std::cout<<__FUNCTION__<<"UserController::registerUser called.\n";
+bool UserController::registerUser(const LocalStructs::User& user){
+    std::cout<<"UserController::registerUser called.\n";
+    return true;
 }
 
-UserController::authorizeUser(const LocalStructs::User& user){
-    std::cout<<__FUNCTION__<<"UserController::authorizeUser called.\n";
+bool UserController::authorizeUser(const LocalStructs::User& user){
+    std::cout<<"UserController::authorizeUser called.\n";
+    return true;
 }
 

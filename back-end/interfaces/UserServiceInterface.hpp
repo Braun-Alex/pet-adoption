@@ -1,8 +1,11 @@
 #pragma once
 
 #include "local-structs/localStructs.hpp"
-#include "Poco/Net/HTTPRequestHandler.hpp"
 #include "Poco/Net/HTMLForm.h"
+#include "Poco/Net/HTTPRequestHandler.h"
+#include "Poco/Net/HTTPServerRequest.h"
+
+using namespace Poco::Net;
 
 class UserServiceInterface{
     public:

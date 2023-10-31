@@ -1,9 +1,18 @@
+#include <iostream>
 #include "interfaces/UserServiceInterface.hpp"
+#include "UserService.hpp"
+#include "controllers/UserController.hpp"
+#include "initializers/initializers.h"
+
+using namespace Poco;
+using namespace Poco::Util;
+//using namespace DatabaseSystem;
+using Poco::ActiveRecord::Context;
 
 
-UserService::UserService(/* args */): pUserController_(new UserController())
+UserService::UserService(/* args */): pUserController_(new UserController)
 {
-    std::cout<<__FUNCTION__<<": UserService constructor. pUserController_ == nullptr: " << if(pUserController_) << "\n";
+    std::cout<<": UserService constructor. pUserController_ == nullptr: " << (pUserController_) << "\n";
 }
 
 UserService::~UserService()
@@ -11,24 +20,31 @@ UserService::~UserService()
 }
 
 HTTPRequestHandler* UserService::registerUser(HTTPServerRequest& request, HTTPServerResponse& response){
-    Application& app = Application::instance();
-    const std::string& clientAddress = request.clientAddress().toString();
-    app.logger().information("Request \"Sign up user\" from %s", clientAddress);
+    // Application& app = Application::instance();
+    // const std::string& clientAddress = request.clientAddress().toString();
+    // app.logger().information("Request \"Sign up user\" from %s", clientAddress);
 
+    HTMLForm form(request, request.stream());
     setHeaderResponse(response);
     response.setContentType("text/html");
 
-    HTMLForm form(request, request.stream());
     auto userEmail = form.find("user-email");
     auto userPassword = form.find("user-password");
-    std::cout<<___FUNCTION__<<": UserService::registerUser called." << " userEmail: " << userEmail<<" userPassword: "<< userPassword<<"\n";
+
+    LocalStructs::User user = {userEmail->second, userPassword->second};
+
+    std::cout<<": UserService::registerUser called." << " userEmail: " << user.email<<" userPassword: "<< user.password<<"\n";
+
     pUserController_->registerUser(user);
 
     return nullptr;
 }
 
 HTTPRequestHandler* UserService::authorizeUser(HTTPServerRequest& request, HTTPServerResponse& response){
-    std::cout<<___FUNCTION__<<": UserService::authorizeUser called.";
+    std::cout<<": UserService::authorizeUser called.";
+    std::string userEmail = "aboba";
+    std::string userPassword = "aboba";
+    LocalStructs::User user= {userEmail, userPassword};
     pUserController_->authorizeUser(user);
     
     return nullptr;
