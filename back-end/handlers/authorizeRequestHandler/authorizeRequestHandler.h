@@ -1,20 +1,16 @@
 #pragma once
 
-#include "../../orm/user/User.h"
-#include "../../initializers/initializers.h"
+#include "../../services/authService/authService.h"
+#include "../../services/tokenService/tokenService.h"
+#include "../../services/cipherService/cipherService.h"
+#include "Poco/URI.h"
 
-#include "Poco/Net/HTTPRequestHandler.h"
-#include "Poco/Net/HTTPServerRequest.h"
-#include "Poco/Net/HTTPServerResponse.h"
-#include "Poco/Crypto/DigestEngine.h"
-#include "Poco/Crypto/CryptoStream.h"
-#include "Poco/Data/PostgreSQL/Connector.h"
-#include "Poco/Data/Session.h"
-#include "Poco/Net/HTMLForm.h"
-#include "Poco/JSON/Object.h"
-#include "Poco/ActiveRecord/ActiveRecord.h"
+#include <map>
 
-#include <random>
+const std::vector<std::string> queryParams = {
+        "userEmail",
+        "userPassword"
+};
 
 using namespace Poco::Net;
 

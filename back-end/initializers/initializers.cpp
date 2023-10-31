@@ -2,6 +2,7 @@
 
 using namespace Poco;
 using namespace Poco::Net;
+using namespace Poco::Util;
 using namespace Poco::Data;
 using namespace Poco::Data::Keywords;
 
@@ -9,6 +10,18 @@ std::string hashData(const std::string& data) {
     Poco::Crypto::DigestEngine engine("SHA256");
     engine.update(data);
     return Crypto::DigestEngine::digestToHex(engine.digest());
+}
+
+std::string generateSalt(size_t length) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(0, 255);
+    std::string salt;
+    salt.reserve(length);
+    for (size_t i = 0; i < length; ++i) {
+        salt += CHARSET[dist(gen) % CHARSET.size()];
+    }
+    return salt;
 }
 
 void setHeaderResponse(HTTPServerResponse& response) {
@@ -28,12 +41,11 @@ bool connectedToDatabase() {
     }
 }
 
+SessionPoolManager::SessionPoolManager(): _pool(initPool(_configPath)) {}
 
 void SessionPoolManager::setConfigPath(const std::string& path) {
     _configPath = path;
 }
-
-SessionPoolManager::SessionPoolManager(): _pool(initPool(_configPath)) {}
 
 SessionPool& SessionPoolManager::getPool() {
     return *_pool;
@@ -55,5 +67,60 @@ std::unique_ptr<Poco::Data::SessionPool> SessionPoolManager::initPool(const std:
 
 SessionPoolManager& getSessionPoolManager() {
     static Poco::SingletonHolder<SessionPoolManager> sh;
+    return *sh.get();
+}
+
+KeyManager::KeyManager(): _passphrase(initPassphrase(_passphrasePath)) {}
+
+void KeyManager::setPrivateKeyPath(const std::string& privateKeyPath) {
+    _privateKeyPath = privateKeyPath;
+}
+
+void KeyManager::setPublicKeyPath(const std::string& publicKeyPath) {
+    _publicKeyPath = publicKeyPath;
+}
+
+void KeyManager::setPassphrasePath(const std::string& passphrasePath) {
+    _passphrasePath = passphrasePath;
+}
+
+const std::string& KeyManager::getPrivateKeyPath() {
+    return _privateKeyPath;
+}
+
+const std::string& KeyManager::getPublicKeyPath() {
+    return _publicKeyPath;
+}
+
+const std::string& KeyManager::getPassphrase() const {
+    return _passphrase;
+}
+
+std::string KeyManager::initPassphrase(const std::string& passphrasePath) {
+    try {
+        Poco::FileInputStream fis(passphrasePath);
+        std::string passphrase;
+
+        while (!fis.eof()) {
+            char buffer[256];
+            fis.read(buffer, sizeof(buffer));
+            passphrase.append(buffer, fis.gcount());
+        }
+
+        fis.close();
+
+        return passphrase;
+    } catch (const Exception& exception) {
+        Application::instance().logger().error(exception.displayText());
+        return "";
+    }
+}
+
+std::string KeyManager::_privateKeyPath;
+std::string KeyManager::_publicKeyPath;
+std::string KeyManager::_passphrasePath;
+
+KeyManager& getKeyManager() {
+    static Poco::SingletonHolder<KeyManager> sh;
     return *sh.get();
 }

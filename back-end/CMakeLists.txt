@@ -5,13 +5,29 @@ set(CMAKE_CXX_STANDARD 23)
 set(HEADERS handlers/pingRequestHandler/pingRequestHandler.h
         handlers/registerRequestHandler/registerRequestHandler.h
         handlers/authorizeRequestHandler/authorizeRequestHandler.h
+        services/registrationService/registrationService.h
+        services/authService/authService.h
+        services/tokenService/tokenService.h
+        services/cipherService/cipherService.h
+        orm/animal/Animal.h
         orm/user/User.h
+        orm/shelter/Shelter.h
+        orm/emailVerification/EmailVerification.h
+        orm/phoneVerification/PhoneVerification.h
         initializers/initializers.h
 )
 set(SOURCES handlers/pingRequestHandler/pingRequestHandler.cpp
         handlers/registerRequestHandler/registerRequestHandler.cpp
         handlers/authorizeRequestHandler/authorizeRequestHandler.cpp
+        services/registrationService/registrationService.cpp
+        services/authService/authService.cpp
+        services/tokenService/tokenService.cpp
+        services/cipherService/cipherService.cpp
+        orm/animal/Animal.cpp
         orm/user/User.cpp
+        orm/shelter/Shelter.cpp
+        orm/emailVerification/EmailVerification.cpp
+        orm/phoneVerification/PhoneVerification.cpp
         initializers/initializers.cpp
         main.cpp
 )
@@ -25,5 +41,5 @@ FetchContent_MakeAvailable(Poco)
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
 
-target_link_libraries(${PROJECT_NAME} PUBLIC Foundation Crypto Net NetSSL Util
+target_link_libraries(${PROJECT_NAME} PUBLIC Foundation Crypto Net NetSSL JWT Util
         JSON ActiveRecord DataPostgreSQL)
