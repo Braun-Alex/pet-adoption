@@ -9,6 +9,8 @@
 #include "Poco/Util/ServerApplication.h"
 #include "Poco/Net/SecureServerSocket.h"
 
+#include <userService/UserService.hpp>
+
 #include <unordered_map>
 
 using namespace Poco;
@@ -17,9 +19,11 @@ using namespace Poco::Util;
 
 class RequestHandlerFactory: public HTTPRequestHandlerFactory {
 public:
-    RequestHandlerFactory() {
-        handlers["/user/register"] = []() -> HTTPRequestHandler* { return new RegisterUserRequestHandler(); };
-        handlers["/user/authorize"] = []() -> HTTPRequestHandler* { return new AuthorizeUserRequestHandler(); };
+    RequestHandlerFactory(): pUserService_(new UserService()) {
+        // handlers["/user/register"] = []() -> HTTPRequestHandler* { return new RegisterUserRequestHandler(); };
+        // handlers["/user/authorize"] = []() -> HTTPRequestHandler* { return new AuthorizeUserRequestHandler(); };
+        handlers["/user/register"] = pUserService_->registerUser();
+        handlers["/user/authorize"] = pUserService_->authorizeUser();
     }
     HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request) override {
         auto handler = handlers.find(request.getURI());
@@ -30,6 +34,7 @@ public:
     }
 private:
     std::unordered_map<std::string, std::function<HTTPRequestHandler*()>> handlers;
+    std::unique_ptr<UserService> pUserService_;
 };
 
 class WebServerApp: public ServerApplication
