@@ -1,7 +1,7 @@
 #include <iostream>
-#include "interfaces/UserServiceInterface.hpp"
+//#include "interfaces/UserServiceInterface.hpp"
 #include "UserService.hpp"
-#include "controllers/UserController.hpp"
+//#include "controllers/UserController.hpp"
 #include "initializers/initializers.h"
 
 using namespace Poco;
@@ -19,19 +19,21 @@ UserService::~UserService()
 {
 }
 
-HTTPRequestHandler* UserService::registerUser(HTTPServerRequest& request, HTTPServerResponse& response){
+HTTPRequestHandler* UserService::registerUser(/*HTTPServerRequest& request, HTTPServerResponse& response*/){
     // Application& app = Application::instance();
     // const std::string& clientAddress = request.clientAddress().toString();
     // app.logger().information("Request \"Sign up user\" from %s", clientAddress);
 
-    HTMLForm form(request, request.stream());
-    setHeaderResponse(response);
-    response.setContentType("text/html");
+    // HTMLForm form(request, request.stream());
+    // setHeaderResponse(response);
+    // response.setContentType("text/html");
 
-    auto userEmail = form.find("user-email");
-    auto userPassword = form.find("user-password");
+    // auto userEmail = form.find("user-email");
+    // auto userPassword = form.find("user-password");
+    std::string userEmail = "aboba";
+    std::string userPassword = "aboba";
 
-    LocalStructs::User user = {userEmail->second, userPassword->second};
+    LocalStructs::User user = {userEmail, userPassword};
 
     std::cout<<": UserService::registerUser called." << " userEmail: " << user.email<<" userPassword: "<< user.password<<"\n";
 
@@ -40,11 +42,12 @@ HTTPRequestHandler* UserService::registerUser(HTTPServerRequest& request, HTTPSe
     return nullptr;
 }
 
-HTTPRequestHandler* UserService::authorizeUser(HTTPServerRequest& request, HTTPServerResponse& response){
+HTTPRequestHandler* UserService::authorizeUser(/*HTTPServerRequest& request, HTTPServerResponse& response*/){
     std::cout<<": UserService::authorizeUser called.";
     std::string userEmail = "aboba";
     std::string userPassword = "aboba";
     LocalStructs::User user= {userEmail, userPassword};
+    
     pUserController_->authorizeUser(user);
     
     return nullptr;

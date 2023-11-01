@@ -7,9 +7,9 @@ UserController::UserController(/*const Poco::Data::Session session, Context::Ptr
     // Poco::Data::Session session = getSessionPoolManager().getPool().get();
     // session_ = session;
 
-    session_ = getSessionPoolManager().getPool().get();
+    session_ = std::make_shared<Session>(getSessionPoolManager().getPool().get());;
 
-    pContext_ = new Context(session_);
+    pContext_ = new Poco::ActiveRecord::Context(*session_);
 }
 
 bool UserController::registerUser(const LocalStructs::User& user){
