@@ -5,7 +5,7 @@
 
 using namespace Poco;
 using namespace Poco::Data;
-using Poco::ActiveRecord::Context;
+//using Poco::ActiveRecord::Context;
 
 
 class UserController:public UserControllerInterface{
@@ -16,7 +16,7 @@ class UserController:public UserControllerInterface{
         bool registerUser(const LocalStructs::User& user) override;
         bool authorizeUser(const LocalStructs::User& user) override;
     private:
-        Session session_;
-        Context::Ptr pContext_;
+        std::shared_ptr<Session> session_;
+        Poco::ActiveRecord::Context::Ptr pContext_;
 
 };

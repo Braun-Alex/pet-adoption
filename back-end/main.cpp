@@ -22,10 +22,12 @@ public:
     RequestHandlerFactory(): pUserService_(new UserService()) {
         // handlers["/user/register"] = []() -> HTTPRequestHandler* { return new RegisterUserRequestHandler(); };
         // handlers["/user/authorize"] = []() -> HTTPRequestHandler* { return new AuthorizeUserRequestHandler(); };
-        handlers["/user/register"] = pUserService_->registerUser();
-        handlers["/user/authorize"] = pUserService_->authorizeUser();
+        handlers["/user/register"] = [this](/*const HTTPServerRequest& request*/) -> HTTPRequestHandler* {return pUserService_->registerUser(/*request*/); };
+        // handlers["/user/register"] = pUserService_->registerUser();
+        handlers["/user/authorize"] = [this](/*const HTTPServerRequest& request*/) -> HTTPRequestHandler* {return pUserService_->authorizeUser(/*request*/); };
     }
     HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request) override {
+        
         auto handler = handlers.find(request.getURI());
         if (handler != handlers.end()) {
             return handler->second();
@@ -33,7 +35,7 @@ public:
         return new PingRequestHandler();
     }
 private:
-    std::unordered_map<std::string, std::function<HTTPRequestHandler*()>> handlers;
+    std::unordered_map<std::string, std::function<HTTPRequestHandler*(/*const HTTPServerRequest& request*/)>> handlers;
     std::unique_ptr<UserService> pUserService_;
 };
 
