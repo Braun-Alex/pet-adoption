@@ -10,6 +10,7 @@
 #include "Poco/Net/SecureServerSocket.h"
 
 #include "userService/UserService.hpp"
+#include "handlers/requestHandler.hpp"
 
 #include <unordered_map>
 
@@ -17,26 +18,41 @@ using namespace Poco;
 using namespace Poco::Net;
 using namespace Poco::Util;
 
+// class Handler{
+//     public:
+//         void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response) override;
+//         handleRequest(HTTPServerRequest& request, HTTPServerResponse& response){
+//             //analyze by URI
+//         }
+//     private:
+//         userService;
+
+// }
+
+
 class RequestHandlerFactory: public HTTPRequestHandlerFactory {
 public:
-    RequestHandlerFactory(): pUserService_(new UserService()) {
-        // handlers["/user/register"] = []() -> HTTPRequestHandler* { return new RegisterUserRequestHandler(); };
-        // handlers["/user/authorize"] = []() -> HTTPRequestHandler* { return new AuthorizeUserRequestHandler(); };
-        handlers["/user/register"] = [this](/*const HTTPServerRequest& request*/) -> HTTPRequestHandler* {return pUserService_->registerUser(/*request*/); };
-        // handlers["/user/register"] = pUserService_->registerUser();
-        handlers["/user/authorize"] = [this](/*const HTTPServerRequest& request*/) -> HTTPRequestHandler* {return pUserService_->authorizeUser(/*request*/); };
+    RequestHandlerFactory():handler_(new RequestHandler()) {
+        // // handlers["/user/register"] = []() -> HTTPRequestHandler* { return new RegisterUserRequestHandler(); };
+        // // handlers["/user/authorize"] = []() -> HTTPRequestHandler* { return new AuthorizeUserRequestHandler(); };
+        // handlers["/user/register"] = [this](/*const HTTPServerRequest& request*/) -> HTTPRequestHandler* {return pUserService_->registerUser(/*request*/); };
+        // // handlers["/user/register"] = pUserService_->registerUser();
+        // handlers["/user/authorize"] = [this](/*const HTTPServerRequest& request*/) -> HTTPRequestHandler* {return pUserService_->authorizeUser(/*request*/); };
     }
     HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request) override {
         
-        auto handler = handlers.find(request.getURI());
-        if (handler != handlers.end()) {
-            return handler->second();
-        }
-        return new PingRequestHandler();
+        // auto handler = handlers.find(request.getURI());
+        // if (handler != handlers.end()) {
+        //     return handler->second();
+        // }
+        // return new PingRequestHandler();
+        return handler_;
     }
 private:
-    std::unordered_map<std::string, std::function<HTTPRequestHandler*(/*const HTTPServerRequest& request*/)>> handlers;
-    std::unique_ptr<UserService> pUserService_;
+    // std::unordered_map<std::string, std::function<HTTPRequestHandler*(/*const HTTPServerRequest& request*/)>> handlers;
+    // std::unique_ptr<UserService> pUserService_;
+
+    HTTPRequestHandler* handler_;
 };
 
 class WebServerApp: public ServerApplication

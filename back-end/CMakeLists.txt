@@ -22,6 +22,7 @@ set(HEADERS handlers/pingRequestHandler/pingRequestHandler.h
         interfaces/UserServiceInterface.hpp
         controllers/UserController.hpp
         services/userService/UserService.hpp
+        handlers/requestHandler.hpp
 
 )
 set(SOURCES handlers/pingRequestHandler/pingRequestHandler.cpp
@@ -34,6 +35,7 @@ set(SOURCES handlers/pingRequestHandler/pingRequestHandler.cpp
 
         services/userService/UserService.cpp
         controllers/UserController.cpp
+        handlers/requestHandler.cpp
 
         orm/animal/Animal.cpp
         orm/user/User.cpp
