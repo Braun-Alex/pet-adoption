@@ -10,6 +10,6 @@ using namespace Poco::Net;
 
 class UserServiceInterface{
     public:
-        virtual HTTPRequestHandler* registerUser(/*HTTPServerRequest& request, HTTPServerResponse& response*/) = 0;
-        virtual HTTPRequestHandler* authorizeUser(/*HTTPServerRequest& request, HTTPServerResponse& response*/) = 0;    
+        virtual void registerUser(const HTTPServerRequest& request, HTTPServerResponse& response) = 0;
+        virtual void authorizeUser(const HTTPServerRequest& request, HTTPServerResponse& response) = 0;    
 };

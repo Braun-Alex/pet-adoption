@@ -19,7 +19,7 @@ UserService::~UserService()
 {
 }
 
-HTTPRequestHandler* UserService::registerUser(/*HTTPServerRequest& request, HTTPServerResponse& response*/){
+void UserService::registerUser(const HTTPServerRequest& request, HTTPServerResponse& response){
     // Application& app = Application::instance();
     // const std::string& clientAddress = request.clientAddress().toString();
     // app.logger().information("Request \"Sign up user\" from %s", clientAddress);
@@ -38,17 +38,13 @@ HTTPRequestHandler* UserService::registerUser(/*HTTPServerRequest& request, HTTP
     std::cout<<": UserService::registerUser called." << " userEmail: " << user.email<<" userPassword: "<< user.password<<"\n";
 
     pUserController_->registerUser(user);
-
-    return nullptr;
 }
 
-HTTPRequestHandler* UserService::authorizeUser(/*HTTPServerRequest& request, HTTPServerResponse& response*/){
+void UserService::authorizeUser(const HTTPServerRequest& request, HTTPServerResponse& response){
     std::cout<<": UserService::authorizeUser called.";
     std::string userEmail = "aboba";
     std::string userPassword = "aboba";
     LocalStructs::User user= {userEmail, userPassword};
-    
+
     pUserController_->authorizeUser(user);
-    
-    return nullptr;
 }
