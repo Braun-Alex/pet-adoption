@@ -10,7 +10,7 @@ class RequestHandler: public HTTPRequestHandler {
         void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response) override;
     private:
         std::unique_ptr<UserService> pUserService_;
-        std::unordered_map<std::string, std::function<HTTPRequestHandler*(/*const HTTPServerRequest& request*/)>> handlers;
+        std::unordered_map<std::string, std::function<void(HTTPServerRequest& request, HTTPServerResponse& response)>> handlers_;
 
 
 };

@@ -16,8 +16,8 @@ private:
     
 public:
 
-    HTTPRequestHandler* registerUser(/*HTTPServerRequest& request, HTTPServerResponse& response*/) override;
-    HTTPRequestHandler* authorizeUser(/*HTTPServerRequest& request, HTTPServerResponse& response*/) override;    
+    void registerUser(const HTTPServerRequest& request, HTTPServerResponse& response) override;
+    void authorizeUser(const HTTPServerRequest& request, HTTPServerResponse& response) override;    
 
 
 
