@@ -79,7 +79,7 @@ class WebServerApp: public ServerApplication
                 "key.pem",
                 "certificate.pem",
                 "",
-                Context::VERIFY_ONCE,
+                Context::VERIFY_NONE,
                 9,
                 true
         );
