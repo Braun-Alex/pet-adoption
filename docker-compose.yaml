@@ -1,0 +1,40 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: ./front-end
+    ports:
+      - "3000:3000"
+    container_name: frontend-container
+    restart: on-failure
+    networks:
+      - my-network
+
+  backend:
+    build:
+      context: ./back-end
+    ports:
+      - "8080:8080"
+    container_name: backend-container
+    restart: on-failure
+    depends_on:
+      - database
+   
+  database:
+    image: postgres:16.0-alpine3.17
+    container_name: postgres-db 
+    #host: host.docker.internal
+    ports:
+      -  "5432:5432"
+    environment:
+      POSTGRES_DB: pet-adoption
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - ./back-end/orm/pet_adoption.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: on-failure
+
+networks:
+  my-network:
+    driver: bridge
+      
