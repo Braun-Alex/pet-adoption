@@ -46,7 +46,7 @@ public:
         //     return handler->second();
         // }
         // return new PingRequestHandler();
-        return handler_;
+        return new RequestHandler();
     }
 private:
     // std::unordered_map<std::string, std::function<HTTPRequestHandler*(/*const HTTPServerRequest& request*/)>> handlers;
@@ -98,10 +98,13 @@ class WebServerApp: public ServerApplication
         KeyManager::setPassphrasePath("serverPassphrase.key");
 
         SecureServerSocket svs(port, 64, pContext);
-        HTTPServer srv(new RequestHandlerFactory, svs, params);
+
+        HTTPServer srv(new RequestHandlerFactory, 8080, params);
 
         srv.start();
         logger().information("HTTPS server started on port %hu.", port);
+        
+        logger().information("ABOBA\n");
         waitForTerminationRequest();
         logger().information("Stopping HTTPS server...");
         srv.stop();

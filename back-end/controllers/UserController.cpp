@@ -13,11 +13,17 @@ UserController::UserController(/*const Poco::Data::Session session, Context::Ptr
 }
 
 bool UserController::registerUser(const LocalStructs::User& user){
+        Application& app = Application::instance();
+   
+    app.logger().information("UserController::registerUser.");
     std::cout<<"UserController::registerUser called.\n";
     return true;
 }
 
 bool UserController::authorizeUser(const LocalStructs::User& user){
+        Application& app = Application::instance();
+   
+    app.logger().information("UserController::authorizeUser.");
     std::cout<<"UserController::authorizeUser called.\n";
     return true;
 }
