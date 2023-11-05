@@ -19,11 +19,13 @@ class UserService(UserServiceInterface):
 
     def register_user(self, user:UserLocal) -> UserLocal:
         user_db = self._user_controller.get_user_by_email(user.email)
-        print (f"{user_db=}")
+        
         if user_db:
             raise HTTPException(400, detail="User already exist")
 
         user_db = self._user_controller.create_user(user)
+        print (f"{str(user_db)=}")
+        
         return UserLocal(id=user_db.id, email=user_db.email, full_name=user_db.full_name)
 
 
@@ -31,6 +33,9 @@ class UserService(UserServiceInterface):
         user_db = self._user_controller.get_user_by_email(user.email)
         print (f"{user_db=}")
         if not user_db:
-            raise HTTPException(400, detail="User is not exist")
+            raise HTTPException(400, detail="User does not exist")
+        
+        if user.password != user_db.password:
+            raise HTTPException(400, detail="Password is incorrect")
         
         return UserLocal(id=user_db.id, email=user_db.email, full_name=user_db.full_name)
