@@ -60,10 +60,11 @@ class UserController(UserControllerInterface):
  
     def create_user(self, user: UserLocal) -> UserDB:
         db_user = UserDB(**user.model_dump())
-        self._db.add(db_user)
+        user_db = UserDB(email=user.email, full_name=user.full_name, password=user.password)
+        self._db.add(user_db)
         self._db.commit()
-        self._db.refresh(db_user)
-        return db_user
+        self._db.refresh(user_db)
+        return user_db
     
     def get_user_by_id(self, user_id: int) -> Optional[UserDB]:
         return self._db.query(UserDB).filter(UserDB.id == user_id).first()

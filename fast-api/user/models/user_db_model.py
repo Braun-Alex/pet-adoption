@@ -15,3 +15,7 @@ class UserDB(Base):
     full_name = Column(String)
     password = Column(String)
 
+    def __str__(self):
+        return f"User(id={self.id}, email={self.email}, full_name={self.full_name})"
+
+
