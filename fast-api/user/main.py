@@ -1,5 +1,6 @@
 # user_service.py
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine, get_db, SessionLocal
 
 from service.user_service import UserService
@@ -16,6 +17,15 @@ from models.user_local_model import UserLocal
 
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # або "*" для дозволу всіх джерел
+    allow_credentials=True,
+    allow_methods=["*"],  # Дозволяє всі методи
+    allow_headers=["*"],  # Дозволяє всі заголовки
+)
+
 db = SessionLocal()
 
 user_service = UserService(user_controller=UserController(db=db)) 
