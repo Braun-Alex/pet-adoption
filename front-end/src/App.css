@@ -15,8 +15,18 @@ header {
   font-size: 17px;
 }
 
+a {
+  text-decoration: none;
+}
 
+.userName-header {
+  color: rgba(36, 29, 17, 0.65);
+  font-size: 18px;
+  font-weight: 500;
+  margin-right: 15px;
+}
 
+.logout-button,
 .login-button {
   background-color: #D8CFB9;
   color: #F2F1ED;
@@ -34,7 +44,7 @@ header {
   border: none;
   padding: 6px 16px;
   border-radius: 50px;
-  margin-left: 10px;
+  margin-left: 15px;
   cursor: pointer;  
   font-size: 16px;
 }

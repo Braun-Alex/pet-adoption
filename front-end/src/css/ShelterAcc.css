@@ -1,0 +1,122 @@
+.shelter-photo-greeting {
+  display: flex;
+  align-items: center;
+  margin-top: 60px;
+  margin-left: 150px;
+}
+
+.photo-container {
+  min-width: 200px;
+  min-height: 200px;
+  background-color: #ccc;
+  border-radius: 50%;
+  color: rgb(255, 255, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.selected-photo {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+}
+
+.shelter-greeting {
+  color: #000;
+  font-size: 40px;
+  font-weight: 300;
+  margin-left: 100px;
+  width: 1000px;
+}
+
+.shelter-options {
+  padding: 20px 0;
+  
+  width: 300px;
+  border-radius: 20px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.active-shelter-option {
+  background: #d8cfb9;
+  height: 65px;
+  border: none;
+  color: #000;
+  font-size: 20px;
+  text-align: left;
+  cursor: pointer;
+  margin: 0;
+}
+
+.inactive-shelter-option {
+  background: none;
+  height: 65px;
+  border: none;
+  color: #000;
+  font-size: 20px;
+  text-align: left;
+  cursor: pointer;
+  margin: 0;
+}
+
+.shelter-options img {
+  width: 23px;
+  margin: 0 10px 0 15px;
+}
+
+.shelter-options-open {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 40px 0px 0px 100px
+}
+
+.shelterEditInfo {
+  margin-left: 50px;
+  width: 225%;
+}
+
+.shelterEditInfo-field {
+  margin-bottom: 15px;
+  padding: 8px 0 0 15px;
+  text-align: left;
+  height: 56px;
+
+  border-radius: 4px;
+  border: 1px solid var(--fields-stroke-validation, #FFEAC1); 
+  background: var(--fields-bg-validation, #FFFBF4);
+}
+
+.shelterEditInfo-field label {  
+  display: block;
+  height: 16px;
+  width: 300px;
+  color: #9D99AC;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px; 
+}
+
+.shelterEditInfo-field input { 
+  margin-top: 7px;
+  outline: none;
+  display: flex;
+  background: #FFFBF4;
+  border: none;  
+  align-items: flex-start;
+  font-size: 14px;
+  gap: 8px;
+}
+
+.shelterInfo {
+  margin-left: 50px;
+  width: 100%;
+  font-size: 20px;
+  border-radius: 20px;
+  background: #fff;
+  padding: 1px 20px;
+}
