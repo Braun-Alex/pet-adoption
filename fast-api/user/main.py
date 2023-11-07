@@ -54,7 +54,7 @@ def authorize_user(user: UserLocal):
 
     # user_local = UserLocal(id=user_db.id, email=user_db.email, full_name=user_db.full_name)
     # return user_local
-
+    print(f"{user=}")
     return user_service.authorize_user(user=user)
     
 

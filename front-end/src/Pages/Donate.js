@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-function Donate() {
-  return <div>Donate Page</div>;
+class Donate extends Component {
+  render() {
+    return (<div>Donate Page</div>)
+  }
 }
 
 export default Donate;

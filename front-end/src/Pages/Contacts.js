@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-function Contacts() {
-  return <div>Contacts Page</div>;
+class Contacts extends Component {
+  render() {
+    return (<div>Contacts Page</div>)
+  }
 }
 
 export default Contacts;
