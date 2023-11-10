@@ -1,4 +1,7 @@
 # user_service.py
+import hashlib
+import os
+
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine, get_db, SessionLocal
@@ -7,13 +10,17 @@ from service.user_service import UserService
 
 from controllers.user_controller import UserController
 
-
 from pydantic import BaseModel
 from typing import Union
 
-
 from models.user_db_model import UserDB
 from models.user_local_model import UserLocal
+
+
+def hash_data(data):
+    sha256 = hashlib.sha256()
+    sha256.update(data.encode('utf-8'))
+    return sha256.hexdigest()
 
 
 app = FastAPI()
@@ -28,22 +35,21 @@ app.add_middleware(
 
 db = SessionLocal()
 
-user_service = UserService(user_controller=UserController(db=db)) 
-
+user_service = UserService(user_controller=UserController(db=db))
 
 Base.metadata.create_all(bind=engine)
 
 
-
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return {"Hi": os.urandom(32).hex()}
 
 
 @app.post("/users/register")
 def register_user(user: UserLocal):
     print(f"{user=}")
     return user_service.register_user(user=user)
+
 
 @app.post("/users/authorize/")
 def authorize_user(user: UserLocal):
@@ -56,7 +62,6 @@ def authorize_user(user: UserLocal):
     # return user_local
     print(f"{user=}")
     return user_service.authorize_user(user=user)
-    
 
 # @app.post("/users/")  # Укажите UserModel в качестве response_model
 # def create_user(user: User):
@@ -66,5 +71,3 @@ def authorize_user(user: UserLocal):
 #     db.commit()
 #     db.refresh(user)
 #     return {"db_user": user}
-
-    

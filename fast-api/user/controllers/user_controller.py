@@ -1,8 +1,8 @@
 # from database import  SessionLocal
 # from models.user_db_model import UserDB
 # from models.user_local_model import UserLocal
-
-
+import hashlib
+import os
 # session = SessionLocal()
 
 # def get_db():
@@ -26,6 +26,13 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 from models.user_db_model import UserDB
 from models.user_local_model import UserLocal
+
+
+def hash_data(data):
+    sha256 = hashlib.sha256()
+    sha256.update(data.encode('utf-8'))
+    return sha256.hexdigest()
+
 
 class UserControllerInterface(ABC):
     @abstractmethod
@@ -57,21 +64,22 @@ class UserController(UserControllerInterface):
     def __init__(self, db: Session) -> None:
         super().__init__()
         self._db = db
- 
+
     def create_user(self, user: UserLocal) -> UserDB:
-        db_user = UserDB(**user.model_dump())
-        user_db = UserDB(email=user.email, full_name=user.full_name, password=user.password)
+        random_salt = os.urandom(32).hex()
+        user_db = UserDB(email=user.email, full_name=user.full_name, password=hash_data(user.password + random_salt),
+                         salt=random_salt)
         self._db.add(user_db)
         self._db.commit()
         self._db.refresh(user_db)
         return user_db
-    
+
     def get_user_by_id(self, user_id: int) -> Optional[UserDB]:
         return self._db.query(UserDB).filter(UserDB.id == user_id).first()
 
     def get_user_by_email(self, email: str) -> Optional[UserDB]:
         return self._db.query(UserDB).filter(UserDB.email == email).first()
-    
+
     def get_all_users(self, skip: int = 0, limit: int = 100) -> List[UserDB]:
         return self._db.query(UserDB).offset(skip).limit(limit).all()
 
@@ -83,7 +91,7 @@ class UserController(UserControllerInterface):
             self._db.commit()
             self._db.refresh(db_user)
         return db_user
-    
+
     def delete_user(self, user_id: int) -> bool:
         db_user = self.get_user_by_id(user_id)
         if db_user:
