@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-
-//aboba
+import { withRouter } from 'react-router-dom';
 
 class Login extends Component {
   constructor(props) {
@@ -11,7 +10,6 @@ class Login extends Component {
       errorMessage: ''
     };
 
-    // Прив'язка методів до this
     this.handleInputChange = this.handleInputChange.bind(this);
     this.loginUser = this.loginUser.bind(this);
   }
@@ -22,7 +20,7 @@ class Login extends Component {
   }
 
   async loginUser(e) {
-    e.preventDefault(); // Це запобігає дефолтній поведінці форми
+    e.preventDefault();
 
     const { userEmail, userPassword } = this.state;
     try {
@@ -40,13 +38,15 @@ class Login extends Component {
       const data = await response.json();
       if (response.status === 200) {
         console.log('Успішно увійшли:', data);
-        // Тут можна зберегти токен та іншу інформацію про користувача
+        // Виклик функції, переданої через пропси, для оновлення стану авторизації в App.js
+        this.props.onLoginSuccess(); // передаємо ім'я користувача або іншу інформацію
+        //this.props.navigate('/'); // Редірект на основну сторінку
       } else {
         throw new Error(data.message || 'Не вдалося увійти');
       }
     } catch (error) {
       console.log('Виникла помилка при спробі входу');
-      this.setState({ errorMessage: error.message } || 'Виникла помилка при спробі входу');
+      this.setState({ errorMessage: error.message || 'Виникла помилка при спробі входу' });
     }
   }
 
@@ -59,7 +59,6 @@ class Login extends Component {
         
         <div className="form">
           <form className="login-form" onSubmit={this.loginUser}>
-
             <div className="form-field">
               <label>Електронна адреса</label>
               <input 
@@ -83,11 +82,10 @@ class Login extends Component {
             {errorMessage && <div className="error-message">{errorMessage}</div>}
             
             <button type="submit" className="button-login">Увійти</button>
-            
-            </form>
+          </form>
         </div>                
       </>
-    )
+    );
   }
 }
 
