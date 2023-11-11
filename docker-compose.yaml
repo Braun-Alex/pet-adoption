@@ -12,6 +12,7 @@ services:
   
   user_service:
     build: ./fast-api/user
+    container_name: user_service
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./fast-api/user/:/app/
@@ -21,11 +22,12 @@ services:
       - DATABASE_URI=postgresql://user_db_admin:user_db_admin@user_db/user_db
     depends_on:
       - user_db
+    # networks:
+    #   - my-network
    
   user_db:
     image: postgres:16.0-alpine3.17
-    container_name: postgres-db 
-    #host: host.docker.internal
+    container_name: user_db 
     ports:
       -  "5432:5432"
     environment:
@@ -33,11 +35,13 @@ services:
       POSTGRES_PASSWORD: user_db_admin
       POSTGRES_DB: user_db
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - user_db_data:/var/lib/postgresql/data
     restart: on-failure
+    # networks:
+    #   - my-network
 
 volumes:
-  postgres-data:
+  user_db_data:
 
 networks:
   my-network:
