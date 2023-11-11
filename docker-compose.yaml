@@ -9,27 +9,29 @@ services:
     restart: on-failure
     networks:
       - my-network
-
-  backend:
-    build:
-      context: ./back-end
+  
+  user_service:
+    build: ./fast-api/user
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    volumes:
+      - ./fast-api/user/:/app/
     ports:
-      - "8080:8080"
-    container_name: backend-container
-    restart: on-failure
+      - 8000:8000
+    environment:
+      - DATABASE_URI=postgresql://user_db_admin:user_db_admin@user_db/user_db
     depends_on:
-      - database
+      - user_db
    
-  database:
+  user_db:
     image: postgres:16.0-alpine3.17
     container_name: postgres-db 
     #host: host.docker.internal
     ports:
       -  "5432:5432"
     environment:
-      POSTGRES_DB: aboba
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin
+      POSTGRES_USER: user_db_admin
+      POSTGRES_PASSWORD: user_db_admin
+      POSTGRES_DB: user_db
     volumes:
       - postgres-data:/var/lib/postgresql/data
     restart: on-failure
