@@ -25,11 +25,11 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from models.user_db_model import UserDB
-from models.user_local_model import UserLocal
+from models.user_local_model import UserLocalOtput, UserLocalAuthorization, UserLocalBase, UserLocalRegistration
 
 class UserControllerInterface(ABC):
     @abstractmethod
-    def create_user(self, user: UserLocal) -> UserDB:
+    def create_user(self, user: UserLocalRegistration) -> UserDB:
         pass
 
     @abstractmethod
@@ -58,8 +58,7 @@ class UserController(UserControllerInterface):
         super().__init__()
         self._db = db
  
-    def create_user(self, user: UserLocal) -> UserDB:
-        db_user = UserDB(**user.model_dump())
+    def create_user(self, user: UserLocalRegistration) -> UserDB:
         user_db = UserDB(email=user.email, full_name=user.full_name, password=user.password)
         self._db.add(user_db)
         self._db.commit()
