@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
-import usericon from '../img/usericon.png'
-import animalicon from '../img/animalicon.png'
-import editicon from '../img/editicon.png'
+import usericon from '../img/usericon.png';
+import animalicon from '../img/animalicon.png';
+import editicon from '../img/editicon.png';
+import RequestList from '../Components/RequestList';
+import AnimalList from '../Components/AnimalList';
+import DB from '../List/DB';
 
 var sheltername = " назва притулку";
 var shelterEmail = " example@ex.ex";
@@ -14,8 +17,9 @@ class ShelterAcc extends Component {
     super();
     this.state = {
       photo: null,
-      showShelterAcc: true,
+      showShelterAcc: false,
       showEditAcc: false,
+      showRequestList: true,
       showAnimal: false,
     };
   }
@@ -23,6 +27,7 @@ class ShelterAcc extends Component {
     this.setState({
       showShelterAcc: true,
       showEditAcc: false,
+      showRequestList: false,
       showAnimal: false,
     });
   }
@@ -30,6 +35,15 @@ class ShelterAcc extends Component {
     this.setState({
       showShelterAcc: false,
       showEditAcc: true,
+      showRequestList: false,
+      showAnimal: false,
+    });
+  }
+  toggleRequest = () => {
+    this.setState({
+      showShelterAcc: false,
+      showEditAcc: false,
+      showRequestList: true,
       showAnimal: false,
     });
   }
@@ -37,6 +51,7 @@ class ShelterAcc extends Component {
     this.setState({
       showShelterAcc: false,
       showEditAcc: false,
+      showRequestList: false,
       showAnimal: true,
     });
   }
@@ -55,8 +70,8 @@ class ShelterAcc extends Component {
     const { photo } = this.state;
     return (
       <>        
+        
         <div class="shelter-photo-greeting">
-
           <label className="photo-container">
              <input type="file" accept="image/*" onChange={this.handleFileChange} style={{ display: 'none' }}/>
               {photo ? (
@@ -65,10 +80,9 @@ class ShelterAcc extends Component {
                 <div>фото</div>
               )}
           </label>
-
           <div className='shelter-greeting'>Вітаємо, {sheltername}!</div>
-
         </div>
+
         <div class="shelter-options-open">
           <div className="shelter-options">   
           
@@ -78,6 +92,10 @@ class ShelterAcc extends Component {
 
           <button className={`${this.state.showEditAcc ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleEditAcc}>
             <img src={editicon} alt="[ ]" /> Редагувати профіль
+            </button>
+            
+          <button className={`${this.state.showRequestList ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleRequest}>
+            <img src={editicon} alt="[ ]" /> Список заявок
           </button>
 
           <button className={`${this.state.showAnimal ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleAnimal}>
@@ -113,32 +131,48 @@ class ShelterAcc extends Component {
               </p>
 
             </div>}
-        </div>
-
-        <div>
-          {this.state.showEditAcc && <form class="shelterEditInfo">
-            <div className="shelterEditInfo-field">
-              <label>Ім'я</label>
-              <input type="text" name="shelterName"/>
-            </div>
-        
-            <div className="shelterEditInfo-field">
-              <label>Адреса</label>
-              <input type="text" name="shelterAddress"/>
-            </div>
+          </div>      
+      
+          <div>            
+            {this.state.showEditAcc && <form class="shelterEditInfo">
+              <div className="shelterEditInfo-field">
+                <label>Ім'я</label>
+                <input type="text" name="shelterName"/>
+              </div>
           
-            <div className="shelterEditInfo-field">
-              <label>Номер телефону</label>
-              <input type="tel" name="shelterPhone"/>
-            </div>
+              <div className="shelterEditInfo-field">
+                <label>Адреса</label>
+                <input type="text" name="shelterAddress"/>
+              </div>
             
-            <div className="shelterEditInfo-field">
-              <label>Опис</label>
-              <input type="text" name="shelterDescription"/>
-            </div>
+              <div className="shelterEditInfo-field">
+                <label>Номер телефону</label>
+                <input type="tel" name="shelterPhone"/>
+              </div>
+              
+              <div className="shelterEditInfo-field">
+                <label>Опис</label>
+                <input type="text" name="shelterDescription"/>
+              </div>
 
             </form>}
-        </div>
+          </div>
+
+          <div>
+            {this.state.showRequestList && <RequestList />
+              
+            }
+          </div>
+           
+          <div>
+            {this.state.showAnimal && <div>
+
+              <AnimalList />
+              
+
+            </div>            
+            }
+          </div>
         </div>
         
       </>     
