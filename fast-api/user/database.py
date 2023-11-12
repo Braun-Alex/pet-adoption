@@ -8,10 +8,13 @@ import os
 db_username = 'admin'
 db_password = 'admin'
 db_host = 'localhost'
-db_name = 'aboba'  # Change to your desired database name
+db_name = 'admin'  # Change to your desired database name
 
 # Create a PostgreSQL database connection URL
 db_url = os.getenv('DATABASE_URI')
+db_url = f'postgresql://{db_username}:{db_password}@{db_host}/{db_name}'
+
+print(f"Trying to create connection with DB. {db_url=}")
 
 # Create an SQLAlchemy engine
 engine = create_engine(db_url)
