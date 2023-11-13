@@ -4,6 +4,8 @@ services:
     build: ./front-end
     ports:
       - "3000:3000"
+    volumes:
+      - ./front-end:/app/
     container_name: frontend-container
     command: npm start
     restart: on-failure
