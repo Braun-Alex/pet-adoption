@@ -5,7 +5,7 @@ FROM node:latest
 WORKDIR /app
 
 # Copy the package.json and package-lock.json to the container
-COPY package*.json ./
+COPY package*.json /app/
 
 # Install dependencies
 RUN npm install
@@ -20,4 +20,4 @@ RUN npm run build
 EXPOSE 3000
 
 # Start the application
-CMD ["npm", "start"]
+# CMD ["npm", "start"]
