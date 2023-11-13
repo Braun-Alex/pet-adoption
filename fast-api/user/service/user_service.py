@@ -3,9 +3,9 @@ from models.user_local_model import UserLocalBase, UserLocalOtput, UserLocalRegi
 from controllers.user_controller import UserController
 from models.user_db_model import UserDB
 from fastapi import HTTPException
-from logging import Logger
+import logging 
 
-logger = Logger("UserService")
+logger = logging.getLogger(__name__)
 
 class UserServiceInterface:
     def register_user(self, user_local:UserLocalRegistration):

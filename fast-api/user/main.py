@@ -7,26 +7,30 @@ from service.user_service import UserService
 
 from controllers.user_controller import UserController
 
-
-from pydantic import BaseModel
 from typing import Union
 
 from models.user_db_model import UserDB
 from models.user_local_model import UserLocalAuthorization, UserLocalBase, UserLocalOtput, UserLocalRegistration
 
-from logging import Logger
+import logging  
 
-logger = Logger("UserRequests")
+from pydantic import BaseModel
 
-app = FastAPI()
+
+# Rest of your code
+app = FastAPI(debug=True)
+
+
+logger = logging.getLogger(__name__)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # або "*" для дозволу всіх джерел
+    allow_origins=["http://localhost:3000"],  # або "*" для дозволу всіх джерел
     allow_credentials=True,
     allow_methods=["*"],  # Дозволяє всі методи
     allow_headers=["*"],  # Дозволяє всі заголовки
-)
+) 
+
 
 db = SessionLocal()
 
