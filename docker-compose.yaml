@@ -1,14 +1,16 @@
 version: '3'
 services:
   frontend:
-    build:
-      context: ./front-end
+    build: ./front-end
     ports:
       - "3000:3000"
     container_name: frontend-container
+    command: npm start
     restart: on-failure
     networks:
       - my-network
+    # volumes:
+    #   - ./front-end/:/app/
   
   user_service:
     build: ./fast-api/user
@@ -17,24 +19,29 @@ services:
     volumes:
       - ./fast-api/user/:/app/
     ports:
-      - 8000:8000
+      - "8000:8000"
     environment:
-      - DATABASE_URI=postgresql://user_db_admin:user_db_admin@user_db/user_db
+      - DATABASE_URI=postgresql://user_db_user:user_db_password@user_db/user_db_dev
     depends_on:
       - user_db
-   
+    networks:
+      - my-network
+
+
   user_db:
     image: postgres:16.0-alpine3.17
-    container_name: user_db 
+    container_name: user_db_container
     ports:
       -  "5432:5432"
     environment:
-      POSTGRES_USER: user_db_admin
-      POSTGRES_PASSWORD: user_db_admin
-      POSTGRES_DB: user_db
+      POSTGRES_DB: user_db_dev
+      POSTGRES_USER: user_db_user
+      POSTGRES_PASSWORD: user_db_password
     volumes:
       - user_db_data:/var/lib/postgresql/data
     restart: on-failure
+    networks:
+      - my-network
 
   animal_service:
     build: ./fast-api/animal
