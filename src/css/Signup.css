@@ -1,0 +1,103 @@
+/* Стилі для форми реєстрації */
+.form-header {
+   color: rgba(36, 29, 17, 0.79);
+   text-align: center;
+   font-size: 24px;
+   font-style: normal;
+   font-weight: 400;
+   line-height: 16px; 
+   margin-top: 70px;
+   margin-bottom: 27px;
+}
+
+.form {
+  text-align: center;
+  margin: auto;
+  max-width: 400px;
+  padding: 20px;
+  border-radius: 10px;
+  background: #F2F1ED;  
+  height: 451px;
+  flex-shrink: 0;
+  
+}
+
+.registration-form {
+  margin-top: 34px;
+  text-align: center;
+  display: inline-block;
+}
+
+
+
+.active {
+  cursor: pointer;
+  border: none;
+  color: #EC905D;
+  font-size: 18px;
+  margin-top: 30px;
+}
+
+.inactive {
+  cursor: pointer;
+  border: none;
+  color: #B7AE9A;
+  font-size: 18px;
+  margin-top: 30px;
+}
+
+
+.hr-line-user {
+    border-top: 3px solid #EC905D; /* Товщина та колір лінії */
+    width: 26%; /* Встановіть бажану довжину лінії (наприклад, 50%) */
+    margin: 6px 0 0 103px; /* Відступи від лінії */
+}
+
+.hr-line-shelter {
+    border-top: 3px solid #EC905D; /* Товщина та колір лінії */
+    width: 23%; /* Встановіть бажану довжину лінії (наприклад, 50%) */
+    margin: 6px 1px 0 210px;
+}
+
+.form-field {
+  margin-bottom: 35px;
+  padding: 8px 0 0 15px;
+  text-align: left;
+  height: 56px;
+  width: 340px;
+  border-radius: 4px;
+  border: 1px solid var(--fields-stroke-validation, #FFEAC1); 
+  background: var(--fields-bg-validation, #FFFBF4);
+}
+
+.form-field label {  
+  display: block;
+  height: 16px;
+  width: 300px;
+  color: #9D99AC;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px; 
+}
+
+.form-field input { 
+  margin-top: 7px;
+  outline: none;
+  display: flex;
+  background: #FFFBF4;
+  border: none;  
+  align-items: flex-start;
+  font-size: 14px;
+  gap: 8px;
+}
+
+.button-reg {
+  background-color: #F2F1ED;
+  border: 2px solid #9e8e78;
+  color: #645A4C;
+  letter-spacing: 1px;
+  padding: 12.968px 83.982px 9.68px 82.832px;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 18px;
+}
