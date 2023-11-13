@@ -14,34 +14,36 @@ services:
   user_service:
     build: ./fast-api/user
     container_name: user_service
-    command: uvicorn main:app --reload 
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
     volumes:
       - ./fast-api/user/:/app/
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URI=postgresql://user_db_admin:user_db_password@user_db_container/user_db_dev
+      - DATABASE_URI=postgresql://user_db_user:user_db_password@user_db/user_db_dev
     depends_on:
       - user_db
-    # networks:
-    #   - my-network
-   
+    networks:
+      - my-network
+
+
   user_db:
     image: postgres:16.0-alpine3.17
-    container_name: user_db_container 
+    container_name: user_db_container
     ports:
       -  "5432:5432"
     environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=admin
+      POSTGRES_DB: user_db_dev
+      POSTGRES_USER: user_db_user
+      POSTGRES_PASSWORD: user_db_password
     volumes:
-      - user_db_data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
     restart: on-failure
-    # networks:
-    #   - my-network
+    networks:
+      - my-network
 
 volumes:
+  postgres-data:
   user_db_data:
 
 networks:
