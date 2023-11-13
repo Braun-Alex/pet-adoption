@@ -16,12 +16,7 @@ from typing import Union
 from models.user_db_model import UserDB
 from models.user_local_model import UserLocal
 
-
-def hash_data(data):
-    sha256 = hashlib.sha256()
-    sha256.update(data.encode('utf-8'))
-    return sha256.hexdigest()
-
+from utilities.utilities import hash_data
 
 app = FastAPI()
 

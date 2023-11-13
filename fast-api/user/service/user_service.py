@@ -1,17 +1,10 @@
-import hashlib
 import os
 from typing import Optional
 from models.user_local_model import UserLocal
 from controllers.user_controller import UserController
 from models.user_db_model import UserDB
 from fastapi import HTTPException
-
-
-def hash_data(data):
-    sha256 = hashlib.sha256()
-    sha256.update(data.encode('utf-8'))
-    return sha256.hexdigest()
-
+from utilities.utilities import hash_data
 
 class UserServiceInterface:
     def register_user(self, user_local: UserLocal):
