@@ -53,6 +53,7 @@ services:
       - "8001:8000"
     environment:
       - DATABASE_URI=postgresql://animal_db_admin:animal_db_password@animal_db/animal_db_dev
+      # TODO: change user_service URL for shelter_service!!!!!
       - SHELTER_SERVICE_HOST_URL=http://user_service:8000/users/
     depends_on:
       - animal_db
