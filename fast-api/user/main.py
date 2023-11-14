@@ -18,14 +18,14 @@ from pydantic import BaseModel
 
 
 # Rest of your code
-app = FastAPI(debug=True)
+app = FastAPI()
 
 
 logger = logging.getLogger(__name__)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # або "*" для дозволу всіх джерел
+    allow_origins=["*"],  # або "*" для дозволу всіх джерел
     allow_credentials=True,
     allow_methods=["*"],  # Дозволяє всі методи
     allow_headers=["*"],  # Дозволяє всі заголовки
@@ -62,6 +62,11 @@ def authorize_user(user: UserLocalAuthorization):
     # return user_local
     logger.info(f"{user=}")
     return user_service.authorize_user(user=user)
+
+@app.get("/users/{id}")
+def get_user_by_id(id: int):
+    logger.info(f"Handling request /users/{id}")
+    return user_service.get_user(id=id)
     
 
 # @app.post("/users/")  # Укажите UserModel в качестве response_model
