@@ -1,15 +1,16 @@
-from typing import Optional
-from models.shelter_local_model import ShelterLocal
 from controllers.shelter_controller import ShelterController
-from fastapi import HTTPException
-from utilities.utilities import HTTPResponse, hash_data
+from models.shelter_local_model import ShelterLocal
+from utilities.utilities import hash_data
+from fastapi import status, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
+from utilities.utilities import TokenSchema, create_access_token, create_refresh_token
 
 
 class ShelterServiceInterface:
-    def register_shelter(self, shelter_local: ShelterLocal):
+    def register_shelter(self, success: bool):
         pass
 
-    def authorize_shelter(self, shelter_local: ShelterLocal):
+    def authorize_shelter(self, tokens: TokenSchema):
         pass
 
 
@@ -17,21 +18,21 @@ class ShelterService(ShelterServiceInterface):
     def __init__(self, shelter_controller: ShelterController):
         self._shelter_controller = shelter_controller
 
-    def register_shelter(self, shelter: ShelterLocal) -> ShelterLocal:
+    def register_shelter(self, shelter: ShelterLocal) -> bool:
         shelter_db = self._shelter_controller.get_shelter_by_email(shelter.email)
 
         if shelter_db:
-            raise HTTPException(HTTPResponse.CONFLICT.value)
+            raise HTTPException(status.HTTP_409_CONFLICT)
 
-        shelter_db = self._shelter_controller.create_shelter(shelter)
-        print(f"{str(shelter_db)=}")
+        return self._shelter_controller.create_shelter(shelter)
 
-        return ShelterLocal(id=shelter_db.id, email=shelter_db.email, name=shelter_db.name)
-
-    def authorize_shelter(self, shelter: ShelterLocal) -> Optional[ShelterLocal]:
-        shelter_db = self._shelter_controller.get_shelter_by_email(shelter.email)
+    def authorize_shelter(self, shelter: OAuth2PasswordRequestForm) -> TokenSchema:
+        shelter_db = self._shelter_controller.get_shelter_by_email(shelter.username)
         print(f"{shelter_db=}")
         if not shelter_db or hash_data(shelter.password + shelter_db.salt) != shelter_db.password:
-            raise HTTPException(HTTPResponse.UNAUTHORIZED.value)
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED)
 
-        return ShelterLocal(id=shelter_db.id, email=shelter_db.email, name=shelter_db.name)
+        return {
+            "access_token": create_access_token(shelter_db),
+            "refresh_token": create_refresh_token(shelter_db),
+        }

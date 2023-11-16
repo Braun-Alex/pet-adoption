@@ -1,11 +1,14 @@
 import os
 
-from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine, SessionLocal
 from service.shelter_service import ShelterService
 from controllers.shelter_controller import ShelterController
 from models.shelter_local_model import ShelterLocal
+from fastapi import FastAPI, Depends
+from fastapi.security import OAuth2PasswordRequestForm
+from dependencies.dependencies import get_current_shelter
+from utilities.utilities import TokenSchema, TokenPayload
 
 app = FastAPI()
 
@@ -29,22 +32,18 @@ def read_root():
     return {"Hi from shelter": os.urandom(32).hex()}
 
 
-@app.post("/shelters/registration")
-def register_shelter(shelter: ShelterLocal):
+@app.post("/shelters/signup", response_model=bool)
+def register_user(shelter: ShelterLocal):
     print(f"{shelter=}")
     return shelter_service.register_shelter(shelter=shelter)
 
 
-@app.post("/shelters/authorization/")
-def authorize_shelter(shelter: ShelterLocal):
+@app.post("/shelters/login", response_model=TokenSchema)
+def authorize_user(shelter: OAuth2PasswordRequestForm = Depends()):
     print(f"{shelter=}")
     return shelter_service.authorize_shelter(shelter=shelter)
 
-# @app.post("/users/")  # Укажите UserModel в качестве response_model
-# def create_user(user: User):
-#     # db_user = user # Создаем объект UserModel
-#     print("ABOBA ")
-#     db.add(user)
-#     db.commit()
-#     db.refresh(user)
-#     return {"db_user": user}
+
+@app.get('/me', response_model=TokenPayload)
+def get_me(token_payload=Depends(get_current_shelter)):
+    return token_payload

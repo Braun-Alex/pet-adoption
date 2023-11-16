@@ -23,15 +23,17 @@ from sqlalchemy.orm import Session
 from models.user_db_model import UserDB
 from models.user_local_model import UserLocal
 from utilities.utilities import hash_data
+from fastapi.security import OAuth2PasswordRequestForm
+from uuid import uuid4
 
 
 class UserControllerInterface(ABC):
     @abstractmethod
-    def create_user(self, user: UserLocal) -> UserDB:
+    def create_user(self, user: UserLocal) -> bool:
         pass
 
     @abstractmethod
-    def get_user_by_id(self, user_id: int) -> Optional[UserDB]:
+    def get_user_by_id(self, user_id: str) -> Optional[UserDB]:
         pass
 
     @abstractmethod
@@ -43,11 +45,11 @@ class UserControllerInterface(ABC):
         pass
 
     @abstractmethod
-    def update_user(self, user_id: int, user_data: dict) -> Optional[UserDB]:
+    def update_user(self, user_id: str, user_data: dict) -> Optional[UserDB]:
         pass
 
     @abstractmethod
-    def delete_user(self, user_id: int) -> bool:
+    def delete_user(self, user_id: str) -> bool:
         pass
 
 
@@ -56,16 +58,19 @@ class UserController(UserControllerInterface):
         super().__init__()
         self._db = db
 
-    def create_user(self, user: UserLocal) -> UserDB:
+    def create_user(self, user: UserLocal) -> bool:
         random_salt = os.urandom(32).hex()
-        user_db = UserDB(email=user.email, full_name=user.full_name, password=hash_data(user.password + random_salt),
+        random_id = str(uuid4())
+        user_db = UserDB(id=random_id,
+                         email=user.email,
+                         password=hash_data(user.password + random_salt),
                          salt=random_salt)
         self._db.add(user_db)
         self._db.commit()
         self._db.refresh(user_db)
-        return user_db
+        return True
 
-    def get_user_by_id(self, user_id: int) -> Optional[UserDB]:
+    def get_user_by_id(self, user_id: str) -> Optional[UserDB]:
         return self._db.query(UserDB).filter(UserDB.id == user_id).first()
 
     def get_user_by_email(self, email: str) -> Optional[UserDB]:
@@ -74,7 +79,7 @@ class UserController(UserControllerInterface):
     def get_all_users(self, skip: int = 0, limit: int = 100) -> List[UserDB]:
         return self._db.query(UserDB).offset(skip).limit(limit).all()
 
-    def update_user(self, user_id: int, user_data: dict) -> Optional[UserDB]:
+    def update_user(self, user_id: str, user_data: dict) -> Optional[UserDB]:
         db_user = self.get_user_by_id(user_id)
         if db_user:
             for key, value in user_data.items():
@@ -83,7 +88,7 @@ class UserController(UserControllerInterface):
             self._db.refresh(db_user)
         return db_user
 
-    def delete_user(self, user_id: int) -> bool:
+    def delete_user(self, user_id: str) -> bool:
         db_user = self.get_user_by_id(user_id)
         if db_user:
             self._db.delete(db_user)
