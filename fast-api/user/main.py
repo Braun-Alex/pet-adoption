@@ -25,10 +25,9 @@ logger = logging.getLogger(__name__)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # або "*" для дозволу всіх джерел
+    allow_origins=["*"], 
     allow_credentials=True,
-    allow_methods=["*"],  # Дозволяє всі методи
-    allow_headers=["*"],  # Дозволяє всі заголовки
+    allow_methods=["*"],
 ) 
 
 
