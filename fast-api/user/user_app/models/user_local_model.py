@@ -3,7 +3,7 @@ from typing import Optional
 
 #shared properties
 class UserLocalBase(BaseModel):
-    email: str 
+    email: Optional[str] = None
     full_name: Optional[str] = None
     photo: Optional[str] = None
     description: Optional[str] = None
