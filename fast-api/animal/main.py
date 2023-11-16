@@ -3,10 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import logging  
 
-from user_app.users import users_route
+from animal_app.animals import animals_router
 
 # Rest of your code
-app = FastAPI(openapi_url="/api/v1/users/openapi.json", docs_url="/api/v1/users/docs")
+app = FastAPI(openapi_url="/api/v1/animals/openapi.json", docs_url="/api/v1/animals/docs")
 
 app.add_middleware(
     CORSMiddleware,
@@ -18,10 +18,10 @@ app.add_middleware(
 
 logger = logging.getLogger(__name__)
 
-app.include_router(users_route, prefix='/api/v1/users', tags=["users"])
+app.include_router(animals_router, prefix='/api/v1/animals', tags=["animals"])
 
 
 
 @app.get("/")
 def biba():
-    return {"message": "Biba handler"}
+    return {"message": "Animal handler"}

@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from models.user_db_model import UserDB
-from models.user_local_model import UserLocalOtput, UserLocalAuthorization, UserLocalBase, UserLocalRegistration
+from user_app.models.user_db_model import UserDB
+from user_app.models.user_local_model import UserLocalOtput, UserLocalAuthorization, UserLocalBase, UserLocalRegistration
 
 class UserControllerInterface(ABC):
     @abstractmethod
