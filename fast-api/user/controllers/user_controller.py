@@ -1,8 +1,3 @@
-# from database import  SessionLocal
-# from models.user_db_model import UserDB
-# from models.user_local_model import UserLocal
-import hashlib
-import os
 # session = SessionLocal()
 
 # def get_db():
@@ -20,14 +15,15 @@ import os
 #     db.commit()
 #     return db_item
 
+import os
 
 from abc import ABC, abstractmethod
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from models.user_db_model import UserDB
 from models.user_local_model import UserLocal
-
 from utilities.utilities import hash_data
+
 
 class UserControllerInterface(ABC):
     @abstractmethod

@@ -1,10 +1,5 @@
-# models/user.py
 from sqlalchemy import Column, Integer, String
-
-
 from database import Base
-
-
 
 
 class UserDB(Base):
@@ -18,5 +13,3 @@ class UserDB(Base):
 
     def __str__(self):
         return f"User(id={self.id}, email={self.email}, full_name={self.full_name})"
-
-

@@ -1,22 +1,11 @@
-# user_service.py
-import hashlib
 import os
 
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from database import Base, engine, get_db, SessionLocal
-
+from database import Base, engine, SessionLocal
 from service.user_service import UserService
-
 from controllers.user_controller import UserController
-
-from pydantic import BaseModel
-from typing import Union
-
-from models.user_db_model import UserDB
 from models.user_local_model import UserLocal
-
-from utilities.utilities import hash_data
 
 app = FastAPI()
 
@@ -37,32 +26,16 @@ Base.metadata.create_all(bind=engine)
 
 @app.get("/")
 def read_root():
-    return {"Hi": os.urandom(32).hex()}
+    return {"Hi from user": os.urandom(32).hex()}
 
 
-@app.post("/users/register")
+@app.post("/users/registration")
 def register_user(user: UserLocal):
     print(f"{user=}")
     return user_service.register_user(user=user)
 
 
-@app.post("/users/authorize/")
+@app.post("/users/authorization")
 def authorize_user(user: UserLocal):
-    # user_db = user_controller.get_user_by_email(email)
-    # print (f"{user_db=}")
-    # if not user_db:
-    #     raise HTTPException(400, detail="User is not exist")
-
-    # user_local = UserLocal(id=user_db.id, email=user_db.email, full_name=user_db.full_name)
-    # return user_local
     print(f"{user=}")
     return user_service.authorize_user(user=user)
-
-# @app.post("/users/")  # Укажите UserModel в качестве response_model
-# def create_user(user: User):
-#     # db_user = user # Создаем объект UserModel
-#     print("ABOBA ")
-#     db.add(user)
-#     db.commit()
-#     db.refresh(user)
-#     return {"db_user": user}
