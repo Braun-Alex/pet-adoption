@@ -22,8 +22,7 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 from models.user_db_model import UserDB
 from models.user_local_model import UserLocal
-from utilities.utilities import hash_data
-from fastapi.security import OAuth2PasswordRequestForm
+from utilities.utilities import hash_data, AES_SECRET_KEY, deterministic_encrypt_data
 from uuid import uuid4
 
 
@@ -38,10 +37,6 @@ class UserControllerInterface(ABC):
 
     @abstractmethod
     def get_user_by_email(self, email: str) -> Optional[UserDB]:
-        pass
-
-    @abstractmethod
-    def get_all_users(self, skip: int = 0, limit: int = 100) -> List[UserDB]:
         pass
 
     @abstractmethod
@@ -62,7 +57,7 @@ class UserController(UserControllerInterface):
         random_salt = os.urandom(32).hex()
         random_id = str(uuid4())
         user_db = UserDB(id=random_id,
-                         email=user.email,
+                         email=deterministic_encrypt_data(user.email, AES_SECRET_KEY),
                          password=hash_data(user.password + random_salt),
                          salt=random_salt)
         self._db.add(user_db)
@@ -74,10 +69,8 @@ class UserController(UserControllerInterface):
         return self._db.query(UserDB).filter(UserDB.id == user_id).first()
 
     def get_user_by_email(self, email: str) -> Optional[UserDB]:
-        return self._db.query(UserDB).filter(UserDB.email == email).first()
-
-    def get_all_users(self, skip: int = 0, limit: int = 100) -> List[UserDB]:
-        return self._db.query(UserDB).offset(skip).limit(limit).all()
+        deterministically_encrypted_email = deterministic_encrypt_data(email, AES_SECRET_KEY)
+        return self._db.query(UserDB).filter(UserDB.email == deterministically_encrypted_email).first()
 
     def update_user(self, user_id: str, user_data: dict) -> Optional[UserDB]:
         db_user = self.get_user_by_id(user_id)

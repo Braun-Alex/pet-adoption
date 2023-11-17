@@ -23,7 +23,6 @@ from sqlalchemy.orm import Session
 from models.shelter_db_model import ShelterDB
 from models.shelter_local_model import ShelterLocal
 from utilities.utilities import hash_data
-from fastapi.security import OAuth2PasswordRequestForm
 from uuid import uuid4
 
 

@@ -13,6 +13,9 @@ class ShelterServiceInterface:
     def authorize_shelter(self, tokens: TokenSchema):
         pass
 
+    def get_shelter(self, shelter: str):
+        pass
+
 
 class ShelterService(ShelterServiceInterface):
     def __init__(self, shelter_controller: ShelterController):
@@ -28,11 +31,16 @@ class ShelterService(ShelterServiceInterface):
 
     def authorize_shelter(self, shelter: OAuth2PasswordRequestForm) -> TokenSchema:
         shelter_db = self._shelter_controller.get_shelter_by_email(shelter.username)
-        print(f"{shelter_db=}")
         if not shelter_db or hash_data(shelter.password + shelter_db.salt) != shelter_db.password:
             raise HTTPException(status.HTTP_401_UNAUTHORIZED)
 
         return {
-            "access_token": create_access_token(shelter_db),
-            "refresh_token": create_refresh_token(shelter_db),
+            "access_token": create_access_token(shelter_db.id),
+            "refresh_token": create_refresh_token(shelter_db.id),
         }
+
+    def get_shelter(self, shelter_id: str) -> str:
+        shelter_db = self._shelter_controller.get_shelter_by_id(shelter_id)
+        if not shelter_db:
+            raise HTTPException(status.HTTP_404_NOT_FOUND)
+        return str(shelter_db)

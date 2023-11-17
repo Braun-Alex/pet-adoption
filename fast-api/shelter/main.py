@@ -8,7 +8,7 @@ from models.shelter_local_model import ShelterLocal
 from fastapi import FastAPI, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from dependencies.dependencies import get_current_shelter
-from utilities.utilities import TokenSchema, TokenPayload
+from utilities.utilities import TokenSchema
 
 app = FastAPI()
 
@@ -32,18 +32,16 @@ def read_root():
     return {"Hi from shelter": os.urandom(32).hex()}
 
 
-@app.post("/shelters/signup", response_model=bool)
+@app.post("/shelter/signup", response_model=bool)
 def register_user(shelter: ShelterLocal):
-    print(f"{shelter=}")
     return shelter_service.register_shelter(shelter=shelter)
 
 
-@app.post("/shelters/login", response_model=TokenSchema)
+@app.post("/shelter/login", response_model=TokenSchema)
 def authorize_user(shelter: OAuth2PasswordRequestForm = Depends()):
-    print(f"{shelter=}")
     return shelter_service.authorize_shelter(shelter=shelter)
 
 
-@app.get('/me', response_model=TokenPayload)
-def get_me(token_payload=Depends(get_current_shelter)):
-    return token_payload
+@app.get('/shelter/profile', response_model=str)
+def get_shelter(token_payload=Depends(get_current_shelter)):
+    return shelter_service.get_shelter(token_payload.sub)

@@ -13,6 +13,9 @@ class UserServiceInterface:
     def authorize_user(self, tokens: TokenSchema):
         pass
 
+    def get_user(self, user: str):
+        pass
+
 
 class UserService(UserServiceInterface):
     def __init__(self, user_controller: UserController):
@@ -28,11 +31,16 @@ class UserService(UserServiceInterface):
 
     def authorize_user(self, user: OAuth2PasswordRequestForm) -> TokenSchema:
         user_db = self._user_controller.get_user_by_email(user.username)
-        print(f"{user_db=}")
         if not user_db or hash_data(user.password + user_db.salt) != user_db.password:
             raise HTTPException(status.HTTP_401_UNAUTHORIZED)
 
         return {
-            "access_token": create_access_token(user_db),
-            "refresh_token": create_refresh_token(user_db),
+            "access_token": create_access_token(user_db.id),
+            "refresh_token": create_refresh_token(user_db.id)
         }
+
+    def get_user(self, user_id: str) -> str:
+        user_db = self._user_controller.get_user_by_id(user_id)
+        if not user_db:
+            raise HTTPException(status.HTTP_404_NOT_FOUND)
+        return str(user_db)

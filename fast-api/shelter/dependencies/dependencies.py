@@ -7,7 +7,7 @@ from jose import jwt
 from pydantic import ValidationError
 
 reusable_oauth = OAuth2PasswordBearer(
-    tokenUrl="/shelters/login",
+    tokenUrl="/shelter/login",
     scheme_name="JWT"
 )
 
