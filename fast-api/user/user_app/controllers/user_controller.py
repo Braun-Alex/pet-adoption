@@ -21,14 +21,14 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from user_app.models.user_db_model import UserDB
-from user_app.models.user_local_model import UserLocal
+from user_app.models.user_local_model import UserLocalRegistration, UserLocalOtput, UserLocalAuthorization
 from user_app.utilities.utilities import hash_data, AES_SECRET_KEY, deterministic_encrypt_data
 from uuid import uuid4
 
 
 class UserControllerInterface(ABC):
     @abstractmethod
-    def create_user(self, user: UserLocal) -> bool:
+    def create_user(self, user: UserLocalRegistration) -> bool:
         pass
 
     @abstractmethod
@@ -53,17 +53,13 @@ class UserController(UserControllerInterface):
         super().__init__()
         self._db = db
 
-    def create_user(self, user: UserLocal) -> bool:
+    def create_user(self, user: UserLocalRegistration) -> bool:
         random_salt = os.urandom(32).hex()
         random_id = str(uuid4())
         user_db = UserDB(id=random_id,
                          email=deterministic_encrypt_data(user.email, AES_SECRET_KEY),
                          password=hash_data(user.password + random_salt),
                          salt=random_salt)
-        self._db.add(user_db)
-        self._db.commit()
-        self._db.refresh(user_db)
-        return True
 
     def get_user_by_id(self, user_id: str) -> Optional[UserDB]:
         return self._db.query(UserDB).filter(UserDB.id == user_id).first()
