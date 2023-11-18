@@ -19,17 +19,17 @@ app.add_middleware(
 
 logger = logging.getLogger(__name__)
 
+logger.info("INFO")
+logger.debug("DEBUG")
+logger.warn("WARN")
+logger.error("ERROR")
+
 app.include_router(users_route, prefix='/api/v1/users', tags=["users"])
-
-user_service = UserService(user_controller=UserController(db=db))
-
-Base.metadata.create_all(bind=engine)
-
 
 @app.get("/")
 def biba():
     return {"message": "Biba handler"}
-def read_root():
-    return {"Hi from user": os.urandom(32).hex()}
+# def read_root():
+#     return {"Hi from user": os.urandom(32).hex()}
 
 

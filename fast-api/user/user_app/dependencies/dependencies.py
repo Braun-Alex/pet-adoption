@@ -6,8 +6,11 @@ from user_app.utilities.utilities import TokenPayload, ALGORITHM, JWT_SECRET_KEY
 from jose import jwt
 from pydantic import ValidationError
 
+
+LOGIN_URL = "/api/v1/users/login"
+
 reusable_oauth = OAuth2PasswordBearer(
-    tokenUrl="/user/login",
+    tokenUrl=LOGIN_URL,
     scheme_name="JWT"
 )
 

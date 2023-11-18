@@ -1,13 +1,13 @@
 import json
-from utilities.utilities import AES_SECRET_KEY, decrypt_data
-from sqlalchemy import Column, String
+from user_app.utilities.utilities import AES_SECRET_KEY, decrypt_data
+from sqlalchemy import Column, String, Integer
 from user_app.database import Base
 
 
 class UserDB(Base):
     __tablename__ = "users"
 
-    id = Column(String, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True)
     full_name = Column(String)
     password = Column(String)

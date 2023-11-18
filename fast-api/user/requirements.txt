@@ -6,3 +6,5 @@ psycopg2
 PyYAML
 python-jose
 pycryptodome
+python-dotenv
+python-multipart
