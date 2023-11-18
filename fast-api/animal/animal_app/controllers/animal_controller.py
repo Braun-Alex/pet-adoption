@@ -15,6 +15,11 @@ class AnimalControllerInterface(ABC):
         pass
 
     @abstractmethod
+    def get_all_animals(self) -> list[AnimalDB]:
+        pass
+
+
+    @abstractmethod
     def update_animal(self, animal_id: int, updated_data: dict) -> Optional[AnimalDB]:
         pass
 
@@ -46,5 +51,8 @@ class AnimalController(AnimalControllerInterface):
     def get_animal(self, animal_id: int) -> Optional[AnimalDB]:
         return super().get_animal(animal_id)
     
+    def get_all_animals(self) -> list[AnimalDB]:
+        return self._db.query(AnimalDB).all()
+
     def delete_animal(self, animal_id: int) -> bool:
         return super().delete_animal(animal_id)

@@ -28,8 +28,13 @@ def read_root():
 @animals_router.post("/add")
 def add_animal(animal: AnimalLocalIn):
     logger.info(f"{__name__}: /animals/add handler")
-    animal_service.add_animal(animal_local=animal)
-    return {"aboba": "aboba"}
+    return animal_service.add_animal(animal_local=animal)
+
+@animals_router.get("/all")
+def get_all_animals():
+    return animal_service.get_all_animals()
+
+
 
 
 
