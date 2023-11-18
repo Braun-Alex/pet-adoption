@@ -1,9 +1,9 @@
-from controllers.user_controller import UserController
-from models.user_local_model import UserLocal
-from utilities.utilities import hash_data
+from user_app.controllers.user_controller import UserController
+from user_app.models.user_local_model import UserLocal
+from user_app.utilities.utilities import hash_data
 from fastapi import status, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
-from utilities.utilities import TokenSchema, create_access_token, create_refresh_token
+from user_app.utilities.utilities import TokenSchema, create_access_token, create_refresh_token
 
 
 class UserServiceInterface:

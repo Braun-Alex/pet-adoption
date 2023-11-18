@@ -20,9 +20,9 @@ import os
 from abc import ABC, abstractmethod
 from typing import List, Optional
 from sqlalchemy.orm import Session
-from models.user_db_model import UserDB
-from models.user_local_model import UserLocal
-from utilities.utilities import hash_data, AES_SECRET_KEY, deterministic_encrypt_data
+from user_app.models.user_db_model import UserDB
+from user_app.models.user_local_model import UserLocal
+from user_app.utilities.utilities import hash_data, AES_SECRET_KEY, deterministic_encrypt_data
 from uuid import uuid4
 
 

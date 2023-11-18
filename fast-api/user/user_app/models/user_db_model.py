@@ -1,7 +1,7 @@
 import json
 from utilities.utilities import AES_SECRET_KEY, decrypt_data
 from sqlalchemy import Column, String
-from database import Base
+from user_app.database import Base
 
 
 class UserDB(Base):
