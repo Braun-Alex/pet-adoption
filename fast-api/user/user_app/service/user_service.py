@@ -2,13 +2,20 @@ from typing import Optional
 from user_app.models.user_local_model import UserLocalBase, UserLocalOtput, UserLocalRegistration, UserLocalAuthorization
 from user_app.controllers.user_controller import UserController
 from user_app.models.user_db_model import UserDB
-from fastapi import HTTPException
+from fastapi import status, HTTPException
+from user_app.utilities.utilities import hash_data
+
+
+from fastapi.security import OAuth2PasswordRequestForm
+from user_app.utilities.utilities import TokenSchema, create_access_token, create_refresh_token
+
+
 import logging 
 
 logger = logging.getLogger(__name__)
 
 class UserServiceInterface:
-    def register_user(self, user_local:UserLocalRegistration):
+    def register_user(self, user_local:UserLocalRegistration) -> bool:
         pass
 
     def authorize_user(self, user_local:UserLocalAuthorization):
@@ -25,37 +32,39 @@ class UserService(UserServiceInterface):
 
     def register_user(self, user:UserLocalRegistration) -> UserLocalOtput:
         logger.info(f"Registrating user with email: {user.email}")
-
         user_db = self._user_controller.get_user_by_email(user.email)
         
         if user_db:
             logger.warn(error_msg:=f"User with email: {user.email} already exist")
-            raise HTTPException(400, detail=error_msg)
+            raise HTTPException(status.HTTP_409_CONFLICT)
 
-        user_db = self._user_controller.create_user(user)
-        logger.info(f"User was successfully registered{str(user_db)=}")
+        return self._user_controller.create_user(user)
         
-        return UserLocalOtput(id=user_db.id, email=user_db.email, full_name=user_db.full_name)
 
-
-    def authorize_user(self, user:UserLocalAuthorization) -> Optional[UserLocalOtput]:
+    def authorize_user(self, user: OAuth2PasswordRequestForm) -> Optional[TokenSchema]:
         user_db = self._user_controller.get_user_by_email(user.email)
         logger.info(f"Authorizing user with email: {user.email}. User from db: {user_db=}")
-        if not user_db:
-            raise HTTPException(400, detail="User does not exist")
+        if not user_db or hash_data(user.password + user_db.salt) != user_db.password:
+            logger.warn(f"User with {user.email=} failed authorization")
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED)
         
-        if user.password != user_db.password:
-            raise HTTPException(400, detail="Password is incorrect")
-        
-        return UserLocalOtput(id=user_db.id, email=user_db.email, full_name=user_db.full_name)
-    
-    def get_user(self, id: int) -> list[UserLocalOtput]:
+        return TokenSchema(access_token=create_access_token(user_db.id), refresh_token= create_refresh_token(user_db.id))
+            
+     
+    def get_user(self, user_id: int) -> UserLocalOtput:
         user_db = self._user_controller.get_user_by_id(id)
         logger.info(f"{user_db=}")
-        # for id in ids:  
-        if self._user_controller.get_user_by_id(id):
-            
-            
-            return(UserLocalOtput(id=user_db.id, full_name=user_db.full_name, email=user_db.email))
-        # return users
+
+        if not user_db:
+            raise HTTPException(status.HTTP_404_NOT_FOUND)
         
+        str(user_db)
+        return(UserLocalOtput(id=user_db.id, full_name=user_db.full_name, email=user_db.email))
+
+       
+
+    # def get_user(self, user_id: str) -> str:
+    #     user_db = self._user_controller.get_user_by_id(user_id)
+    #     if not user_db:
+    #         raise HTTPException(status.HTTP_404_NOT_FOUND)
+    #     return str(user_db)

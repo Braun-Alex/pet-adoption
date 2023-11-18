@@ -1,16 +1,21 @@
+import os
+
 from abc import ABC, abstractmethod
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from user_app.models.user_db_model import UserDB
-from user_app.models.user_local_model import UserLocalOtput, UserLocalAuthorization, UserLocalBase, UserLocalRegistration
+from user_app.models.user_local_model import UserLocalRegistration, UserLocalOtput, UserLocalAuthorization
+from user_app.utilities.utilities import hash_data, AES_SECRET_KEY, deterministic_encrypt_data
+from uuid import uuid4
+
 
 class UserControllerInterface(ABC):
     @abstractmethod
-    def create_user(self, user: UserLocalRegistration) -> UserDB:
+    def create_user(self, user: UserLocalRegistration) -> bool:
         pass
 
     @abstractmethod
-    def get_user_by_id(self, user_id: int) -> Optional[UserDB]:
+    def get_user_by_id(self, user_id: str) -> Optional[UserDB]:
         pass
 
     @abstractmethod
@@ -18,15 +23,11 @@ class UserControllerInterface(ABC):
         pass
 
     @abstractmethod
-    def get_all_users(self, skip: int = 0, limit: int = 100) -> List[UserDB]:
+    def update_user(self, user_id: str, user_data: dict) -> Optional[UserDB]:
         pass
 
     @abstractmethod
-    def update_user(self, user_id: int, user_data: dict) -> Optional[UserDB]:
-        pass
-
-    @abstractmethod
-    def delete_user(self, user_id: int) -> bool:
+    def delete_user(self, user_id: str) -> bool:
         pass
 
 
@@ -34,24 +35,23 @@ class UserController(UserControllerInterface):
     def __init__(self, db: Session) -> None:
         super().__init__()
         self._db = db
- 
-    def create_user(self, user: UserLocalRegistration) -> UserDB:
-        user_db = UserDB(email=user.email, full_name=user.full_name, password=user.password)
-        self._db.add(user_db)
-        self._db.commit()
-        self._db.refresh(user_db)
-        return user_db
-    
-    def get_user_by_id(self, user_id: int) -> Optional[UserDB]:
+
+    def create_user(self, user: UserLocalRegistration) -> bool:
+        random_salt = os.urandom(32).hex()
+        random_id = str(uuid4())
+        user_db = UserDB(id=random_id,
+                         email=deterministic_encrypt_data(user.email, AES_SECRET_KEY),
+                         password=hash_data(user.password + random_salt),
+                         salt=random_salt)
+
+    def get_user_by_id(self, user_id: str) -> Optional[UserDB]:
         return self._db.query(UserDB).filter(UserDB.id == user_id).first()
 
     def get_user_by_email(self, email: str) -> Optional[UserDB]:
-        return self._db.query(UserDB).filter(UserDB.email == email).first()
-    
-    def get_all_users(self, skip: int = 0, limit: int = 100) -> List[UserDB]:
-        return self._db.query(UserDB).offset(skip).limit(limit).all()
+        deterministically_encrypted_email = deterministic_encrypt_data(email, AES_SECRET_KEY)
+        return self._db.query(UserDB).filter(UserDB.email == deterministically_encrypted_email).first()
 
-    def update_user(self, user_id: int, user_data: dict) -> Optional[UserDB]:
+    def update_user(self, user_id: str, user_data: dict) -> Optional[UserDB]:
         db_user = self.get_user_by_id(user_id)
         if db_user:
             for key, value in user_data.items():
@@ -59,8 +59,8 @@ class UserController(UserControllerInterface):
             self._db.commit()
             self._db.refresh(db_user)
         return db_user
-    
-    def delete_user(self, user_id: int) -> bool:
+
+    def delete_user(self, user_id: str) -> bool:
         db_user = self.get_user_by_id(user_id)
         if db_user:
             self._db.delete(db_user)
