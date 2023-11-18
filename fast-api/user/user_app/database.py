@@ -11,10 +11,12 @@ db_username = 'admin'
 # db_name = 'mydb'  # Change to your desired database name
 
 # Create a PostgreSQL database connection URL
-db_url = os.getenv('DATABASE_URI')
+DATABASE_URI="postgresql://user_db_user:user_db_password@localhost/user_db_dev"
+
+db_url = os.getenv('DATABASE_URI') or DATABASE_URI
 # db_url = f'postgresql://{db_username}:{db_password}@{db_host}/{db_name}'
 
-print(f"Trying to create connection with DB. {db_url=}")
+#print(f"Trying to create connection with DB. {db_url=}")
 
 # Create an SQLAlchemy engine
 engine = create_engine(db_url)
