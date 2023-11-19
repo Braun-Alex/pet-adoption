@@ -2,9 +2,12 @@ import React, {useContext} from 'react';
 import { Context } from "../index";
 import '../css/List.css';
 
+const requeststatus = 2;
+
+
 const RequestList = () => {
     const { db } = useContext(Context);
-    const filteredRequests = db.requests.filter(req => req.status === 2);
+    const filteredRequests = db.requests.filter(req => req.status === requeststatus);
 
     const getRequestDetails = (requestId) => {
         const requestInfo = db.requests.find(req => req.id === requestId);
@@ -19,19 +22,22 @@ const RequestList = () => {
     };    
 
     return (
-        <ul>
+        <div className='request'>
+            <ul className='list'>
             {filteredRequests.map(requestItem => {
                 const { animal, user } = getRequestDetails(requestItem.id);
                 if (animal && user) {
                     return (
-                        <li key={requestItem.id} className="request">
-                            {`${animal.name} - ${user.name}`}
+                        <li key={requestItem.id} className="list-item">
+                            {`${user.name} хоче прихистити ${animal.name}`}
                         </li>
                     );
                 }
                 return null;
             })}
         </ul>
+        </div>
+        
     );
 }
 

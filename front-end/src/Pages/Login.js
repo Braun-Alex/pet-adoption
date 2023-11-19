@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showUserReg: true,
+      showShelterReg: false,
+      registrationPath: '/user-account',
       userEmail: '',
       userPassword: '',
       errorMessage: ''
@@ -13,7 +16,20 @@ class Login extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.loginUser = this.loginUser.bind(this);
   }
-
+  toggleUser = () => {
+    this.setState({
+      showUserReg: true,
+      showShelterReg: false,
+      registrationPath: '/user-account',
+    });
+  }
+  toggleShelter = () => {
+    this.setState({
+      showUserReg: false,
+      showShelterReg: true,
+      registrationPath: '/shelter-account',
+    });
+  }
   handleInputChange(e) {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -58,6 +74,8 @@ class Login extends Component {
         <h1 className="form-header">ВХІД</h1>
         
         <div className="form">
+          <button className={`${this.state.showUserReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleUser}>Користувач</button>
+      <button className={`${this.state.showShelterReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleShelter}>Притулок</button>
           <form className="login-form" onSubmit={this.loginUser}>
             <div className="form-field">
               <label>Електронна адреса</label>
@@ -81,7 +99,7 @@ class Login extends Component {
 
             {errorMessage && <div className="error-message">{errorMessage}</div>}
             
-            <button type="submit" className="button-login">Увійти</button>
+            <Link to={this.state.registrationPath}><button type="submit" className="button-reg" onClick={this.registerUser}>Увійти</button></Link>
           </form>
         </div>                
       </>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 class Signup extends Component {
@@ -75,7 +75,6 @@ class Signup extends Component {
       
       <button className={`${this.state.showUserReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleUser}>Користувач</button>
       <button className={`${this.state.showShelterReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleShelter}>Притулок</button>
-      <div className={`${this.state.showUserReg ? 'hr-line-user' : 'hr-line-shelter'}`} onClick={this.toggleContent1}></div>
 
       {this.state.showUserReg && 
       <form className="registration-form">
