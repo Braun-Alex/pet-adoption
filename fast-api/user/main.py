@@ -11,16 +11,18 @@ from controllers.user_controller import UserController
 from pydantic import BaseModel
 from typing import Union
 
-
 from models.user_db_model import UserDB
-from models.user_local_model import UserLocal
+from models.user_local_model import UserLocalAuthorization, UserLocalBase, UserLocalOtput, UserLocalRegistration
 
+from logging import Logger
+
+logger = Logger("UserRequests")
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # або "*" для дозволу всіх джерел
+    allow_origins=["*"],  # або "*" для дозволу всіх джерел
     allow_credentials=True,
     allow_methods=["*"],  # Дозволяє всі методи
     allow_headers=["*"],  # Дозволяє всі заголовки
@@ -40,13 +42,13 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.post("/users/register")
-def register_user(user: UserLocal):
-    print(f"{user=}")
+@app.post("/users/register", response_model=UserLocalOtput)
+def register_user(user: UserLocalRegistration):
+    logger.info(f"{user=}")
     return user_service.register_user(user=user)
 
-@app.post("/users/authorize/")
-def authorize_user(user: UserLocal):
+@app.post("/users/authorize/", response_model=UserLocalOtput)
+def authorize_user(user: UserLocalAuthorization):
     # user_db = user_controller.get_user_by_email(email)
     # print (f"{user_db=}")
     # if not user_db:
@@ -54,7 +56,7 @@ def authorize_user(user: UserLocal):
 
     # user_local = UserLocal(id=user_db.id, email=user_db.email, full_name=user_db.full_name)
     # return user_local
-    print(f"{user=}")
+    logger.info(f"{user=}")
     return user_service.authorize_user(user=user)
     
 

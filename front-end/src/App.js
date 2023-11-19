@@ -13,7 +13,6 @@ import './App.css';
 import './css/Auth.css'
 import './css/ShelterAcc.css'
 
-import { authRoutes, publicRoutes } from "./routes";
 
 function App() {
   const navigate = useNavigate(); // Отримуємо функцію navigate
