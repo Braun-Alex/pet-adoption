@@ -1,5 +1,4 @@
 import json
-from user_app.utilities.utilities import AES_SECRET_KEY, decrypt_data
 from sqlalchemy import Column, String, Integer
 from user_app.database import Base
 
@@ -16,8 +15,8 @@ class UserDB(Base):
     def to_dict(self):
         return {
             "id": self.id,
-            "email": decrypt_data(self.email, AES_SECRET_KEY),
-            "full_name": decrypt_data(self.full_name, AES_SECRET_KEY)
+            "email": self.email,
+            "full_name": self.full_name
         }
 
     def to_json(self):

@@ -3,13 +3,11 @@ from user_app.models.user_local_model import UserLocalBase, UserLocalOtput, User
 from user_app.controllers.user_controller import UserController
 from user_app.models.user_db_model import UserDB
 from fastapi import status, HTTPException
-from user_app.utilities.utilities import hash_data
+# from user_app.utilities.utilities import hash_data
 
 
 from fastapi.security import OAuth2PasswordRequestForm
 from user_app.utilities.utilities import TokenSchema, create_access_token, create_refresh_token
-from user_app.utilities.utilities import AES_SECRET_KEY, decrypt_data
-
 
 
 import logging 
@@ -46,7 +44,7 @@ class UserService(UserServiceInterface):
     def authorize_user(self, user: OAuth2PasswordRequestForm) -> Optional[TokenSchema]:
         user_db = self._user_controller.get_user_by_email(user.username)
         logger.info(f"Authorizing user with email: {user.username}. User from db: {user_db=}")
-        if not user_db or hash_data(user.password + user_db.salt) != user_db.password:
+        if not user_db or self._user_controller._hasher.hash_data(user.password + user_db.salt) != user_db.password:
             logger.warn(f"User with {user.username=} failed authorization")
             raise HTTPException(status.HTTP_401_UNAUTHORIZED)
         
@@ -63,7 +61,9 @@ class UserService(UserServiceInterface):
         logger.info(f"{user_db.email= }, {user_db.full_name= }, {user_id=}")
 
         # return str(user_db)
-        return(UserLocalOtput(id=user_db.id, full_name=user_db.full_name, email=decrypt_data(user_db.email, AES_SECRET_KEY)))
+        return(UserLocalOtput(id=user_db.id, full_name=user_db.full_name, email=self._user_controller._encrypter.decrypt_data(user_db.email)))
+
+
 
        
 

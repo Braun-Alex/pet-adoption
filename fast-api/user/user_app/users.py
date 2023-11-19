@@ -5,21 +5,13 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from user_app.dependencies.dependencies import get_current_user
 
-from user_app.database import Base, engine, SessionLocal
 from user_app.utilities.utilities import TokenSchema, TokenPayload
 
-from sqlalchemy.orm import sessionmaker
-
-from user_app.service.user_service import UserService
-
-from user_app.controllers.user_controller import UserController
-
-from typing import Union
-
-from user_app.models.user_db_model import UserDB
 from user_app.models.user_local_model import UserLocalAuthorization, UserLocalBase, UserLocalOtput, UserLocalRegistration
 
 import logging  
+
+from user_app.config import config_service
 
 from user_app.dependencies.dependencies import LOGIN_URL
 
@@ -28,14 +20,9 @@ from user_app.dependencies.dependencies import LOGIN_URL
 
 logger = logging.getLogger(__name__)
 
-Base.metadata.create_all(bind=engine)
+user_service = config_service()
 
 users_route = APIRouter()
-
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-db = SessionLocal()
-
-user_service = UserService(user_controller=UserController(db=db)) 
 
 @users_route.get("/")
 def read_root():

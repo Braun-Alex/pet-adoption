@@ -5,8 +5,12 @@ from typing import List, Optional
 from sqlalchemy.orm import Session
 from user_app.models.user_db_model import UserDB
 from user_app.models.user_local_model import UserLocalRegistration, UserLocalOtput, UserLocalAuthorization
-from user_app.utilities.utilities import hash_data, AES_SECRET_KEY, deterministic_encrypt_data
 from uuid import uuid4
+
+from user_app.utilities.encrypter.aes_encrypter import Encrypter
+from user_app.utilities.hasher import Hasher
+
+
 import logging
 
 logger = logging.getLogger(__name__)
@@ -35,16 +39,19 @@ class UserControllerInterface(ABC):
 
 
 class UserController(UserControllerInterface):
-    def __init__(self, db: Session) -> None:
+    def __init__(self, db: Session, encrypter: Encrypter, hasher: Hasher) -> None:
         super().__init__()
         self._db = db
+        self._encrypter = encrypter
+        self._hasher = hasher
 
     def create_user(self, user: UserLocalRegistration) -> bool:
         random_salt = os.urandom(32).hex()
         random_id = str(uuid4())
         user_db = UserDB(
-                            email=deterministic_encrypt_data(user.email, AES_SECRET_KEY),
-                            password=hash_data(user.password + random_salt),
+                            email=self._encrypter.deterministic_encrypt_data(user.email),
+                            full_name=self._encrypter.deterministic_encrypt_data(user.full_name),
+                            password=self._hasher.hash_data(data=user.password, salt=random_salt),
                             salt=random_salt
                         )            
         try:
@@ -60,7 +67,7 @@ class UserController(UserControllerInterface):
         return self._db.query(UserDB).filter(UserDB.id == user_id).first()
 
     def get_user_by_email(self, email: str) -> Optional[UserDB]:
-        deterministically_encrypted_email = deterministic_encrypt_data(email, AES_SECRET_KEY)
+        deterministically_encrypted_email = self._encrypter.deterministic_encrypt_data(email)
         return self._db.query(UserDB).filter(UserDB.email == deterministically_encrypted_email).first()
 
     def update_user(self, user_id: str, user_data: dict) -> Optional[UserDB]:
