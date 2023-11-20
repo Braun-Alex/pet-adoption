@@ -1,16 +1,15 @@
 
 export default class DB {
     constructor() {
-        
         this._animals = [
-            { id: 1, shelterId: 2, name: "1назва_тваринки" },
-            { id: 2, shelterId: 2, name: "2назва_тваринки" },
-            { id: 3, shelterId: 2, name: "3назва_тваринки" },
-            { id: 4, shelterId: 2, name: "4назва_тваринки" },
-            { id: 5, shelterId: 2, name: "5назва_тваринки" },
-            { id: 6, shelterId: 2, name: "6назва_тваринки" },
-            { id: 7, shelterId: 2, name: "7назва_тваринки" },
-            { id: 8, shelterId: 1, name: "8назва_тваринки"}
+            { id: 1, shelterId: 2, name: "1назва_тваринки", sex: "дівчинка", type: "пес", age: "1 рік"},
+            { id: 2, shelterId: 2, name: "2назва_тваринки", sex: "дівчинка", type: "кіт", age: "2 роки" },
+            { id: 3, shelterId: 2, name: "3назва_тваринки", sex: "хлопчик", type: "пес", age: "3 роки" },
+            { id: 4, shelterId: 2, name: "4назва_тваринки", sex: "хлопчик", type: "кіт", age: "4 роки" },
+            { id: 5, shelterId: 2, name: "5назва_тваринки", sex: "дівчинка", type: "пес", age: "5 років" },
+            { id: 6, shelterId: 2, name: "6назва_тваринки", sex: "дівчинка", type: "кіт", age: "6 років" },
+            { id: 7, shelterId: 2, name: "7назва_тваринки", sex: "хлопчик", type: "пес", age: "7 років" },
+            { id: 8, shelterId: 1, name: "8назва_тваринки", sex: "хлопчик", type: "кіт", age: "8 років" }
         ]
 
         this._users = [
@@ -33,8 +32,9 @@ export default class DB {
         ]
 
         this._shelters = [
-            { id: 1, name: "shelter1", adress: "address" },
-            { id: 2, name: "shelter2", adress: "address" }
+            { id: 1, name: "shelter1", email: "shelter1@ex.com", phone: "+380111111111", address: "address1", description: "description1" },
+            { id: 2, name: "shelter2", email: "shelter2@ex.com", phone: "+380222222222", address: "address2", description: "description2" },
+            { id: 3, name: "shelter3", email: "shelter3@ex.com", phone: "+380333333333", address: "address3", description: "description3" }
         ]
     }
 

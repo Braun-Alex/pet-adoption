@@ -1,12 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-var isAuthenticated = false;
-var username = "ім'я користувача";
 
-function Header({ isAuthenticated, username, handleLogout }) {
+function Header({isAuthenticated, username, handleLogout, usertype}) {
+  var registrationPath = '';
+  {usertype == "shelter" ? registrationPath = '/shelter-account' : registrationPath = '/user-account'}
   return (
     <header>
-      <div className="header-left">
+      <div className="header-left"> 
         <Link to="/">Головна</Link>          
         <Link to="/donate">Допомогти</Link>
         <Link to="/contacts">Контакти</Link>
@@ -15,7 +15,7 @@ function Header({ isAuthenticated, username, handleLogout }) {
       <div className="header-right">
         {isAuthenticated ? (
           <>
-            <span className="userName-header">{username}</span>
+            <Link to={registrationPath} className="userName-header">{username}</Link>
             <button className="logout-button" onClick={handleLogout}>Вийти</button>
           </>
         ) : (

@@ -13,8 +13,10 @@ const CreateAnimal = ({ show, onHide }) => {
         display: show ? 'block' : 'none',
     };
 
-    const mounths = ['Січень', 'Лютий', 'Березень', 'Квітень', 'Травень', 'Червень', 'Липень', 'Серпень', 'Вересень', 'Жовтень', 'Листопад', 'Грудень'];
-    const years = ['2023', '2022', '2021', '2020', '2019', '2018', '2017'];
+    const types = ['кіт', 'пес'];
+    const sex = ['хлопчик', 'дівчинка'];
+    const mounths = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+    const years = ['2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015'];
     const defaultOption = null;
     
     return (
@@ -40,9 +42,11 @@ const CreateAnimal = ({ show, onHide }) => {
                             <label>Ім'я тваринки</label>
                             <input type="text" />
                         </div>
-                        <div className="animal-type">
-                            <label>Вид тваринки</label>
-                            <input type="text" />
+                        <div>
+                             <Dropdown options={types} value={defaultOption} placeholder="вид тваринки"  className="animal-type"/>                        
+                        </div>
+                        <div>
+                            <Dropdown options={sex} value={defaultOption} placeholder="стать" className="animal-sex"/>
                         </div>
                         <div class="select-date" >
                             <Dropdown options={mounths} value={defaultOption} placeholder="місяць" />

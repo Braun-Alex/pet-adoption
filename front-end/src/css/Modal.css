@@ -39,8 +39,7 @@
     padding: 10px 0;
 }
 
-.animal-name,
-.animal-type{
+.animal-name{
     height: 50px;
     margin: 15px auto;
     padding: 8px 0 0 15px;
@@ -50,6 +49,12 @@
     border: 1px solid #FFEAC1; 
     background: #fff;
 }
+
+.animal-sex,
+.animal-type {
+    margin: 15px auto;
+}
+
 .animal-desc{   
     height: 100px;
     margin: 15px auto;
@@ -73,7 +78,6 @@
   line-height: 16px; 
 }
 
-.animal-type input,
 .animal-name input { 
   margin-top: 5px;
   outline: none;  
@@ -89,7 +93,7 @@
     outline: none;    
     border:none;
     align-items: flex-start;
-    font-size: 14px;
+    font-size: 16px;
     gap: 8px;
     width: 95%;
     height: 60%;
@@ -102,6 +106,8 @@
 .year {
     margin-left: 20px;
 }
+
+
 .create-animal-button {
     background-color: #F2F1ED;
     border: 1px solid #9e8e78;

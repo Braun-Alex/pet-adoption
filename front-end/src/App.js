@@ -9,6 +9,8 @@ import Signup from './Pages/Signup';
 import Header from './Components/Header';
 import ShelterAcc from './Pages/ShelterAcc';
 import Animal from './Pages/Animal';
+import AnimalMain from './Pages/AnimalMain';
+
 import './App.css';
 import './css/Auth.css'
 import './css/ShelterAcc.css'
@@ -16,16 +18,17 @@ import './css/ShelterAcc.css'
 
 function App() {
   const navigate = useNavigate(); // Отримуємо функцію navigate
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [username, setUsername] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [username, setUsername] = useState("username");
+  const [usertype, setUsertype] = useState("shelter")
 
   const handleLoginSuccess = () => {
-    setIsAuthenticated(true);
+    setIsAuthenticated(false);
     navigate('/');
   };
 
   const handleLogout = () => {
-    setIsAuthenticated(false);
+    setIsAuthenticated(true);
     setUsername('');
     navigate('/login'); // Редірект на сторінку входу
   };
@@ -33,7 +36,7 @@ function App() {
   return (
       
       <div>
-      <Header isAuthenticated={isAuthenticated} handleLogout={handleLogout} username={username} />
+      <Header isAuthenticated={isAuthenticated} handleLogout={handleLogout} username={username} usertype={usertype} />
       <Routes>        
         <Route path='/' element={<Home />} />
         <Route path='/donate' element={<Donate />} />
@@ -41,7 +44,8 @@ function App() {
         <Route path='/login' element={<Login onLoginSuccess={handleLoginSuccess} />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/shelter-account' element={<ShelterAcc />} />
-        <Route path="/animal/:animalId" element={<Animal/>} />
+        <Route path="/animal/:animalId" element={<Animal />} />
+        <Route path="/animal-main" element={<AnimalMain />} />
       </Routes>  
       </div>
     

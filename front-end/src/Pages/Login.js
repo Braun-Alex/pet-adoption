@@ -75,7 +75,7 @@ class Login extends Component {
         
         <div className="form">
           <button className={`${this.state.showUserReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleUser}>Користувач</button>
-      <button className={`${this.state.showShelterReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleShelter}>Притулок</button>
+          <button className={`${this.state.showShelterReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleShelter}>Притулок</button>
           <form className="login-form" onSubmit={this.loginUser}>
             <div className="form-field">
               <label>Електронна адреса</label>

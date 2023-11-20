@@ -1,9 +1,27 @@
-import React, { Component } from 'react';
+import React, {useState} from 'react';
+import { Link } from 'react-router-dom';
+import mainphoto2 from '../img/mainphoto2.JPG';
+import animalicon from '../img/animalicon.png';
+import '../css/Home.css';
 
-class Home extends Component {
-  render() {
-    return (<div>Home Page</div>)
-  }
-}
+
+const Home = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  return (
+    <div className="main-container">
+
+      <div className="left-side">
+        <img className="main-photo" src={mainphoto2} alt="main-photo" />
+      </div>
+      
+      <div className="right-side">
+        <button className='view-shelter'>Переглянути притулки</button>
+        <Link to="/animal-main" className='view-animal'>
+          Знайти друга <img src={animalicon} alt="animalicon"/> </Link>
+      </div>
+      
+    </div>
+  );
+};
 
 export default Home;

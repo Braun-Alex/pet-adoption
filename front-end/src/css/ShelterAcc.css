@@ -76,25 +76,37 @@
     color: #000;
     font-size: 35px;
     margin-bottom: 108px;
-    margin-top: 60px;
+    margin-top: 50px;
 }
 
 .shelter-edit-info{
     display: flex;
-    flex-direction: column;
-    margin-top: 40px;
+    flex-direction: column; 
 }
 
 .shelterEditInfo-field {
-  margin-bottom: 15px;  
-  padding: 12px 0 0 15px;
-  text-align: left;
-  height: 60px;
-  border-radius: 4px;
-  border: 1px solid #ffeac1;
-  background: #fffbf4;
-  width: 90%
+    margin-bottom: 10px;  
+    padding: 12px 0 0 15px;
+    text-align: left;
+    height: 55px;
+    border-radius: 4px;
+    border: 1px solid #ffeac1;
+    background: #fffefd;
+    width: 90%
 }
+
+.shelterEditInfo-button {
+    background-color: #fffdf6a5;
+    border: 2px solid #9e8e78;
+    color: #645A4C;
+    letter-spacing: 1px;
+    padding: 5px 85px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 18px;
+    width: 92%;
+}
+
 
 .shelterEditInfo-field-desc {
   margin-bottom: 15px;  
@@ -103,7 +115,7 @@
   height: 150px;
   border-radius: 4px;
   border: 1px solid #ffeac1;
-  background: #fffbf4;
+  background: #fffefd;
   width: 90%
 }
 
@@ -121,7 +133,7 @@
   margin-top: 7px;
   outline: none;
   display: flex;
-  background: #fffbf4;
+  background: #fffefd;
   border: none;
   align-items: flex-start;
   font-size: 14px;
@@ -134,7 +146,7 @@
     outline: none;    
     border:none;
     align-items: flex-start;
-    background: #fffbf4;
+    background: #fffefd;
     font-size: 14px;
     gap: 8px;
     width: 96%;
