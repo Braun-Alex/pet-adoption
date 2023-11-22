@@ -3,7 +3,7 @@ project(server)
 
 set(CMAKE_CXX_STANDARD 23)
 set(HEADERS handlers/pingRequestHandler/pingRequestHandler.h
-        handlers/registerRequestHandler/registerRequestHandler.h
+        handlers/registerRequestHandler/registerRequestHandler.hpp
         handlers/authorizeRequestHandler/authorizeRequestHandler.h
         services/registrationService/registrationService.h
         services/authService/authService.h
@@ -15,6 +15,15 @@ set(HEADERS handlers/pingRequestHandler/pingRequestHandler.h
         orm/emailVerification/EmailVerification.h
         orm/phoneVerification/PhoneVerification.h
         initializers/initializers.h
+
+        
+        local-structs/localStructs.hpp
+        interfaces/UserControllerInterface.hpp
+        interfaces/UserServiceInterface.hpp
+        controllers/UserController.hpp
+        services/userService/UserService.hpp
+        handlers/requestHandler.hpp
+
 )
 set(SOURCES handlers/pingRequestHandler/pingRequestHandler.cpp
         handlers/registerRequestHandler/registerRequestHandler.cpp
@@ -23,6 +32,11 @@ set(SOURCES handlers/pingRequestHandler/pingRequestHandler.cpp
         services/authService/authService.cpp
         services/tokenService/tokenService.cpp
         services/cipherService/cipherService.cpp
+
+        services/userService/UserService.cpp
+        controllers/UserController.cpp
+        handlers/requestHandler.cpp
+
         orm/animal/Animal.cpp
         orm/user/User.cpp
         orm/shelter/Shelter.cpp
@@ -40,6 +54,13 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(Poco)
 
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
+
+target_include_directories(
+        ${PROJECT_NAME}
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/services
+)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC Foundation Crypto Net NetSSL JWT Util
         JSON ActiveRecord DataPostgreSQL)

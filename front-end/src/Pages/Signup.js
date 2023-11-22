@@ -37,8 +37,27 @@ class Signup extends Component {
     registerUser = () => {
         const { full_name, email, password, showUserReg } = this.state;
         const userType = showUserReg ? 'user' : 'shelter';
+  /*registerUser = async () => {
+    try {
+      console.log('ABOBA');
+      const { full_name, email, password, showUserReg } = this.state;
+      const userType = showUserReg ? 'user' : 'shelter';
+      console.log(full_name);
+      console.log(email);
+      console.log(password);
+      const response = await fetch('http://127.0.0.1:8080/api/v1/users/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          full_name,
+          email,
+          password,
+        }),
+      });*/
 
-        const SIGNUP_API_URL = 'http://127.0.0.1:8000/user/signup';
+        const SIGNUP_API_URL = 'http://127.0.0.1:8080/api/v1/users/register';
 
         axios.post(SIGNUP_API_URL, {
             // full_name,

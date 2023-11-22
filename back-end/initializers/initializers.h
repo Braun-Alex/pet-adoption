@@ -19,6 +19,7 @@
 #include <random>
 
 using namespace Poco::Net;
+using namespace Poco::Util;
 using namespace Poco::Data;
 
 const int SALT_LENGTH = 32,

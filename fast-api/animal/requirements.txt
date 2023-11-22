@@ -1,0 +1,6 @@
+fastapi
+SQLAlchemy
+uvicorn
+httpx
+psycopg2
+PyYAML

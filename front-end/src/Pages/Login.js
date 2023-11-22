@@ -22,6 +22,34 @@ class Login extends Component {
 
     setAuthHeader(accessToken) {
         axios.defaults.headers.common['Authorization'] = accessToken ? `Bearer ${accessToken}` : '';
+  /*async loginUser(e) {
+    e.preventDefault();
+
+    const { userEmail, userPassword } = this.state;
+    try {
+      const response = await fetch('http://127.0.0.1:8080/api/v1/users/authorize/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: userEmail,
+          password: userPassword
+        })
+      });
+
+      const data = await response.json();
+      if (response.status === 200) {
+        console.log('Успішно увійшли:', data);
+        // Виклик функції, переданої через пропси, для оновлення стану авторизації в App.js
+        this.props.onLoginSuccess(); // передаємо ім'я користувача або іншу інформацію
+        //this.props.navigate('/'); // Редірект на основну сторінку
+      } else {
+        throw new Error(data.message || 'Не вдалося увійти');
+      }
+    } catch (error) {
+      console.log('Виникла помилка при спробі входу');
+      this.setState({ errorMessage: error.message || 'Виникла помилка при спробі входу' });*/
     }
 
   loginUser = (e) => {
