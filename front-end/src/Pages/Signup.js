@@ -41,7 +41,7 @@ class Signup extends Component {
       console.log(full_name);
       console.log(email);
       console.log(password);
-      const response = await fetch('http://127.0.0.1:8000/users/register', {
+      const response = await fetch('http://127.0.0.1:8080/api/v1/users/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
