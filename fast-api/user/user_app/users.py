@@ -30,10 +30,12 @@ PROFILE_URL = "/profile"
 def read_root():
     return {"Hello": "User Service"}
 
-# @users_route.get("/users/{id}")
-# def get_user_by_id(id: int):
-#     logger.info(f"Handling request /users/{id}")
-#     return user_service.get_user(id=id)
+@users_route.get("/exists/{id}")
+def get_user_by_id(id: int):
+    logger.info(f"Handling request /users/{id}")
+    # return False
+    return True if user_service.get_user(user_id=id) is not None else False
+    # return True if user_service.get_user(user_id=id)
 
 @users_route.post("/signup", response_model=bool)
 def register_user(user: UserLocalRegistration):
@@ -55,5 +57,5 @@ def authorize_user(user: OAuth2PasswordRequestForm = Depends()):
 @users_route.get(PROFILE_URL, response_model=UserLocalOtput)
 def get_user(token_payload: TokenPayload = Depends(get_current_user)):
     logger.info(f"Handling {PROFILE_URL}: {token_payload=}")
-    return user_service.get_user(token_payload.sub)
+    return user_service.get_user(user_id=token_payload.sub)
     

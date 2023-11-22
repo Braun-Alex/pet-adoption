@@ -28,6 +28,7 @@ class AnimaServicelInterface:
     @abstractmethod
     def is_shelter_presented(shelter_id:int) -> bool:
         pass
+
 class AnimalService(AnimaServicelInterface):
     def __init__(self, animal_controller: AnimalController) -> None:
         super().__init__()
@@ -64,7 +65,7 @@ class AnimalService(AnimaServicelInterface):
         return animals_local 
     
     def is_shelter_presented(self, shelter_id: int) -> bool:
-        request = f'{self._shelter_url}{shelter_id}'
+        request = f'{self._shelter_url}exists/{shelter_id}'
         logger.info(f"{__name__} : Sending request {request=}")
         r = httpx.get(request)
         logger.info(f"{__name__} : {r.content=}")
