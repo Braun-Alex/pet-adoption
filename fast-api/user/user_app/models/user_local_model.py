@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
+from datetime import datetime, timedelta
+
 
 #shared properties
 class UserLocalBase(BaseModel):
@@ -21,5 +23,15 @@ class UserLocalRegistration(BaseModel):
 class UserLocalAuthorization(BaseModel):
     email: str 
     password: str
+
+class TokenSchema(BaseModel):
+    access_token: str
+    refresh_token: str
+
+
+class TokenPayload(BaseModel):
+    sub: str = None
+    exp: datetime = None
+    is_shelter: bool = None
 
  

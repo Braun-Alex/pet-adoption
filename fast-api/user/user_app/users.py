@@ -13,8 +13,6 @@ import logging
 
 from user_app.config import config_service
 
-from user_app.dependencies.dependencies import LOGIN_URL
-
 
 
 
@@ -23,6 +21,10 @@ logger = logging.getLogger(__name__)
 user_service = config_service()
 
 users_route = APIRouter()
+
+LOGIN_URL = "/login"
+PROFILE_URL = "/profile"
+
 
 @users_route.get("/")
 def read_root():
@@ -44,13 +46,14 @@ def register_user(user: UserLocalRegistration):
     return True
 
 
-@users_route.post("/login", response_model=TokenSchema)
+@users_route.post(LOGIN_URL, response_model=TokenSchema)
 def authorize_user(user: OAuth2PasswordRequestForm = Depends()):
-    logger.info(f"{user=}")
+    logger.info(f"Handling {LOGIN_URL}: User from request: {user}")
     return user_service.authorize_user(user=user)
 
     
-@users_route.get('/profile', response_model=UserLocalOtput)
+@users_route.get(PROFILE_URL, response_model=UserLocalOtput)
 def get_user(token_payload: TokenPayload = Depends(get_current_user)):
+    logger.info(f"Handling {PROFILE_URL}: {token_payload=}")
     return user_service.get_user(token_payload.sub)
     

@@ -27,4 +27,5 @@ class DummyHasher(HasherInterface):
     @staticmethod
     def hash_data(data: str, salt: str = None) -> str | None:
         logger.info(f"{__class__.__name__} was called. So we won't hash data")
+        logger.info(f"{__class__.__name__} {data=}")
         return data

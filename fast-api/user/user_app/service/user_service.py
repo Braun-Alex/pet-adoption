@@ -43,8 +43,10 @@ class UserService(UserServiceInterface):
 
     def authorize_user(self, user: OAuth2PasswordRequestForm) -> Optional[TokenSchema]:
         user_db = self._user_controller.get_user_by_email(user.username)
+        logger.info(f"{user.username=} {user.password=}")
+        logger.info(f"{__class__.__name__}: {str(user_db)=}")
         logger.info(f"Authorizing user with email: {user.username}. User from db: {user_db=}")
-        if not user_db or self._user_controller._hasher.hash_data(user.password + user_db.salt) != user_db.password:
+        if not user_db or self._user_controller._hasher.hash_data(user.password, user_db.salt) != user_db.password:
             logger.warn(f"User with {user.username=} failed authorization")
             raise HTTPException(status.HTTP_401_UNAUTHORIZED)
         
