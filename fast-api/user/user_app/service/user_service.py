@@ -21,7 +21,10 @@ class UserServiceInterface:
     def authorize_user(self, user_local:UserLocalAuthorization):
         pass
 
-    def get_user(self, ids: list[int]) -> list[UserLocalOtput]:
+    def get_user(self, user_id: int) -> list[UserLocalOtput]:
+        pass
+
+    def is_user_exists(self, user_id: int) -> bool:
         pass
 
 
@@ -58,15 +61,13 @@ class UserService(UserServiceInterface):
         logger.info(f"{user_db=}")
 
         if not user_db:
+            logger.info(f"User with id: {user_id} doesn't exist. Sending 404 error.")
             raise HTTPException(status.HTTP_404_NOT_FOUND)
         
         logger.info(f"{user_db.email= }, {user_db.full_name= }, {user_id=}")
 
         # return str(user_db)
         return(UserLocalOtput(id=user_db.id, full_name=user_db.full_name, email=self._user_controller._encrypter.decrypt_data(user_db.email)))
-
-
-
        
 
     # def get_user(self, user_id: str) -> str:
