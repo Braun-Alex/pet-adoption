@@ -1,5 +1,5 @@
 #include "handlers/pingRequestHandler/pingRequestHandler.h"
-#include "handlers/registerRequestHandler/registerRequestHandler.h"
+#include "handlers/registerRequestHandler/registerRequestHandler.hpp"
 #include "handlers/authorizeRequestHandler/authorizeRequestHandler.h"
 
 #include "Poco/Net/HTTPServer.h"
@@ -9,27 +9,50 @@
 #include "Poco/Util/ServerApplication.h"
 #include "Poco/Net/SecureServerSocket.h"
 
+#include "userService/UserService.hpp"
+#include "handlers/requestHandler.hpp"
+
 #include <unordered_map>
 
 using namespace Poco;
 using namespace Poco::Net;
 using namespace Poco::Util;
 
+// class Handler{
+//     public:
+//         void handleRequest(HTTPServerRequest& request, HTTPServerResponse& response) override;
+//         handleRequest(HTTPServerRequest& request, HTTPServerResponse& response){
+//             //analyze by URI
+//         }
+//     private:
+//         userService;
+
+// }
+
+
 class RequestHandlerFactory: public HTTPRequestHandlerFactory {
 public:
-    RequestHandlerFactory() {
-        handlers["/user/register"] = []() -> HTTPRequestHandler* { return new RegisterUserRequestHandler(); };
-        handlers["/user/authorize"] = []() -> HTTPRequestHandler* { return new AuthorizeUserRequestHandler(); };
+    RequestHandlerFactory():handler_(new RequestHandler()) {
+        // // handlers["/user/register"] = []() -> HTTPRequestHandler* { return new RegisterUserRequestHandler(); };
+        // // handlers["/user/authorize"] = []() -> HTTPRequestHandler* { return new AuthorizeUserRequestHandler(); };
+        // handlers["/user/register"] = [this](/*const HTTPServerRequest& request*/) -> HTTPRequestHandler* {return pUserService_->registerUser(/*request*/); };
+        // // handlers["/user/register"] = pUserService_->registerUser();
+        // handlers["/user/authorize"] = [this](/*const HTTPServerRequest& request*/) -> HTTPRequestHandler* {return pUserService_->authorizeUser(/*request*/); };
     }
     HTTPRequestHandler* createRequestHandler(const HTTPServerRequest& request) override {
-        auto handler = handlers.find(request.getURI());
-        if (handler != handlers.end()) {
-            return handler->second();
-        }
-        return new PingRequestHandler();
+        
+        // auto handler = handlers.find(request.getURI());
+        // if (handler != handlers.end()) {
+        //     return handler->second();
+        // }
+        // return new PingRequestHandler();
+        return new RequestHandler();
     }
 private:
-    std::unordered_map<std::string, std::function<HTTPRequestHandler*()>> handlers;
+    // std::unordered_map<std::string, std::function<HTTPRequestHandler*(/*const HTTPServerRequest& request*/)>> handlers;
+    // std::unique_ptr<UserService> pUserService_;
+
+    HTTPRequestHandler* handler_;
 };
 
 class WebServerApp: public ServerApplication
@@ -56,7 +79,7 @@ class WebServerApp: public ServerApplication
                 "key.pem",
                 "certificate.pem",
                 "",
-                Context::VERIFY_ONCE,
+                Context::VERIFY_NONE,
                 9,
                 true
         );
@@ -75,10 +98,13 @@ class WebServerApp: public ServerApplication
         KeyManager::setPassphrasePath("serverPassphrase.key");
 
         SecureServerSocket svs(port, 64, pContext);
-        HTTPServer srv(new RequestHandlerFactory, svs, params);
+
+        HTTPServer srv(new RequestHandlerFactory, 8080, params);
 
         srv.start();
         logger().information("HTTPS server started on port %hu.", port);
+        
+        logger().information("ABOBA\n");
         waitForTerminationRequest();
         logger().information("Stopping HTTPS server...");
         srv.stop();

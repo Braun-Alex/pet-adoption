@@ -40,7 +40,7 @@ class Login extends Component {
 
     const { userEmail, userPassword } = this.state;
     try {
-      const response = await fetch('http://127.0.0.1:8000/users/authorize', {
+      const response = await fetch('http://127.0.0.1:8080/api/v1/users/authorize/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
