@@ -8,9 +8,13 @@ class UserDB(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     email = Column(String, unique=True, index=True)
+    
     full_name = Column(String)
     password = Column(String)
     salt = Column(String)
+
+    photo = Column(String, nullable=True)
+    description =Column(String, nullable=True)
 
     def to_dict(self):
         return {
