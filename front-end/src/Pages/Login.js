@@ -72,6 +72,7 @@ class Login extends Component {
       e.preventDefault();
 
       const { userEmail, userPassword } = this.state;
+      const showUserReg = this.state.showUserReg;
       console.log(showUserReg);
       const AUTH_API_URL = showUserReg
           ? 'http://127.0.0.1:8080/api/v1/users/login'
