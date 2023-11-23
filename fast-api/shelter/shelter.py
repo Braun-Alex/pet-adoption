@@ -40,7 +40,7 @@ def authorize_user(shelter: OAuth2PasswordRequestForm = Depends()):
     return shelter_service.authorize_shelter(shelter=shelter)
 
 
-@shelter_route.get('/profile', response_model=str)
+@shelter_route.get('/profile', response_model=ShelterLocalOutput)
 def get_curent_shelter(token_payload=Depends(get_current_shelter)):
     return shelter_service.get_shelter(token_payload.sub)
 
