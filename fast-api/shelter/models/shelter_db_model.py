@@ -11,20 +11,18 @@ class ShelterDB(Base):
     name = Column(String)
     password = Column(String)
     salt = Column(String)
-    # address = Column(String, nullable=True)
-    # number = Column(String, unique=True, index=True, nullable=True)
-    # description = Column(String, nullable=True)
-    # status = Column(Integer, nullable=True)
+    address = Column(String, nullable=True)
+    number = Column(String, unique=True, index=True, nullable=True)
+    description = Column(String, nullable=True)
 
     def to_dict(self):
         return {
             "id": self.id,
             "email": self.email,
             "name": self.name,
-            # "address": self.address,
-            # "number": self.number,
-            # "description": self.description,
-            # "status": self.status
+            "address": self.address,
+            "number": self.number,
+            "description": self.description,
         }
 
     def to_json(self):

@@ -41,7 +41,7 @@ class ShelterService(ShelterServiceInterface):
         }
 
     def get_shelter(self, shelter_id: str) -> str:
-        shelter_db = self._shelter_controller.get_shelter_by_id(shelter_id)
-        if not shelter_db:
+        shelter_local = self._shelter_controller.get_shelter_by_id(shelter_id)
+        if not shelter_local:
             raise HTTPException(status.HTTP_404_NOT_FOUND)
-        return str(shelter_db)
+        return str(shelter_local)
