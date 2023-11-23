@@ -56,10 +56,10 @@ class Signup extends Component {
         }),
       });*/
 
-        const SIGNUP_API_URL = 'http://127.0.0.1:8080/api/v1/users/register';
+        const SIGNUP_API_URL = 'http://127.0.0.1:8080/api/v1/users/signup';
 
         axios.post(SIGNUP_API_URL, {
-            // full_name,
+            full_name,
             email,
             password,
         }).then(response => {
