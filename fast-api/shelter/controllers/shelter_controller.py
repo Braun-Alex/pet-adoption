@@ -23,6 +23,7 @@ from sqlalchemy.orm import Session
 from models.shelter_db_model import ShelterDB
 from models.shelter_local_model import ShelterLocal, ShelterLocalRegistration, ShelterLocalOutput
 from utilities.utilities import hash_data
+from utilities.converter import convert_from_shelter_db_to_local
 from uuid import uuid4
 
 
@@ -76,9 +77,9 @@ class ShelterController(ShelterControllerInterface):
         self._db.refresh(user_db)
         return True
 
-    def get_shelter_by_id(self, shelter_id: str) -> Optional[ShelterDB]:
+    def get_shelter_by_id(self, shelter_id: str) -> Optional[ShelterLocalOutput]:
         shelter_bd = self._db.query(ShelterDB).filter(ShelterDB.id == shelter_id).first()
-        return ShelterLocalOutput(id=shelter_bd.id, name=shelter_bd.name, )
+        return convert_from_shelter_db_to_local(shelter_db=shelter_bd)
 
     def get_shelter_by_name(self, shelter_name: str) -> Optional[ShelterDB]:
         return self._db.query(ShelterDB).filter(ShelterDB.id == shelter_name).first()

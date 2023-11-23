@@ -46,4 +46,4 @@ def get_curent_shelter(token_payload=Depends(get_current_shelter)):
 
 @shelter_route.get('/{id}', response_model=ShelterLocalOutput)
 def get_shelter(id: int):
-    shelter_service.get_shelter(shelter_id=id)
+    return shelter_service.get_shelter(shelter_id=id)

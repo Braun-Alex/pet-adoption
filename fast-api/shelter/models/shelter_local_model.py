@@ -6,7 +6,7 @@ class ShelterLocal(BaseModel):
     email: str
     full_name: str
     address: Optional[str] = None
-    phone_number: str
+    phone_number: Optional[str] = None
     description: Optional[str] = None
     status: Optional[int] = None
     address: Optional[str] = None

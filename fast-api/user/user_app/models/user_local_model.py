@@ -31,7 +31,7 @@ class TokenSchema(BaseModel):
 
 class TokenPayload(BaseModel):
     sub: str = None
-    exp: datetime = None
+    exp: int = None
     is_shelter: bool = None
 
  
