@@ -56,7 +56,11 @@ class Signup extends Component {
         }),
       });*/
 
-        const SIGNUP_API_URL = 'http://127.0.0.1:8080/api/v1/users/signup';
+
+        console.log(userType);
+        const SIGNUP_API_URL = userType == 'user' 
+            ? 'http://127.0.0.1:8080/api/v1/users/signup' 
+            : 'http://127.0.0.1:8080/api/v1/shelter/signup';
 
         axios.post(SIGNUP_API_URL, {
             full_name,
@@ -64,6 +68,7 @@ class Signup extends Component {
             password,
         }).then(response => {
             console.log('Реєстрація пройшла успішно:', response.data);
+            this.props.history.push('/login');
         }).catch(error => {
             console.error('Користувач із такою електронною поштою вже існує.', error.message);
         });

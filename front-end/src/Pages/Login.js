@@ -72,7 +72,11 @@ class Login extends Component {
       e.preventDefault();
 
       const { userEmail, userPassword } = this.state;
-      const AUTH_API_URL = 'http://127.0.0.1:8080/api/v1/users/login';
+      console.log(showUserReg);
+      const AUTH_API_URL = showUserReg
+          ? 'http://127.0.0.1:8080/api/v1/users/login'
+          : 'http://127.0.0.1:8080/api/v1/shelter/login';
+
       const formData = new URLSearchParams();
 
       formData.append('username', userEmail);
