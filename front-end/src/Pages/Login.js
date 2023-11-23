@@ -77,7 +77,6 @@ class Login extends Component {
       const { saveTokens, loginUser, loginShelter } = useContext(AuthContext);
 
       const { email, password } = this.state;
-      let AUTH_API_URL = '';
       let entity = '';
       const formData = new URLSearchParams();
 
@@ -92,7 +91,7 @@ class Login extends Component {
           entity = 'shelter';
       }
 
-      AUTH_API_URL = `http://127.0.0.1:8080/api/v1/${entity}/login`;
+      const AUTH_API_URL = `http://127.0.0.1:8080/api/v1/${entity}/login`;
 
       axios.post(AUTH_API_URL, formData).then(response => {
           console.log('Авторизація пройшла успішно:', response.data);
