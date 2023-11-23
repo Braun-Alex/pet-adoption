@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 class Signup extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       showUserReg: true,
       showShelterReg: false,
       registrationPath: '/user-account',
-      full_name: '',
+      name: '',
       email: '',
       password: '',
     };
@@ -33,9 +33,7 @@ class Signup extends Component {
     this.setState({ [field]: value });
   }
 
-    registerUser = () => {
-        const { full_name, email, password, showUserReg } = this.state;
-        const userType = showUserReg ? 'user' : 'shelter';
+    register = () => {
   /*registerUser = async () => {
     try {
       console.log('ABOBA');
@@ -56,14 +54,27 @@ class Signup extends Component {
         }),
       });*/
 
-        const SIGNUP_API_URL = 'http://127.0.0.1:8080/api/v1/users/signup';
+        const { name, email, password } = this.state;
+        let entity = '';
+
+        const { showUserReg, showShelterReg } = this.state;
+
+        if (showUserReg) {
+            entity = 'user';
+        } else if (showShelterReg) {
+            entity = 'shelter';
+        }
+
+        const SIGNUP_API_URL = `http://127.0.0.1:8080/api/v1/${entity}/login`;
 
         axios.post(SIGNUP_API_URL, {
-            full_name,
+            name,
             email,
             password,
         }).then(response => {
-            console.log('Реєстрація пройшла успішно:', response.data);
+            console.log('Реєстрацію пройдено успішно:', response.data);
+            const navigate = useNavigate();
+            navigate("/login");
         }).catch(error => {
             console.error('Користувач із такою електронною поштою вже існує.', error.message);
         });
@@ -87,7 +98,7 @@ class Signup extends Component {
           <label>Ім'я користувача</label>
           <input
             type="text"
-            onChange={(e) => this.handleInputChange('full_name', e.target.value)}
+            onChange={(e) => this.handleInputChange('name', e.target.value)}
           />
         </div>
 
@@ -129,7 +140,7 @@ class Signup extends Component {
 
           </form>}
 
-      <Link to={this.state.registrationPath}><button className="button-reg" onClick={this.registerUser}>Зареєструватися</button></Link>
+      <Link to={this.state.registrationPath}><button className="button-reg" onClick={this.register}>Зареєструватися</button></Link>
 
       </div>
     </>
