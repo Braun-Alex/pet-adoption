@@ -27,9 +27,10 @@ def get_current_user(token: str = Depends(reusable_oauth)) -> TokenPayload:
         
         logger.info(f"{payload=}")
         token_data = TokenPayload(**payload)
-
-        # if datetime.fromtimestamp(token_data.exp) < datetime.now():
-        if token_data.exp < datetime.now():
+        logger.info(f"{token_data=}")
+        # logger.info(f"{datetime.fromtimestamp(token_data.exp)=} {datetime.now()=}")
+        if token_data.exp.replace(tzinfo=None)  < datetime.now():
+    #  if token_data.exp < datetime.now():
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 headers={"WWW-Authenticate": "Bearer"}

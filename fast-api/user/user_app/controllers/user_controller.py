@@ -7,6 +7,8 @@ from user_app.models.user_db_model import UserDB
 from user_app.models.user_local_model import UserLocalRegistration, UserLocalOtput, UserLocalAuthorization
 from uuid import uuid4
 
+from user_app.utilities.converter import convert_from_user_db_to_local
+
 from user_app.utilities.encrypter.aes_encrypter import Encrypter
 from user_app.utilities.hasher import Hasher
 
@@ -63,8 +65,10 @@ class UserController(UserControllerInterface):
             return False
         return True
 
-    def get_user_by_id(self, user_id: int) -> Optional[UserDB]:
+    def get_user_by_id(self, user_id: int) -> Optional[UserLocalOtput]:
         return self._db.query(UserDB).filter(UserDB.id == user_id).first()
+
+        
 
     def get_user_by_email(self, email: str) -> Optional[UserDB]:
         deterministically_encrypted_email = self._encrypter.deterministic_encrypt_data(email)
