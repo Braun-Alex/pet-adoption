@@ -58,6 +58,7 @@ class Signup extends Component {
 
 
         console.log(userType);
+        console.log(full_name+" "+email+" "+password);
         const SIGNUP_API_URL = userType == 'user' 
             ? 'http://127.0.0.1:8080/api/v1/users/signup' 
             : 'http://127.0.0.1:8080/api/v1/shelter/signup';
@@ -119,17 +120,21 @@ class Signup extends Component {
 
           <div className="form-field">
             <label>Ім'я притулку</label>
-            <input type="text" />
+            <input type="text"
+            onChange={(e) => this.handleInputChange('full_name', e.target.value)} />
+            
           </div>
 
           <div className="form-field">
             <label>Електронна адреса</label>
-            <input type="email" />
+            <input type="email" 
+            onChange={(e) => this.handleInputChange('email', e.target.value)} />
           </div>
 
           <div className="form-field">
             <label>Пароль</label>
-            <input type="password" />
+            <input type="password" 
+            onChange={(e) => this.handleInputChange('password', e.target.value)}/>
           </div>
 
           </form>}
