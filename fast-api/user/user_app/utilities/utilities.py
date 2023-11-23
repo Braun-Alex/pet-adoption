@@ -96,7 +96,7 @@ def create_jwt_token(subject: Union[str, Any], expires_delta: timedelta = None,
                          timedelta(minutes=jwt_token_type_expiration))
     logger.info(f"create_jwt_token: {type(expires_delta)}")
 
-    to_encode = TokenPayload(sub=str(subject), exp=int(expires_delta), is_shelter=False)
+    to_encode = TokenPayload(sub=str(subject), exp=expires_delta, is_shelter=False)
     #to_encode = {"exp": expires_delta, "sub": str(subject), "is_shelter": ""}
     encoded_jwt = jwt.encode(to_encode.__dict__, JWT_SECRET_KEY, ALGORITHM)
     return encoded_jwt
