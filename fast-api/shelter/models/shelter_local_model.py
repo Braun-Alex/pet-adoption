@@ -3,12 +3,21 @@ from typing import Optional
 
 
 class ShelterLocal(BaseModel):
-    id: Optional[str] = None
+    email: str
+    name: str
+    address: Optional[str] = None
+    phone_number: str
+    description: Optional[str] = None
+    status: Optional[int] = None
+
+class ShelterLocalRegistration(BaseModel):
     email: str
     name: str
     password: str
-    salt: Optional[str] = None
-    address: Optional[str] = None
-    number: str
-    description: Optional[str] = None
-    status: Optional[int] = None
+
+class ShelterLocaAuthorization(BaseModel):
+    email: str
+    password: str
+
+class ShelterLocalOutput(ShelterLocal):
+    id: int

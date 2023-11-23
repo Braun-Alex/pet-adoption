@@ -21,7 +21,7 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from models.shelter_db_model import ShelterDB
-from models.shelter_local_model import ShelterLocal
+from models.shelter_local_model import ShelterLocal, ShelterLocalRegistration
 from utilities.utilities import hash_data
 from uuid import uuid4
 
@@ -61,15 +61,16 @@ class ShelterController(ShelterControllerInterface):
         super().__init__()
         self._db = db
 
-    def create_shelter(self, shelter: ShelterLocal) -> bool:
+    def create_shelter(self, shelter: ShelterLocalRegistration) -> bool:
         random_salt = os.urandom(32).hex()
         random_id = str(uuid4())
-        user_db = ShelterDB(id=random_id,
-                            email=shelter.email,
-                            name=shelter.name,
-                            password=hash_data(shelter.password + random_salt),
-                            number=shelter.number,
-                            salt=random_salt)
+        user_db = ShelterDB(
+                                email=shelter.email,
+                                name=shelter.name,
+                                password=shelter.password,
+                                #password=hash_data(shelter.password + random_salt),
+                                salt=random_salt
+                            )
         self._db.add(user_db)
         self._db.commit()
         self._db.refresh(user_db)
