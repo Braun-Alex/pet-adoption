@@ -69,7 +69,6 @@ class Signup extends Component {
             password,
         }).then(response => {
             console.log('Реєстрація пройшла успішно:', response.data);
-            this.props.history.push('/login');
         }).catch(error => {
             console.error('Користувач із такою електронною поштою вже існує.', error.message);
         });
