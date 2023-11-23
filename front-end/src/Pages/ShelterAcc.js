@@ -6,11 +6,13 @@ import editicon from '../img/editicon.png';
 import mailicon from '../img/mailicon.png';
 import RequestList from '../Components/RequestList';
 import AnimalList from '../Components/AnimalList';
+import { UserDataContext } from './UserDataContext';
 
 const currentShelterId = 2;
 
 const ShelterAcc = () => {
     const { db } = useContext(Context);
+    const { userData } = useContext(UserDataContext);
     
     const [photo, setPhoto] = useState(null);
     const [showShelterAcc, setShowShelterAcc] = useState(true);
@@ -96,12 +98,12 @@ const ShelterAcc = () => {
                 <div className="shelterInfo">
                   <p>
                     <label>Ім'я: </label>
-                    <span id="name">{filteredShelter[0].name}</span>
+                    <span id="name">{userData.full_name}</span>
                   </p>
 
                   <p>
                     <label>Email: </label>
-                    <span id="email">{filteredShelter[0].email}</span>
+                    <span id="email">{userData.email}</span>
                   </p>
 
                   <p>
@@ -166,4 +168,3 @@ const ShelterAcc = () => {
 };
 
 export default ShelterAcc;
-

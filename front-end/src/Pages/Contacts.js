@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { UserDataContext } from './UserDataContext';
 import axios from 'axios';
 
 class Contacts extends Component {
@@ -23,9 +24,10 @@ class Contacts extends Component {
     }
 
     getUserData() {
-        axios.get('http://127.0.0.1:8080/api/v1/users/profile').then(response => {
+        axios.get('http://127.0.0.1:8080/api/v1/shelter/profile').then(response => {
             console.log('Дані про користувача успішно отримано:', response.data);
             this.setState({ userData: response.data });
+            this.context.setUserData(response.data);
         }).catch(error => {
             if (!this.state.accessToken) {
                 this.refreshAuthentication().then(success => {
@@ -56,7 +58,14 @@ class Contacts extends Component {
 
     render() {
         const { userData } = this.state;
-        return (<div>Дані користувача: {userData}</div>)
+       // return (<div>Дані користувача: {userData}</div>)
+       return (
+            <div>
+                <p>Email: {userData.email}</p>
+                <p>Full Name: {userData.full_name}</p>
+            {/* інші поля */}
+            </div>
+        )
     }
 }
 
