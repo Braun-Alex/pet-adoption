@@ -6,6 +6,7 @@ from user_app.utilities.utilities import TokenPayload, ALGORITHM, JWT_SECRET_KEY
 from jose import jwt
 from pydantic import ValidationError
 
+
 import logging 
 
 logger = logging.getLogger(__name__)
