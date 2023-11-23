@@ -23,7 +23,7 @@ class Contacts extends Component {
     }
 
     getUserData() {
-        axios.get('http://127.0.0.1:8000/user/profile').then(response => {
+        axios.get('http://127.0.0.1:8080/api/v1/users/profile').then(response => {
             console.log('Дані про користувача успішно отримано:', response.data);
             this.setState({ userData: response.data });
         }).catch(error => {
