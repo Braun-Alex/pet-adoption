@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { UserDataContext } from './UserDataContext';
 import axios from 'axios';
 
 class Contacts extends Component {
@@ -18,7 +17,7 @@ class Contacts extends Component {
     componentDidMount() {
         this.getUserData();
     }
-
+3
     setAuthHeader(accessToken) {
         axios.defaults.headers.common['Authorization'] = accessToken ? `Bearer ${accessToken}` : '';
     }

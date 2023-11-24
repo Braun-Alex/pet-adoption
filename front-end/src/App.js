@@ -33,22 +33,22 @@ function App() {
     navigate('/login'); // Редірект на сторінку входу
   };
 
+  const userData = { isAuthenticated, username, usertype };
+
   return (
-      
-      <div>
-      <Header isAuthenticated={isAuthenticated} handleLogout={handleLogout} username={username} usertype={usertype} />
-      <Routes>        
-        <Route path='/' element={<Home />} />
-        <Route path='/donate' element={<Donate />} />
-        <Route path='/contacts' element={<Contacts />} />
-        <Route path='/login' element={<Login onLoginSuccess={handleLoginSuccess} />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='/shelter-account' element={<ShelterAcc />} />
-        <Route path="/animal/:animalId" element={<Animal />} />
-        <Route path="/animal-main" element={<AnimalMain />} />
-      </Routes>  
-      </div>
-    
+        <div>
+          <Header isAuthenticated={isAuthenticated} handleLogout={handleLogout} username={username} usertype={usertype} />
+          <Routes>        
+            <Route path='/' element={<Home />} />
+            <Route path='/donate' element={<Donate />} />
+            <Route path='/contacts' element={<Contacts />} />
+            <Route path='/login' element={<Login onLoginSuccess={handleLoginSuccess} />} />
+            <Route path='/signup' element={<Signup />} />
+            <Route path='/shelter-account' element={<ShelterAcc />} />
+            <Route path="/animal/:animalId" element={<Animal />} />
+            <Route path="/animal-main" element={<AnimalMain />} />
+          </Routes>
+        </div>
   );
 }
 

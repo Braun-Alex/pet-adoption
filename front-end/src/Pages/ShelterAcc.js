@@ -6,13 +6,13 @@ import editicon from '../img/editicon.png';
 import mailicon from '../img/mailicon.png';
 import RequestList from '../Components/RequestList';
 import AnimalList from '../Components/AnimalList';
-import { UserDataContext } from './UserDataContext';
+import axios from 'axios';
+
 
 const currentShelterId = 2;
 
 const ShelterAcc = () => {
     const { db } = useContext(Context);
-    const { userData } = useContext(UserDataContext);
     
     const [photo, setPhoto] = useState(null);
     const [showShelterAcc, setShowShelterAcc] = useState(true);
@@ -57,7 +57,9 @@ const ShelterAcc = () => {
       reader.readAsDataURL(file);
     }
   };
-   const filteredShelter = db.shelters.filter((shel) => shel.id === currentShelterId);
+   //const filteredShelter = db.shelters.filter((shel) => shel.id === currentShelterId);
+   const UserEmail = db.getUserEmail();
+   const UserName = db.getUserName();
 
   return (
     <>
@@ -94,30 +96,30 @@ const ShelterAcc = () => {
           <div>
             {showShelterAcc && (
               <div>
-                <div className="shelter-greeting">Вітаємо, {filteredShelter[0].name}!</div>
+                <div className="shelter-greeting">Вітаємо, {/*filteredShelter[0].name*/"aboba"}!</div>
                 <div className="shelterInfo">
                   <p>
                     <label>Ім'я: </label>
-                    <span id="name">{userData.full_name}</span>
+                    <span id="name">{UserName}</span>
                   </p>
 
                   <p>
                     <label>Email: </label>
-                    <span id="email">{userData.email}</span>
+                    <span id="email">{UserEmail}</span>
                   </p>
 
                   <p>
                     <label>Номер телефону: </label>
-                    <span id="phone">{filteredShelter[0].phone}</span>
+                    <span id="phone">{/*filteredShelter[0].phone*/"aboba"}</span>
                   </p>
                   <p>
                     <label>Адреса: </label>
-                    <span id="address">{filteredShelter[0].address}</span>
+                    <span id="address">{/*filteredShelter[0].address*/"aboba"}</span>
                   </p>
 
                   <p>
                     <label>Опис: </label>
-                    <span id="description">{filteredShelter[0].description}</span>
+                    <span id="description">{/*filteredShelter[0].description*/"aboba"}</span>
                   </p>
                 </div>
               </div>
