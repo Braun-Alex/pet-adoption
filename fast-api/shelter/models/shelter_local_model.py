@@ -6,7 +6,11 @@ class ShelterLocal(BaseModel):
     email: str
     full_name: str
     address: Optional[str] = None
+<<<<<<< HEAD
     phone_number: Optional[str] = None
+=======
+    number: Optional[str] = None
+>>>>>>> 7533c49 (init commit to application service)
     description: Optional[str] = None
     address: Optional[str] = None
     description: Optional[str] = None

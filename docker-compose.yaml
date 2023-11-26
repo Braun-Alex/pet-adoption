@@ -28,6 +28,8 @@ services:
       - user_db
     networks:
       - my-network
+    restart: on-failure
+
 
   user_db:
     image: postgres:16.0-alpine3.17
@@ -60,6 +62,8 @@ services:
       - animal_db
     networks:
       - my-network
+    restart: on-failure
+
 
   animal_db:
     image: postgres:16.0-alpine3.17
@@ -120,11 +124,46 @@ services:
       - shelter_db
     networks:
       - my-network
+    restart: on-failure
+
+
+  application_service:
+    build: ./fast-api/application
+    container_name: application
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
+    volumes:
+      - ./fast-api/application:/app/
+    ports:
+      - "8003:8000"
+    environment:
+      - DATABASE_URI=postgresql://application_db_user:application_db_password@application_db/applicationdb_dev
+    #   - JWT_SECRET_KEY=61f16943d3be6938417e2143bd8c2b9516eadf678d82ea399384085084fd4309
+    #   - AES_SECRET_KEY=a1fd6e8ee6e95b25d8d3bd0f8df50076150cea8eaa808455e24c8e7a44f32609
+    depends_on:
+      - application_db
+    networks:
+      - my-network
+
+  application_db:
+    image: postgres:16.0-alpine3.17
+    container_name: application_db_container
+    environment:
+      POSTGRES_DB: applicationdb_dev
+      POSTGRES_USER: application_db_user
+      POSTGRES_PASSWORD: application_db_password
+    ports: 
+      - "5435:5432"
+    volumes:
+      - application_db_data:/var/lib/postgresql/data
+    restart: on-failure
+    networks:
+      - my-network
 
 volumes:
   user_db_data:
   animal_db_data:
   shelter_db_data:
+  application_db_data:
 
 networks:
   my-network:
