@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import '../css/Auth.css'
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import "../css/Auth.css"
 
 class Login extends Component {
   constructor(props) {
@@ -36,7 +37,9 @@ class Login extends Component {
     this.setState({ [name]: value });
   }
 
-  async loginUser(e) {
+    setAuthHeader(accessToken) {
+        axios.defaults.headers.common['Authorization'] = accessToken ? `Bearer ${accessToken}` : '';
+  /*async loginUser(e) {
     e.preventDefault();
 
     const { userEmail, userPassword } = this.state;
@@ -63,8 +66,29 @@ class Login extends Component {
       }
     } catch (error) {
       console.log('Виникла помилка при спробі входу');
-      this.setState({ errorMessage: error.message || 'Виникла помилка при спробі входу' });
+      this.setState({ errorMessage: error.message || 'Виникла помилка при спробі входу' });*/
     }
+
+  loginUser = (e) => {
+      e.preventDefault();
+
+      const { userEmail, userPassword } = this.state;
+      const AUTH_API_URL = 'http://127.0.0.1:8000/user/login';
+      const formData = new URLSearchParams();
+
+      formData.append('username', userEmail);
+      formData.append('password', userPassword);
+
+      axios.post(AUTH_API_URL, formData).then(response => {
+          console.log('Авторизація пройшла успішно:', response.data);
+          localStorage.setItem('access_token', response.data.access_token);
+          localStorage.setItem('refresh_token', response.data.refresh_token);
+          this.setAuthHeader(response.data.access_token);
+          this.setState({ errorMessage: 'Авторизація пройшла успішно' });
+      }).catch((error) => {
+          console.error('Введено некоректну електронну пошту або пароль.', error.message);
+          this.setState({ errorMessage: 'Введено некоректну електронну пошту або пароль' });
+      });
   }
 
   render() {
@@ -73,36 +97,36 @@ class Login extends Component {
     return (
       <>
         <h1 className="form-header">ВХІД</h1>
-        
+
         <div className="form">
           <button className={`${this.state.showUserReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleUser}>Користувач</button>
           <button className={`${this.state.showShelterReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleShelter}>Притулок</button>
           <form className="login-form" onSubmit={this.loginUser}>
             <div className="form-field">
               <label>Електронна адреса</label>
-              <input 
-                type="email" 
-                name="userEmail" 
+              <input
+                type="email"
+                name="userEmail"
                 value={userEmail}
-                onChange={this.handleInputChange} 
+                onChange={this.handleInputChange}
               />
             </div>
-          
+
             <div className="form-field">
               <label>Пароль</label>
-              <input 
-                type="password" 
-                name="userPassword" 
+              <input
+                type="password"
+                name="userPassword"
                 value={userPassword}
-                onChange={this.handleInputChange} 
+                onChange={this.handleInputChange}
               />
             </div>
 
             {errorMessage && <div className="error-message">{errorMessage}</div>}
-            
-            <Link to={this.state.registrationPath}><button type="submit" className="button-reg" onClick={this.registerUser}>Увійти</button></Link>
+
+            <button type="submit" className="button-login">Увійти</button>
           </form>
-        </div>                
+        </div>
       </>
     );
   }

@@ -10,7 +10,6 @@ import Header from './Components/Header';
 import ShelterAcc from './Pages/ShelterAcc';
 import Animal from './Pages/Animal';
 import AnimalMain from './Pages/AnimalMain';
-import './App.css';
 
 
 function App() {
