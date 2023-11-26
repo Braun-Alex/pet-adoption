@@ -1,6 +1,7 @@
 .container {
   display: flex;
   height: 100%;
+  padding-top: 160px;
 }
 
 .shelter-photo-greeting {
@@ -8,7 +9,6 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  padding-top: 110px;
 }
 
 .photo-container {
@@ -68,7 +68,6 @@
     flex: 9;
     height: 100%;
     justify-content: start;
-    padding-top: 110px;
     padding-left: 10px;
 }
 

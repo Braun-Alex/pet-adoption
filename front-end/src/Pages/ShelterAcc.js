@@ -7,7 +7,10 @@ import mailicon from '../img/mailicon.png';
 import RequestList from '../Components/RequestList';
 import AnimalList from '../Components/AnimalList';
 
+import '../css/ShelterAcc.css'
+
 const currentShelterId = 2;
+
 
 const ShelterAcc = () => {
     const { db } = useContext(Context);
@@ -60,6 +63,7 @@ const ShelterAcc = () => {
   return (
     <>
       <div className="container">
+        
         <div className="shelter-photo-greeting">
           <label className="photo-container">
             <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />

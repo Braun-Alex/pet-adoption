@@ -10,15 +10,12 @@ import Header from './Components/Header';
 import ShelterAcc from './Pages/ShelterAcc';
 import Animal from './Pages/Animal';
 import AnimalMain from './Pages/AnimalMain';
-
 import './App.css';
-import './css/Auth.css'
-import './css/ShelterAcc.css'
 
 
 function App() {
   const navigate = useNavigate(); // Отримуємо функцію navigate
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState("username");
   const [usertype, setUsertype] = useState("shelter")
 
