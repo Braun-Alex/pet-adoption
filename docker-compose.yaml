@@ -136,7 +136,7 @@ services:
     ports:
       - "8003:8000"
     environment:
-      - DATABASE_URI=postgresql://application_db_user:application_db_password@application_db/applicationdb_dev
+      - DATABASE_URI=postgresql://application_db_user:application_db_password@application_db/application_db_dev
     #   - JWT_SECRET_KEY=61f16943d3be6938417e2143bd8c2b9516eadf678d82ea399384085084fd4309
     #   - AES_SECRET_KEY=a1fd6e8ee6e95b25d8d3bd0f8df50076150cea8eaa808455e24c8e7a44f32609
     depends_on:
@@ -148,7 +148,7 @@ services:
     image: postgres:16.0-alpine3.17
     container_name: application_db_container
     environment:
-      POSTGRES_DB: applicationdb_dev
+      POSTGRES_DB: application_db_dev
       POSTGRES_USER: application_db_user
       POSTGRES_PASSWORD: application_db_password
     ports: 

@@ -2,7 +2,8 @@ from sqlalchemy import Column, Integer, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+from application_app.db.database import Base
+
 
 class ApplicationDB(Base):
     __tablename__ = 'applications'

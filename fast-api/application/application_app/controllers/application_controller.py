@@ -34,6 +34,18 @@ class ApplicationControllerInterface(ABC):
         """
 
     @abstractmethod
+    def get_application_by_shelter_id(self, shelter_id: int) -> Optional[ApplicationOut]:
+        """
+        Get information about an application by shelter ID.
+
+        Args:
+            application_id (int): The ID of the application to retrieve.
+
+        Returns:
+            Optional[ApplicationOut]: Information about the application if found, else None.
+        """
+
+    @abstractmethod
     def update_application(self, application_update: ApplicationUpdate) -> Optional[ApplicationOut]:
         """
         Update information about an application and return the updated information.
@@ -77,12 +89,22 @@ class ApplicationController(ApplicationControllerInterface):
         self._db.add(new_application)
         self._db.commit()
         self._db.refresh(new_application)
-        return ApplicationOut(**new_application.__dict__)
+        return True
 
     def get_application(self, application_id: int) -> Optional[ApplicationOut]:
         application = self._db.query(ApplicationDB).filter(ApplicationDB.id == application_id).first()
         if application:
             return ApplicationOut(**application.__dict__)
+        return None
+
+    def get_application_by_shelter_id(self, shelter_id: int) -> Optional[ApplicationOut]:
+        applications = self._db.query(ApplicationDB).filter(ApplicationDB.shelter_id == shelter_id).all()
+        if applications:
+            applications_local = [ 
+                                    ApplicationOut(**application.__dict__)
+                                    for application in applications
+                                 ]
+            return applications_local
         return None
 
     def update_application(self, application_update: ApplicationUpdate) -> Optional[ApplicationOut]:

@@ -34,6 +34,18 @@ class ApplicationServiceInterface(ABC):
         """
 
     @abstractmethod
+    def get_application_by_shelter_id(self, shleter_id: int) -> Optional[ApplicationOut]:
+        """
+        Get information about an application by shelter ID.
+
+        Args:
+            application_id (int): The ID of the application to retrieve.
+
+        Returns:
+            Optional[ApplicationOut]: Information about the application if found, else None.
+        """
+
+    @abstractmethod
     def update_application(self, application_update: ApplicationUpdate) -> Optional[ApplicationOut]:
         """
         Update information about an application and return the updated information.
@@ -97,6 +109,9 @@ class ApplicationService(ApplicationServiceInterface):
 
     def get_application(self, application_id: int) -> Optional[ApplicationOut]:
         return self._controller.get_application(application_id)
+    
+    def get_application_by_shelter_id(self, shelter_id: int) -> Optional[ApplicationOut]:
+        return self._controller.get_application_by_shelter_id(shelter_id=shelter_id)
 
     def update_application(self, application_update: ApplicationUpdate) -> Optional[ApplicationOut]:
         return self._controller.update_application(application_update)
