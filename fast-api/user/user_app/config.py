@@ -14,6 +14,8 @@ from user_app.utilities.encrypter.aes_encrypter import AESEncrypter
 
 from user_app.utilities.hasher import Hasher, DummyHasher
 
+from sqlalchemy.exc import OperationalError
+
 CONFIG_FILE = "/app/user_app/user_app_config.json"
 
 logger = logging.getLogger(__name__)
@@ -29,10 +31,24 @@ def load_config():
 
 def config_service() -> UserServiceInterface:
     config = load_config()
-    Base.metadata.create_all(bind=engine)
+   
 
-    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-    db = SessionLocal()
+    try:
+    # Попытка установления соединения   
+        Base.metadata.create_all(bind=engine)
+       
+        SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+        db = SessionLocal()
+        # Если успешно установлено соединение
+        logger.info("Connection established successfully")
+
+        # Здесь вы можете выполнять операции с базой данных
+
+        # Не забудьте закрыть соединение, когда оно больше не нужно
+    except Exception as e:
+    # Обработка ошибки установления соединения
+        logger.error(f"Connection error: {e}")
+
 
     logger.info(f"{config=}")
 
