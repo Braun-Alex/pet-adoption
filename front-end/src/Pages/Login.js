@@ -1,141 +1,112 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
+import { AuthContext } from '../Contexts/AuthContext';
+import { withoutAuth } from '../Wrappers/WithoutAuth';
 
 class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showUserReg: true,
-      showShelterReg: false,
-      registrationPath: '/user-account',
-      userEmail: '',
-      userPassword: '',
-      errorMessage: ''
-    };
+    static contextType = AuthContext;
 
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.loginUser = this.loginUser.bind(this);
-  }
-  toggleUser = () => {
-    this.setState({
-      showUserReg: true,
-      showShelterReg: false,
-      registrationPath: '/user-account',
-    });
-  }
-  toggleShelter = () => {
-    this.setState({
-      showUserReg: false,
-      showShelterReg: true,
-      registrationPath: '/shelter-account',
-    });
-  }
-  handleInputChange(e) {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            showUserAuth: true,
+            showShelterAuth: false,
+            registrationPath: '/user-account',
+            email: '',
+            password: '',
+            errorMessage: ''
+        };
 
-    setAuthHeader(accessToken) {
-        axios.defaults.headers.common['Authorization'] = accessToken ? `Bearer ${accessToken}` : '';
-  /*async loginUser(e) {
-    e.preventDefault();
-
-    const { userEmail, userPassword } = this.state;
-    try {
-      const response = await fetch('http://127.0.0.1:8080/api/v1/users/authorize/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: userEmail,
-          password: userPassword
-        })
-      });
-
-      const data = await response.json();
-      if (response.status === 200) {
-        console.log('Успішно увійшли:', data);
-        // Виклик функції, переданої через пропси, для оновлення стану авторизації в App.js
-        this.props.onLoginSuccess(); // передаємо ім'я користувача або іншу інформацію
-        //this.props.navigate('/'); // Редірект на основну сторінку
-      } else {
-        throw new Error(data.message || 'Не вдалося увійти');
-      }
-    } catch (error) {
-      console.log('Виникла помилка при спробі входу');
-      this.setState({ errorMessage: error.message || 'Виникла помилка при спробі входу' });*/
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.login = this.login.bind(this);
     }
 
-  loginUser = (e) => {
-      e.preventDefault();
+    toggleUser = () => {
+        this.setState({
+            showUserAuth: true,
+            showShelterAuth: false,
+            registrationPath: '/user-account',
+        });
+    }
 
-      const { userEmail, userPassword } = this.state;
-      const showUserReg = this.state.showUserReg;
-      console.log(showUserReg);
-      const AUTH_API_URL = showUserReg
-          ? 'http://127.0.0.1:8080/api/v1/users/login'
-          : 'http://127.0.0.1:8080/api/v1/shelter/login';
+    toggleShelter = () => {
+        this.setState({
+            showUserAuth: false,
+            showShelterAuth: true,
+            registrationPath: '/shelter-account',
+        });
+    }
 
-      const formData = new URLSearchParams();
+    handleInputChange = (field, value) => {
+        this.setState({ [field]: value } );
+    }
 
-      formData.append('username', userEmail);
-      formData.append('password', userPassword);
+    login = async (event) => {
+        event.preventDefault();
 
-      axios.post(AUTH_API_URL, formData).then(response => {
-          console.log('Авторизація пройшла успішно:', response.data);
-          localStorage.setItem('access_token', response.data.access_token);
-          localStorage.setItem('refresh_token', response.data.refresh_token);
-          this.setAuthHeader(response.data.access_token);
-          this.setState({ errorMessage: 'Авторизація пройшла успішно' });
-      }).catch((error) => {
-          console.error('Введено некоректну електронну пошту або пароль.', error.message);
-          this.setState({ errorMessage: 'Введено некоректну електронну пошту або пароль' });
-      });
-  }
+        const { saveTokens, tryLoginUser, tryLoginShelter } = this.context;
+        const { email, password, showUserAuth } = this.state;
 
-  render() {
-    const { userEmail, userPassword, errorMessage } = this.state;
+        const formData = new URLSearchParams();
+        formData.append('username', email);
+        formData.append('password', password);
 
-    return (
-      <>
-        <h1 className="form-header">ВХІД</h1>
+        const entity = showUserAuth ? 'users' : 'shelter';
+        const AUTH_API_URL = `http://127.0.0.1:8080/${entity}/login`;
 
-        <div className="form">
-          <button className={`${this.state.showUserReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleUser}>Користувач</button>
-          <button className={`${this.state.showShelterReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleShelter}>Притулок</button>
-          <form className="login-form" onSubmit={this.loginUser}>
-            <div className="form-field">
-              <label>Електронна адреса</label>
-              <input
-                type="email"
-                name="userEmail"
-                value={userEmail}
-                onChange={this.handleInputChange}
-              />
-            </div>
+        try {
+            const response = await axios.post(AUTH_API_URL, formData);
+            saveTokens(response.data);
+            const successAuth = showUserAuth ? await tryLoginUser(): await tryLoginShelter();
+            if (successAuth) {
+                console.log('Авторизацію пройшдено успішно:', response.data);
+                this.setState({ errorMessage: 'Авторизацію пройдено успішно' });
+            }
+        } catch (error) {
+            console.error('Введено некоректну електронну пошту або пароль.', error.message);
+            this.setState({ errorMessage: 'Введено некоректну електронну пошту або пароль' });
+        }
+    }
 
-            <div className="form-field">
-              <label>Пароль</label>
-              <input
-                type="password"
-                name="userPassword"
-                value={userPassword}
-                onChange={this.handleInputChange}
-              />
-            </div>
+    render() {
+        const { email, password, errorMessage } = this.state;
 
-            {errorMessage && <div className="error-message">{errorMessage}</div>}
-            
-            {/* <Link to={this.state.registrationPath}><button type="submit" className="button-reg" onClick={this.registerUser}>Увійти</button></Link> */}
+        return (
+            <>
+                <h1 className="form-header">ВХІД</h1>
 
-            <button type="submit" className="button-login">Увійти</button>
-          </form>
-        </div>
-      </>
-    );
-  }
+                <div className="form">
+                    <button className={`${this.state.showUserAuth ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleUser}>Користувач</button>
+                    <button className={`${this.state.showShelterAuth ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleShelter}>Притулок</button>
+                    <form className="login-form" onSubmit={this.login}>
+                        <div className="form-field">
+                            <label>Електронна адреса</label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(event) => this.handleInputChange('email', event.target.value)}
+                            />
+                        </div>
+
+                        <div className="form-field">
+                            <label>Пароль</label>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(event) => this.handleInputChange('password', event.target.value)}
+                            />
+                        </div>
+
+                        {errorMessage && <div className="error-message">{errorMessage}</div>}
+
+                        {/* <Link to={this.state.registrationPath}><button type="submit" className="button-reg" onClick={this.registerUser}>Увійти</button></Link> */}
+
+                        <button type="submit" className="button-login">Увійти</button>
+                    </form>
+                </div>
+            </>
+        );
+    }
 }
 
-export default Login;
+export default withoutAuth(Login);

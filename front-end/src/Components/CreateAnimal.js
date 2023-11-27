@@ -3,6 +3,8 @@ import '../css/Modal.css'
 import Modal from 'react-modal';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
+
+//const CreateAnimal = ({ show, onHide }) => {
 import axios from 'axios';
 
 const CreateAnimal = ({ show, onHide }) => {

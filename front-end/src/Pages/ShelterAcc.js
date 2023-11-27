@@ -6,8 +6,6 @@ import editicon from '../img/editicon.png';
 import mailicon from '../img/mailicon.png';
 import RequestList from '../Components/RequestList';
 import AnimalList from '../Components/AnimalList';
-import axios from 'axios';
-
 
 const currentShelterId = 2;
 
@@ -58,8 +56,11 @@ const ShelterAcc = () => {
     }
   };
    const filteredShelter = db.shelters.filter((shel) => shel.id === currentShelterId);
+<<<<<<< HEAD
+=======
    const UserEmail = db.getUserEmail();
    const UserName = db.getUserName();
+>>>>>>> main
 
   return (
     <>
@@ -96,30 +97,30 @@ const ShelterAcc = () => {
           <div>
             {showShelterAcc && (
               <div>
-                <div className="shelter-greeting">Вітаємо, {/*filteredShelter[0].name*/"aboba"}!</div>
+                <div className="shelter-greeting">Вітаємо, {filteredShelter[0].name}!</div>
                 <div className="shelterInfo">
                   <p>
                     <label>Ім'я: </label>
-                    <span id="name">{UserName}</span>
+                    <span id="name">{filteredShelter[0].name}</span>
                   </p>
 
                   <p>
                     <label>Email: </label>
-                    <span id="email">{UserEmail}</span>
+                    <span id="email">{filteredShelter[0].email}</span>
                   </p>
 
                   <p>
                     <label>Номер телефону: </label>
-                    <span id="phone">{/*filteredShelter[0].phone*/"aboba"}</span>
+                    <span id="phone">{filteredShelter[0].phone}</span>
                   </p>
                   <p>
                     <label>Адреса: </label>
-                    <span id="address">{/*filteredShelter[0].address*/"aboba"}</span>
+                    <span id="address">{filteredShelter[0].address}</span>
                   </p>
 
                   <p>
                     <label>Опис: </label>
-                    <span id="description">{/*filteredShelter[0].description*/"aboba"}</span>
+                    <span id="description">{filteredShelter[0].description}</span>
                   </p>
                 </div>
               </div>
@@ -170,3 +171,4 @@ const ShelterAcc = () => {
 };
 
 export default ShelterAcc;
+
