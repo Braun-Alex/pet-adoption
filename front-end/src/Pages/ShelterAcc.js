@@ -57,7 +57,7 @@ const ShelterAcc = () => {
       reader.readAsDataURL(file);
     }
   };
-   //const filteredShelter = db.shelters.filter((shel) => shel.id === currentShelterId);
+   const filteredShelter = db.shelters.filter((shel) => shel.id === currentShelterId);
    const UserEmail = db.getUserEmail();
    const UserName = db.getUserName();
 

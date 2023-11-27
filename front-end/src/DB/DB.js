@@ -16,7 +16,7 @@ export default class DB extends Component {
         console.log("AFTER GETTING USER DATA");
         this.refreshAuthentication = this.refreshAuthentication.bind(this);
 
-        /*this._animals = [
+        this._animals = [
             { id: 1, shelterId: 2, name: "1назва_тваринки", sex: "дівчинка", type: "пес", age: "1 рік"},
             { id: 2, shelterId: 2, name: "2назва_тваринки", sex: "дівчинка", type: "кіт", age: "2 роки" },
             { id: 3, shelterId: 2, name: "3назва_тваринки", sex: "хлопчик", type: "пес", age: "3 роки" },
@@ -50,7 +50,7 @@ export default class DB extends Component {
             { id: 1, name: "shelter1", email: "shelter1@ex.com", phone: "+380111111111", address: "address1", description: "description1" },
             { id: 2, name: "shelter2", email: "shelter2@ex.com", phone: "+380222222222", address: "address2", description: "description2" },
             { id: 3, name: "shelter3", email: "shelter3@ex.com", phone: "+380333333333", address: "address3", description: "description3" }
-        ]*/
+        ]
     }
 
     componentDidMount() {
