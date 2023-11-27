@@ -51,8 +51,8 @@ class Login extends Component {
         formData.append('username', email);
         formData.append('password', password);
 
-        const entity = showUserAuth ? 'user' : 'shelter';
-        const AUTH_API_URL = `http://127.0.0.1:8000/${entity}/login`;
+        const entity = showUserAuth ? 'users' : 'shelter';
+        const AUTH_API_URL = `http://127.0.0.1:8080/${entity}/login`;
 
         try {
             const response = await axios.post(AUTH_API_URL, formData);

@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+<<<<<<< HEAD
 import { withoutAuth } from '../Wrappers/WithoutAuth';
+=======
+>>>>>>> main
 
 class Signup extends Component {
     constructor(props) {
@@ -42,7 +45,7 @@ class Signup extends Component {
         const { showUserReg, showShelterReg } = this.state;
 
         if (showUserReg) {
-            entity = 'user';
+            entity = 'users';
             entityData = {
                 full_name: name,
                 email: email,
@@ -57,7 +60,7 @@ class Signup extends Component {
             }
         }
 
-        const SIGNUP_API_URL = `http://127.0.0.1:8000/${entity}/signup`;
+        const SIGNUP_API_URL = `http://127.0.0.1:8080/${entity}/signup`;
 
         axios.post(SIGNUP_API_URL, entityData).then(response => {
             console.log('Реєстрацію пройдено успішно:', response.data);

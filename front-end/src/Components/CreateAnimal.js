@@ -4,7 +4,46 @@ import Modal from 'react-modal';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 
+//const CreateAnimal = ({ show, onHide }) => {
+import axios from 'axios';
+
 const CreateAnimal = ({ show, onHide }) => {
+    // Стан для зберігання даних форми
+    const [animalData, setAnimalData] = useState({
+        name: '',
+        type: '',
+        sex: '',
+        birthMonth: '',
+        birthYear: '',
+        description: ''
+    });
+
+    // Функція для обробки змін у полях вводу
+    const handleInputChange = (field, value) => {
+        setAnimalData({ ...animalData, [field]: value });
+    };
+
+    // Функція для відправки даних на сервер
+    const registerAnimal = async () => {
+        const { name, type, sex, birthMonth, birthYear, description } = animalData;
+        console.log('Дані тварини:', name, type, sex, birthMonth, birthYear, description);
+        // Вказати URL вашого API
+        const API_URL = 'http://127.0.0.1:8080/api/v1/animals/register';
+
+        try {
+            const response = await axios.post(API_URL, {
+                name,
+                type,
+                sex,
+                birthMonth,
+                birthYear,
+                description
+            });
+            console.log('Тварина успішно зареєстрована:', response.data);
+        } catch (error) {
+            console.error('Помилка при реєстрації тварини:', error.message);
+        }
+    };
 
     const modalStyles = {
         display: show ? 'block' : 'none',
@@ -59,7 +98,7 @@ const CreateAnimal = ({ show, onHide }) => {
                     </form>
                 </div>
 
-                <button className="create-animal-button">Додати</button>
+                <button className="create-animal-button" onClick={registerAnimal}>Додати</button>
 
             </div>
             
