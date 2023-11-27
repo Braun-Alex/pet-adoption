@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-<<<<<<< HEAD
 import { withoutAuth } from '../Wrappers/WithoutAuth';
-=======
->>>>>>> main
 
 class Signup extends Component {
     constructor(props) {
@@ -54,13 +51,13 @@ class Signup extends Component {
         } else if (showShelterReg) {
             entity = 'shelter';
             entityData = {
-                shelter_name: name,
+                full_name: name,
                 email: email,
                 password: password
             }
         }
 
-        const SIGNUP_API_URL = `http://127.0.0.1:8080/${entity}/signup`;
+        const SIGNUP_API_URL = `http://127.0.0.1:8080/api/v1/${entity}/signup`;
 
         axios.post(SIGNUP_API_URL, entityData).then(response => {
             console.log('Реєстрацію пройдено успішно:', response.data);
@@ -115,17 +112,20 @@ class Signup extends Component {
 
                         <div className="form-field">
                             <label>Ім'я притулку</label>
-                            <input type="text" />
+                            <input type="text"
+                            onChange={(event) => this.handleInputChange('name', event.target.value)}/>
                         </div>
 
                         <div className="form-field">
                             <label>Електронна адреса</label>
-                            <input type="email" />
+                            <input type="email"
+                            onChange={(event) => this.handleInputChange('email', event.target.value)} />
                         </div>
 
                         <div className="form-field">
                             <label>Пароль</label>
-                            <input type="password" />
+                            <input type="password"
+                            onChange={(event) => this.handleInputChange('password', event.target.value)} />
                         </div>
 
                     </form>}

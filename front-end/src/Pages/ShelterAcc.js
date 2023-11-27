@@ -56,11 +56,6 @@ const ShelterAcc = () => {
     }
   };
    const filteredShelter = db.shelters.filter((shel) => shel.id === currentShelterId);
-<<<<<<< HEAD
-=======
-   const UserEmail = db.getUserEmail();
-   const UserName = db.getUserName();
->>>>>>> main
 
   return (
     <>

@@ -41,7 +41,8 @@ export const AuthProvider = ({ children }) => {
     const getData = async (apiUrl) => {
         try {
             const response = await axios.get(apiUrl);
-            return JSON.parse(response.data);
+            console.log(response); // Тестові логи
+            return /*JSON.parse(*/response.data;//);
         } catch (error) {
             const accessToken = localStorage.getItem('access_token');
             if (accessToken) {
@@ -57,7 +58,7 @@ export const AuthProvider = ({ children }) => {
     const tryRefreshAccessToken = async () => {
         const refreshToken = localStorage.getItem('refresh_token');
         try {
-            const response = await axios.post('http://127.0.0.1:8000/token/refresh', { refresh_token: refreshToken });
+            const response = await axios.post('http://127.0.0.1:8080/api/v1/token/refresh', { refresh_token: refreshToken });
             const accessToken = response.data.access_token;
             localStorage.setItem('access_token', accessToken);
             setAuthHeader(response.data.accessToken);
@@ -68,7 +69,8 @@ export const AuthProvider = ({ children }) => {
     }
 
     const getUserData = async () => {
-        const user = await getData('http://127.0.0.1:8000/user/profile');
+        const user = await getData('http://127.0.0.1:8080/api/v1/users/profile');
+        //console.log(user);
         if (user) {
             return {
                 userID: user.id,
@@ -80,11 +82,11 @@ export const AuthProvider = ({ children }) => {
     }
 
     const getShelterData = async () => {
-        const shelter = await getData('http://127.0.0.1:8000/shelter/profile');
+        const shelter = await getData('http://127.0.0.1:8080/api/v1/shelter/profile');
         if (shelter) {
             return {
                 shelterID: shelter.id,
-                shelterName: shelter.shelter_name,
+                shelterName: shelter.full_name,
                 shelterEmail: shelter.email
             };
         }
@@ -92,12 +94,20 @@ export const AuthProvider = ({ children }) => {
     }
 
     const tryLoginUser = async () => {
+        //console.log("tryloginuser1");
         const userData = await getUserData();
+       // console.log("tryloginuser2");
+       // console.log(userData);
         if (userData) {
+            //console.log(userData);
             setUser(userData);
+           // console.log("tryloginuser3");
             setEntityType('user');
+            //console.log("tryloginuser4");
             setEntityName(userData.userFullName);
+           // console.log("tryloginuser5");
             setIsAuthenticated(true);
+           // console.log("tryloginuser6");
             return true;
         }
         return false;
@@ -126,15 +136,23 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const getAuthState = async () => {
+            //console.log("test1");
             const access_token = localStorage.getItem('access_token');
+           // console.log("test2");
             setAuthHeader(access_token);
+           // console.log("test3");
             let success = false;
             if (access_token) {
+              //  console.log("test4");
                 success = await tryLoginUser();
+               // console.log(success);
                 if (!success) {
+                   // console.log("test5");
                     success = await tryLoginShelter();
+                    console.log(success);
                 }
             }
+           // console.log("test6");
             setIsAuthenticated(success);
         };
 
