@@ -21,8 +21,9 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from models.shelter_db_model import ShelterDB
-from models.shelter_local_model import ShelterLocal
+from models.shelter_local_model import ShelterLocal, ShelterLocalRegistration, ShelterLocalOutput
 from utilities.utilities import hash_data
+from utilities.converter import convert_from_shelter_db_to_local
 from uuid import uuid4
 
 
@@ -61,22 +62,24 @@ class ShelterController(ShelterControllerInterface):
         super().__init__()
         self._db = db
 
-    def create_shelter(self, shelter: ShelterLocal) -> bool:
+    def create_shelter(self, shelter: ShelterLocalRegistration) -> bool:
         random_salt = os.urandom(32).hex()
         random_id = str(uuid4())
-        user_db = ShelterDB(id=random_id,
-                            email=shelter.email,
-                            name=shelter.name,
-                            password=hash_data(shelter.password + random_salt),
-                            number=shelter.number,
-                            salt=random_salt)
+        user_db = ShelterDB(
+                                email=shelter.email,
+                                name=shelter.full_name,
+                                password=shelter.password,
+                                #password=hash_data(shelter.password + random_salt),
+                                salt=random_salt
+                            )
         self._db.add(user_db)
         self._db.commit()
         self._db.refresh(user_db)
         return True
 
-    def get_shelter_by_id(self, shelter_id: str) -> Optional[ShelterDB]:
-        return self._db.query(ShelterDB).filter(ShelterDB.id == shelter_id).first()
+    def get_shelter_by_id(self, shelter_id: str) -> Optional[ShelterLocalOutput]:
+        shelter_bd = self._db.query(ShelterDB).filter(ShelterDB.id == shelter_id).first()
+        return convert_from_shelter_db_to_local(shelter_db=shelter_bd)
 
     def get_shelter_by_name(self, shelter_name: str) -> Optional[ShelterDB]:
         return self._db.query(ShelterDB).filter(ShelterDB.id == shelter_name).first()

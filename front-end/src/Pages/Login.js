@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      showUserReg: true,
+      showShelterReg: false,
+      registrationPath: '/user-account',
       userEmail: '',
       userPassword: '',
       errorMessage: ''
@@ -14,7 +17,20 @@ class Login extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.loginUser = this.loginUser.bind(this);
   }
-
+  toggleUser = () => {
+    this.setState({
+      showUserReg: true,
+      showShelterReg: false,
+      registrationPath: '/user-account',
+    });
+  }
+  toggleShelter = () => {
+    this.setState({
+      showUserReg: false,
+      showShelterReg: true,
+      registrationPath: '/shelter-account',
+    });
+  }
   handleInputChange(e) {
     const { name, value } = e.target;
     this.setState({ [name]: value });
@@ -56,7 +72,12 @@ class Login extends Component {
       e.preventDefault();
 
       const { userEmail, userPassword } = this.state;
-      const AUTH_API_URL = 'http://127.0.0.1:8000/user/login';
+      const showUserReg = this.state.showUserReg;
+      console.log(showUserReg);
+      const AUTH_API_URL = showUserReg
+          ? 'http://127.0.0.1:8080/api/v1/users/login'
+          : 'http://127.0.0.1:8080/api/v1/shelter/login';
+
       const formData = new URLSearchParams();
 
       formData.append('username', userEmail);
@@ -82,6 +103,8 @@ class Login extends Component {
         <h1 className="form-header">ВХІД</h1>
 
         <div className="form">
+          <button className={`${this.state.showUserReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleUser}>Користувач</button>
+          <button className={`${this.state.showShelterReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleShelter}>Притулок</button>
           <form className="login-form" onSubmit={this.loginUser}>
             <div className="form-field">
               <label>Електронна адреса</label>
@@ -104,6 +127,8 @@ class Login extends Component {
             </div>
 
             {errorMessage && <div className="error-message">{errorMessage}</div>}
+            
+            {/* <Link to={this.state.registrationPath}><button type="submit" className="button-reg" onClick={this.registerUser}>Увійти</button></Link> */}
 
             <button type="submit" className="button-login">Увійти</button>
           </form>

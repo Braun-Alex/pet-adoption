@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import DB from './List/DB';
+import DB from './DB/DB';
 
 export const Context = createContext(null)
 

@@ -1,11 +1,12 @@
 /* Стилі для шапки */
 header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: space-around;
   background-color: #D8CFB9;
-  color: #fff;
-  padding: 17px 70px;
+  padding-top: 17px;
+  padding-bottom: 17px;
+  width: 100%;
+  right: inherit;
 }
 
 .header-left a {

@@ -17,15 +17,16 @@ class Contacts extends Component {
     componentDidMount() {
         this.getUserData();
     }
-
+3
     setAuthHeader(accessToken) {
         axios.defaults.headers.common['Authorization'] = accessToken ? `Bearer ${accessToken}` : '';
     }
 
     getUserData() {
-        axios.get('http://127.0.0.1:8000/user/profile').then(response => {
+        axios.get('http://127.0.0.1:8080/api/v1/shelter/profile').then(response => {
             console.log('Дані про користувача успішно отримано:', response.data);
             this.setState({ userData: response.data });
+            this.context.setUserData(response.data);
         }).catch(error => {
             if (!this.state.accessToken) {
                 this.refreshAuthentication().then(success => {
@@ -56,7 +57,14 @@ class Contacts extends Component {
 
     render() {
         const { userData } = this.state;
-        return (<div>Дані користувача: {userData}</div>)
+       // return (<div>Дані користувача: {userData}</div>)
+       return (
+            <div>
+                <p>Email: {userData.email}</p>
+                <p>Full Name: {userData.full_name}</p>
+            {/* інші поля */}
+            </div>
+        )
     }
 }
 

@@ -1,13 +1,19 @@
+.container {
+  display: flex;
+  height: 100%;
+}
+
 .shelter-photo-greeting {
+  flex: 4;
   display: flex;
   align-items: center;
-  margin-top: 60px;
-  margin-left: 150px;
+  flex-direction: column;
+  padding-top: 110px;
 }
 
 .photo-container {
-  min-width: 200px;
-  min-height: 200px;
+  width: 150px;
+  height: 150px;
   background-color: #ccc;
   border-radius: 50%;
   color: rgb(255, 255, 255);
@@ -15,6 +21,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  margin-bottom: 55px;
 }
 
 .selected-photo {
@@ -23,22 +30,13 @@
   border-radius: 50%;
 }
 
-.shelter-greeting {
-  color: #000;
-  font-size: 40px;
-  font-weight: 300;
-  margin-left: 100px;
-  width: 1000px;
-}
-
 .shelter-options {
-  padding: 20px 0;
-  
-  width: 300px;
-  border-radius: 20px;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
+    padding: 20px 0;
+    width: 300px;
+    border-radius: 20px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
 }
 
 .active-shelter-option {
@@ -49,7 +47,6 @@
   font-size: 20px;
   text-align: left;
   cursor: pointer;
-  margin: 0;
 }
 
 .inactive-shelter-option {
@@ -60,63 +57,106 @@
   font-size: 20px;
   text-align: left;
   cursor: pointer;
-  margin: 0;
 }
 
 .shelter-options img {
-  width: 23px;
-  margin: 0 10px 0 15px;
+    width: 23px;
+    margin: 0 10px 0px 15px;
 }
 
 .shelter-options-open {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  padding: 40px 0px 0px 100px
+    flex: 9;
+    height: 100%;
+    justify-content: start;
+    padding-top: 110px;
+    padding-left: 10px;
 }
 
-.shelterEditInfo {
-  margin-left: 50px;
-  width: 225%;
+.shelter-greeting {
+    color: #000;
+    font-size: 35px;
+    margin-bottom: 108px;
+    margin-top: 50px;
+}
+
+.shelter-edit-info{
+    display: flex;
+    flex-direction: column; 
 }
 
 .shelterEditInfo-field {
-  margin-bottom: 15px;
-  padding: 8px 0 0 15px;
+    margin-bottom: 10px;  
+    padding: 12px 0 0 15px;
+    text-align: left;
+    height: 55px;
+    border-radius: 4px;
+    border: 1px solid #ffeac1;
+    background: #fffefd;
+    width: 90%
+}
+
+.shelterEditInfo-button {
+    background-color: #fffdf6a5;
+    border: 2px solid #9e8e78;
+    color: #645A4C;
+    letter-spacing: 1px;
+    padding: 5px 85px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 18px;
+    width: 92%;
+}
+
+
+.shelterEditInfo-field-desc {
+  margin-bottom: 15px;  
+  padding: 12px 0 0 15px;
   text-align: left;
-  height: 56px;
-
+  height: 150px;
   border-radius: 4px;
-  border: 1px solid var(--fields-stroke-validation, #FFEAC1); 
-  background: var(--fields-bg-validation, #FFFBF4);
+  border: 1px solid #ffeac1;
+  background: #fffefd;
+  width: 90%
 }
 
-.shelterEditInfo-field label {  
-  display: block;
+.shelterEditInfo-field-desc label,
+.shelterEditInfo-field label {
+  display: flex;
   height: 16px;
-  width: 300px;
-  color: #9D99AC;
-  font-size: 12px;
+  color: #9d99ac;
+  font-size: 14px;
   font-weight: 400;
-  line-height: 16px; 
+  line-height: 16px;
 }
 
-.shelterEditInfo-field input { 
+.shelterEditInfo-field input {
   margin-top: 7px;
   outline: none;
   display: flex;
-  background: #FFFBF4;
-  border: none;  
+  background: #fffefd;
+  border: none;
   align-items: flex-start;
   font-size: 14px;
   gap: 8px;
+  width: 95%;
+}
+
+.shelterEditInfo-field-desc textarea {
+    margin-top: 5px;
+    outline: none;    
+    border:none;
+    align-items: flex-start;
+    background: #fffefd;
+    font-size: 14px;
+    gap: 8px;
+    width: 96%;
+    height: 75%;
 }
 
 .shelterInfo {
-  margin-left: 50px;
-  width: 100%;
   font-size: 20px;
   border-radius: 20px;
   background: #fff;
-  padding: 1px 20px;
+  padding: 5px 20px;
+  width: 90%;
 }

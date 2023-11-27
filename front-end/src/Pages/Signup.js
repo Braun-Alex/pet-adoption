@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
-
 class Signup extends Component {
   constructor() {
     super();
@@ -57,10 +56,15 @@ class Signup extends Component {
         }),
       });*/
 
-        const SIGNUP_API_URL = 'http://127.0.0.1:8080/api/v1/users/register';
+
+        console.log(userType);
+        console.log(full_name+" "+email+" "+password);
+        const SIGNUP_API_URL = userType == 'user' 
+            ? 'http://127.0.0.1:8080/api/v1/users/signup' 
+            : 'http://127.0.0.1:8080/api/v1/shelter/signup';
 
         axios.post(SIGNUP_API_URL, {
-            // full_name,
+            full_name,
             email,
             password,
         }).then(response => {
@@ -80,7 +84,6 @@ class Signup extends Component {
 
       <button className={`${this.state.showUserReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleUser}>Користувач</button>
       <button className={`${this.state.showShelterReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleShelter}>Притулок</button>
-      <div className={`${this.state.showUserReg ? 'hr-line-user' : 'hr-line-shelter'}`} onClick={this.toggleContent1}></div>
 
       {this.state.showUserReg &&
       <form className="registration-form">
@@ -116,17 +119,21 @@ class Signup extends Component {
 
           <div className="form-field">
             <label>Ім'я притулку</label>
-            <input type="text" />
+            <input type="text"
+            onChange={(e) => this.handleInputChange('full_name', e.target.value)} />
+            
           </div>
 
           <div className="form-field">
             <label>Електронна адреса</label>
-            <input type="email" />
+            <input type="email" 
+            onChange={(e) => this.handleInputChange('email', e.target.value)} />
           </div>
 
           <div className="form-field">
             <label>Пароль</label>
-            <input type="password" />
+            <input type="password" 
+            onChange={(e) => this.handleInputChange('password', e.target.value)}/>
           </div>
 
           </form>}
