@@ -13,108 +13,103 @@ const initialState = {
     tryRefreshAccessToken: () => {},
     getUserData: () => {},
     getShelterData: () => {},
-    loginUser: () => {},
-    loginShelter: () => {},
+    tryLoginUser: () => {},
+    tryLoginShelter: () => {},
     logout: () => {}
 };
 
 export const AuthContext = createContext(initialState);
 
 export const AuthProvider = ({ children }) => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(true);
     const [user, setUser] = useState(null);
     const [shelter, setShelter] = useState(null);
     const [entityType, setEntityType] = useState('');
-    const [entityName, setEntityName] = useState('')
+    const [entityName, setEntityName] = useState('');
 
     const setAuthHeader = (accessToken) => {
         axios.defaults.headers.common['Authorization'] = accessToken ? `Bearer ${accessToken}` : '';
     };
 
-    const saveTokens = (serverResponse) => {
-        localStorage.setItem('access_token', serverResponse.data.access_token);
-        localStorage.setItem('refresh_token', serverResponse.data.refresh_token);
-        setAuthHeader(serverResponse.data.access_token);
+    const saveTokens = (data) => {
+        const accessToken = data.access_token;
+        localStorage.setItem('access_token', accessToken);
+        localStorage.setItem('refresh_token', data.refresh_token);
+        setAuthHeader(accessToken);
     }
 
-    const getData = (apiUrl) => {
-        axios.get(apiUrl).then(response => {
-            return response.data;
-        }).catch(() => {
+    const getData = async (apiUrl) => {
+        try {
+            const response = await axios.get(apiUrl);
+            return JSON.parse(response.data);
+        } catch (error) {
             const accessToken = localStorage.getItem('access_token');
             if (accessToken) {
-                const success = tryRefreshAccessToken();
+                const success = await tryRefreshAccessToken();
                 if (success) {
-                    this.getData();
+                    return getData(apiUrl);
                 }
             }
-        });
+        }
         return null;
     }
 
-    const tryRefreshAccessToken = () => {
+    const tryRefreshAccessToken = async () => {
         const refreshToken = localStorage.getItem('refresh_token');
-        axios.post('http://127.0.0.1:8000/token/refresh',
-            { refresh_token: refreshToken }).then(response => {
-            localStorage.setItem('access_token', response.data.access_token);
-            this.setAuthHeader(response.data.access_token);
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/token/refresh', { refresh_token: refreshToken });
+            const accessToken = response.data.access_token;
+            localStorage.setItem('access_token', accessToken);
+            setAuthHeader(response.data.accessToken);
             return true;
-        });
-        return false;
+        } catch (error) {
+            return false;
+        }
     }
 
-    const getUserData = () => {
-        const user = getData('http://127.0.0.1:8080/api/v1/user/profile');
+    const getUserData = async () => {
+        const user = await getData('http://127.0.0.1:8000/user/profile');
         if (user) {
             return {
                 userID: user.id,
                 userFullName: user.full_name,
                 userEmail: user.email
-            }
+            };
         }
-        return null
+        return null;
     }
 
-    const getShelterData = () => {
-        const shelter = getData('http://127.0.0.1:8080/api/v1/shelter/profile');
+    const getShelterData = async () => {
+        const shelter = await getData('http://127.0.0.1:8000/shelter/profile');
         if (shelter) {
             return {
                 shelterID: shelter.id,
-                shelterName: shelter.name,
-                shelterEmail: shelter.email,
-                shelterNumber: shelter.number
-            }
+                shelterName: shelter.shelter_name,
+                shelterEmail: shelter.email
+            };
         }
-        return null
+        return null;
     }
 
-    const loginUser = () => {
-        setIsAuthenticated(true);
-        setUser(getUserData());
-        setEntityType('user');
-        setEntityName(user.fullName);
-    };
-
-    const loginShelter = () => {
-        setIsAuthenticated(true);
-        setShelter(getShelterData());
-        setEntityType('shelter');
-        setEntityName(shelter.name);
-    };
-
-    const tryLoginUser = () => {
-        const user = getUserData();
-        if (user) {
-            loginUser();
+    const tryLoginUser = async () => {
+        const userData = await getUserData();
+        if (userData) {
+            setUser(userData);
+            setEntityType('user');
+            setEntityName(userData.userFullName);
+            setIsAuthenticated(true);
             return true;
         }
         return false;
     }
 
-    const tryLoginShelter = () => {
-        const shelter = getShelterData();
-        if (shelter) {
-            loginShelter();
+    const tryLoginShelter = async () => {
+        const shelterData = await getShelterData();
+        if (shelterData) {
+            setShelter(shelterData);
+            setEntityType('shelter');
+            setEntityName(shelterData.shelterName);
+            setIsAuthenticated(true);
             return true;
         }
         return false;
@@ -126,23 +121,28 @@ export const AuthProvider = ({ children }) => {
         setAuthHeader(null);
         setUser(null);
         setShelter(null);
+        setIsAuthenticated(false);
     }
 
     useEffect(() => {
-        const access_token = localStorage.getItem('access_token');
-        if (access_token) {
-            let success = tryLoginUser();
-            if (!success) {
-                success = tryLoginShelter();
+        const getAuthState = async () => {
+            const access_token = localStorage.getItem('access_token');
+            setAuthHeader(access_token);
+            let success = false;
+            if (access_token) {
+                success = await tryLoginUser();
+                if (!success) {
+                    success = await tryLoginShelter();
+                }
             }
-            if (success) {
-                setIsAuthenticated(true);
-            }
-        }
+            setIsAuthenticated(success);
+        };
+
+        getAuthState();
     }, []);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, shelter, entityType, entityName, loginUser, loginShelter, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, shelter, entityType, entityName, saveTokens, tryLoginUser, tryLoginShelter, logout }}>
             {children}
         </AuthContext.Provider>
     );

@@ -18,7 +18,7 @@ function Header() {
                 {isAuthenticated ? (
                     <>
                         <Link to={registrationPath} className="userName-header">{entityName}</Link>
-                        <Link to="/login" className="logout-button" onClick={logout}>Вийти</Link>
+                        <Link to="/" className="logout-button" onClick={logout}>Вийти</Link>
                     </>
                 ): (
                     <>
