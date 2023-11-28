@@ -7,6 +7,10 @@ from sqlalchemy.orm import Session
 from application_app.models.application_local_models import ApplicationIn, ApplicationOut, ApplicationUpdate
 from application_app.models.application_db_models import ApplicationDB
 
+import logging
+
+logger = logging.getLogger(__name__)
+
 class ApplicationControllerInterface(ABC):
 
     @abstractmethod
@@ -34,7 +38,7 @@ class ApplicationControllerInterface(ABC):
         """
 
     @abstractmethod
-    def get_application_by_shelter_id(self, shelter_id: int) -> Optional[ApplicationOut]:
+    def get_application_by_shelter_id(self, shelter_id: int) -> Optional[List[ApplicationOut]]:
         """
         Get information about an application by shelter ID.
 
@@ -97,15 +101,18 @@ class ApplicationController(ApplicationControllerInterface):
             return ApplicationOut(**application.__dict__)
         return None
 
-    def get_application_by_shelter_id(self, shelter_id: int) -> Optional[ApplicationOut]:
+    def get_application_by_shelter_id(self, shelter_id: int) -> Optional[List[ApplicationOut]]:
         applications = self._db.query(ApplicationDB).filter(ApplicationDB.shelter_id == shelter_id).all()
+        logger.info(f"Application Controller: {applications=}")
         if applications:
             applications_local = [ 
                                     ApplicationOut(**application.__dict__)
                                     for application in applications
                                  ]
+            
             return applications_local
-        return None
+        applications_local = [ApplicationOut(id=None, user_id=None, animal_id=None, status=None, shelter_id=None)]
+        return applications_local
 
     def update_application(self, application_update: ApplicationUpdate) -> Optional[ApplicationOut]:
         application = self.get_application(application_update.id)

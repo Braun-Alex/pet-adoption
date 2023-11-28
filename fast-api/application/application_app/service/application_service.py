@@ -6,6 +6,9 @@ from application_app.controllers.application_controller import ApplicationContro
 
 from fastapi import status, HTTPException
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ApplicationServiceInterface(ABC):
 
@@ -111,6 +114,7 @@ class ApplicationService(ApplicationServiceInterface):
         return self._controller.get_application(application_id)
     
     def get_application_by_shelter_id(self, shelter_id: int) -> Optional[ApplicationOut]:
+        logger.info(f"Application Service: {shelter_id=}")
         return self._controller.get_application_by_shelter_id(shelter_id=shelter_id)
 
     def update_application(self, application_update: ApplicationUpdate) -> Optional[ApplicationOut]:

@@ -23,9 +23,9 @@ Base.metadata.create_all(bind=engine)
 
 animal_service = AnimalService(AnimalController(db=db))
 
-# @animals_router.get("/")
-# def read_root():
-#     return{"Hello":"animal"}
+@animals_router.get("/")
+def read_root():
+    return{"Hello":"animal"}
 
 @animals_router.post("/add")
 def add_animal(animal: AnimalLocalIn):
@@ -37,7 +37,7 @@ def get_all_animals():
     return animal_service.get_all_animals()
 
 
-@animals_router.get("/", response_model=List[AnimalLocalOut])
+@animals_router.get("/get/", response_model=List[AnimalLocalOut])
 def get_animals_by_shelter_id(shelter_id: int):
     return animal_service.get_animals_by_shelter_id(id=shelter_id)
 
