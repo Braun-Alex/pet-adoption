@@ -6,24 +6,27 @@
    font-style: normal;
    font-weight: 400;
    line-height: 16px; 
-   margin-top: 70px;
+   margin-top: 130px;
    margin-bottom: 27px;
 }
 
 .form {
   text-align: center;
   margin: auto;
-  max-width: 400px;
+  width: 400px;
   padding: 40px 0px;
   border-radius: 10px;
   background: #F2F1ED;  
   flex-shrink: 0;  
+  border: 1px solid #c4ac9e;
 }
 
 .login-form,
 .registration-form {
-  text-align: center;
-  display: inline-block;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
 }
 
 .activeToggle {
@@ -34,6 +37,7 @@
   position: relative;
   padding: 0 15px 10px 15px;
   margin-bottom: 20px;
+  background-color: #F2F1ED;
 }
 
 .activeToggle::before {
@@ -52,14 +56,16 @@
   font-size: 18px;
   padding: 0 15px 10px 15px;
   margin-bottom: 10px;
+  background-color: #F2F1ED;
 }
 
 .form-field {
+  justify-content: center;
   margin-bottom: 35px;
   padding: 8px 0px 0px 15px;
   text-align: left;
   height: 56px;
-  width: 340px;
+  width: 80%;
   border-radius: 4px;
   border: 1px solid #FFEAC1; 
   background:#FFFBF4;
@@ -68,11 +74,12 @@
 .form-field label {  
   display: block;
   height: 16px;
-  width: 100%;
+  width: 90%;
   color: #9D99AC;
   font-size: 12px;
   font-weight: 400;
   line-height: 16px; 
+  
 }
 
 .form-field input { 
@@ -90,7 +97,7 @@
 .button-login,
 .button-reg {
   background-color: #F2F1ED;
-  border: 2px solid #9e8e78;
+  border: 2px solid rgb(171, 140, 99);
   color: #645A4C;
   letter-spacing: 1px;
   padding: 10px 85px;

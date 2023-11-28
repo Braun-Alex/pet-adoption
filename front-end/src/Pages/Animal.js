@@ -1,24 +1,33 @@
-// AnimalDetail.js
-import React from 'react';
+// Animal.js
+import React, { useContext, useState } from 'react';
+import { Context } from '../index';
+import {useParams} from 'react-router-dom'
+//import axios from "axios";
 
-const AnimalDetail = ({ match }) => {
-  // Використовуйте match.params.animalId для отримання id тваринки з URL
-  const animalId = match.params.animalId;
+/*const $host = axios.create({
+    baseURL: process.env.REACT_APP_API_URL
+})
 
-  // Отримайте дані тваринки і відобразіть їх
-  // Замість цього коду вам слід отримати дані тваринки зі свого джерела даних
-  const animalData = {
-    id: animalId,
-    name: 'Ім\'я тваринки',
-    description: 'Опис тваринки...',
-  };
+const fetchOneAnimal = async (id) => {
+    const {data} = await $host.get('api/animal/' + id)
+    return data
+}*/
 
+const Animal = () => {
+  const [animal, setAnimal] = useState( {info :[]})
+  const {id} = useParams()
+  /*useEffect(() => {
+        fetchOneAnimal(id).then(data => setDevice(data))
+    }, [])*/
+  
   return (
     <div>
-      <h2>{animalData.name}</h2>
-      <p>{animalData.description}</p>
+      <h2>Ім'я тваринки: {animal.name}</h2>
+      <p>Тип: {animal.type}</p>
+      <p>Стать: {animal.sex}</p>
+      <p>Вік: {animal.age}</p>
     </div>
   );
 };
 
-export default AnimalDetail;
+export default Animal;

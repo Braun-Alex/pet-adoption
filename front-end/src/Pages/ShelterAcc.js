@@ -6,67 +6,101 @@ import editicon from '../img/editicon.png';
 import mailicon from '../img/mailicon.png';
 import RequestList from '../Components/RequestList';
 import AnimalList from '../Components/AnimalList';
-import axios from 'axios';
-
+import { AuthContext } from '../Contexts/AuthContext';
+import { withAuth } from '../Wrappers/WithAuth';
 
 const currentShelterId = 2;
 
-const ShelterAcc = () => {
-    const { db } = useContext(Context);
+class ShelterAcc extends Component {
+    static contextType = AuthContext;
+
+    constructor(props) {
+      super(props);
+      this.state = {
+          photo: null,
+          showShelterAcc: true,
+          showEditAcc: false,
+          showRequestList: false,
+          showAnimal: false,
+          // інші змінні стану
+      };
+      // Прив'язування методів до контексту класу
+      this.handleFileChange = this.handleFileChange.bind(this);
+      this.toggleShelterAcc = this.toggleShelterAcc.bind(this);
+      this.toggleEditAcc = this.toggleEditAcc.bind(this);
+      this.toggleRequest = this.toggleRequest.bind(this);
+      this.toggleAnimal = this.toggleAnimal.bind(this);
+    }
+    //const { db } = useContext(Context);
     
-    const [photo, setPhoto] = useState(null);
+    /*const [photo, setPhoto] = useState(null);
     const [showShelterAcc, setShowShelterAcc] = useState(true);
     const [showEditAcc, setShowEditAcc] = useState(false);
     const [showRequestList, setShowRequestList] = useState(false);
-    const [showAnimal, setShowAnimal] = useState(false);
+    const [showAnimal, setShowAnimal] = useState(false);*/
 
-    const toggleShelterAcc = () => {
-      setShowShelterAcc(true);
-      setShowEditAcc(false);
-      setShowRequestList(false);
-      setShowAnimal(false);
+    toggleShelterAcc = () => {
+      this.setState({
+        showShelterAcc: true,
+        showEditAcc: false,
+        showRequestList: false,
+        showAnimal: false
+    });
     };
 
-    const toggleEditAcc = () => {
-      setShowShelterAcc(false);
-      setShowEditAcc(true);
-      setShowRequestList(false);
-      setShowAnimal(false);
+    toggleEditAcc = () => {
+      this.setState({
+        showShelterAcc: false,
+        showEditAcc: true,
+        showRequestList: false,
+        showAnimal: false
+    });
     };
 
-    const toggleRequest = () => {
-      setShowShelterAcc(false);
-      setShowEditAcc(false);
-      setShowRequestList(true);
-      setShowAnimal(false);
+    toggleRequest = () => {
+      this.setState({
+        showShelterAcc: false,
+        showEditAcc: false,
+        showRequestList: true,
+        showAnimal: false
+    });
     };
 
-    const toggleAnimal = () => {
-      setShowShelterAcc(false);
-      setShowEditAcc(false);
-      setShowRequestList(false);
-      setShowAnimal(true);
+    toggleAnimal = () => {
+      this.setState({
+        showShelterAcc: false,
+        showEditAcc: false,
+        showRequestList: false,
+        showAnimal: true
+    });
   };
-  const handleFileChange = (event) => {
+  handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setPhoto(e.target.result);
+        this.setState({ photo: e.target.result });
       };
       reader.readAsDataURL(file);
     }
   };
-   //const filteredShelter = db.shelters.filter((shel) => shel.id === currentShelterId);
-   const UserEmail = db.getUserEmail();
-   const UserName = db.getUserName();
 
-  return (
-    <>
+   //const filteredShelter = db.shelters.filter((shel) => shel.id === currentShelterId);
+
+  render() {
+    const { photo, showShelterAcc, showEditAcc, showRequestList, showAnimal } = this.state;
+    const { user, shelter } = this.context;
+
+    if (!shelter) {
+      console.log(shelter);
+      return <div>Завантаження...</div>; // або будь-який інший варіант заповнення
+    }
+
+    return (
       <div className="container">
         <div className="shelter-photo-greeting">
           <label className="photo-container">
-            <input type="file" accept="image/*" onChange={handleFileChange} style={{ display: 'none' }} />
+            <input type="file" accept="image/*" onChange={this.handleFileChange} style={{ display: 'none' }} />
             {photo ? (
               <img src={photo} alt="Фото" className="selected-photo" style={{ objectFit: 'cover' }} />
             ) : (
@@ -74,19 +108,19 @@ const ShelterAcc = () => {
             )}
           </label>
           <div className="shelter-options">
-            <button className={`${showShelterAcc ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={toggleShelterAcc}>
+            <button className={`${showShelterAcc ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleShelterAcc}>
               <img src={usericon} alt="[ ]" /> Акаунт
             </button>
 
-            <button className={`${showEditAcc ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={toggleEditAcc}>
+            <button className={`${showEditAcc ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleEditAcc}>
               <img src={editicon} alt="[ ]" /> Редагувати профіль
             </button>
 
-            <button className={`${showRequestList ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={toggleRequest}>
+            <button className={`${showRequestList ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleRequest}>
               <img src={mailicon} alt="[ ]" /> Список заявок
             </button>
 
-            <button className={`${showAnimal ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={toggleAnimal}>
+            <button className={`${showAnimal ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleAnimal}>
               <img src={animalicon} alt="[ ]" /> Тваринки
             </button>
           </div>
@@ -96,30 +130,30 @@ const ShelterAcc = () => {
           <div>
             {showShelterAcc && (
               <div>
-                <div className="shelter-greeting">Вітаємо, {/*filteredShelter[0].name*/"aboba"}!</div>
+                <div className="shelter-greeting">Вітаємо, {shelter.shelterName}!</div>
                 <div className="shelterInfo">
                   <p>
                     <label>Ім'я: </label>
-                    <span id="name">{UserName}</span>
+                    <span id="name">{shelter.shelterName}</span>
                   </p>
 
                   <p>
                     <label>Email: </label>
-                    <span id="email">{UserEmail}</span>
+                    <span id="email">{shelter.shelterEmail}</span>
                   </p>
 
                   <p>
                     <label>Номер телефону: </label>
-                    <span id="phone">{/*filteredShelter[0].phone*/"aboba"}</span>
+                    <span id="phone">{"Немає"}</span>
                   </p>
                   <p>
                     <label>Адреса: </label>
-                    <span id="address">{/*filteredShelter[0].address*/"aboba"}</span>
+                    <span id="address">{"Немає"}</span>
                   </p>
 
                   <p>
                     <label>Опис: </label>
-                    <span id="description">{/*filteredShelter[0].description*/"aboba"}</span>
+                    <span id="description">{"Немає"}</span>
                   </p>
                 </div>
               </div>
@@ -165,8 +199,8 @@ const ShelterAcc = () => {
           
         </div>
       </div>
-    </>
-  );
+    )
+  }
 };
 
-export default ShelterAcc;
+export default withAuth(ShelterAcc);

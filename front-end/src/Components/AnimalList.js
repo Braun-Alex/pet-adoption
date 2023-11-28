@@ -11,9 +11,12 @@ const AnimalList = () => {
     const { db } = useContext(Context);
    
     const filteredAnimals = db.animals.filter(anim => anim.shelterId === currentShelterId);
+
+    console.log('createAnimalVisible:', createAnimalVisible);
     return (
         <div class="animal-from-shelter">
             <button
+                aria-controls=''
                 onClick={() => setCreateAnimalVisible(true)}
                 className='add-animal-button'
             >
@@ -24,15 +27,14 @@ const AnimalList = () => {
                 {filteredAnimals.map(animal =>
                     <Link to={`/animal/${animal.id}`}>
                         <li key={animal.id} class="list-item">
-                     {animal.name}
-                </li>
-                </Link>
+                            {animal.name}
+                        </li>
+                    </Link>
                 
                 )}
             </ul>
             
         </div>
-        
     );
-}
+};
 export default AnimalList;

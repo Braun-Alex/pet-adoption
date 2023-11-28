@@ -6,9 +6,13 @@ const AnimalTableItem = ({animal}) => {
             <div className='animal-item'>
                 <div>{animal.name}</div>
                 <div class="animal-photo">фото тваринки</div>
-                <div>{animal.sex}</div>
-                <div>{animal.type}</div>
-                <div>{animal.age}</div>
+                <div className="grup-animal-info">
+                    <div>Тип тварини: {animal.sex}</div>
+                    <div>Вид тваринки: {animal.type}</div>
+                    <div>Вік: {animal.age}</div>
+                </div>
+                <botton className="animal-info-button">Подати заявку</botton>
+                
             </div>
         </div>
     );

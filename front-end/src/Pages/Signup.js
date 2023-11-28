@@ -1,74 +1,67 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { withoutAuth } from '../Wrappers/WithoutAuth';
 
 class Signup extends Component {
-  constructor() {
-    super();
-    this.state = {
-      showUserReg: true,
-      showShelterReg: false,
-      registrationPath: '/user-account',
-      full_name: '',
-      email: '',
-      password: '',
-    };
-  }
-  toggleUser = () => {
-    this.setState({
-      showUserReg: true,
-      showShelterReg: false,
-      registrationPath: '/user-account',
-    });
-  }
-  toggleShelter = () => {
-    this.setState({
-      showUserReg: false,
-      showShelterReg: true,
-      registrationPath: '/shelter-account',
-    });
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            showUserReg: true,
+            showShelterReg: false,
+            registrationPath: '/user-account',
+            name: '',
+            email: '',
+            password: ''
+        };
+    }
 
-  handleInputChange = (field, value) => {
-    this.setState({ [field]: value });
-  }
+    toggleUser = () => {
+        this.setState({
+            showUserReg: true,
+            showShelterReg: false,
+            registrationPath: '/user-account',
+        });
+    }
 
-    registerUser = () => {
-        const { full_name, email, password, showUserReg } = this.state;
-        const userType = showUserReg ? 'user' : 'shelter';
-  /*registerUser = async () => {
-    try {
-      console.log('ABOBA');
-      const { full_name, email, password, showUserReg } = this.state;
-      const userType = showUserReg ? 'user' : 'shelter';
-      console.log(full_name);
-      console.log(email);
-      console.log(password);
-      const response = await fetch('http://127.0.0.1:8080/api/v1/users/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          full_name,
-          email,
-          password,
-        }),
-      });*/
+    toggleShelter = () => {
+        this.setState({
+            showUserReg: false,
+            showShelterReg: true,
+            registrationPath: '/shelter-account',
+        });
+    }
 
+    handleInputChange = (field, value) => {
+        this.setState({ [field]: value });
+    }
 
-        console.log(userType);
-        console.log(full_name+" "+email+" "+password);
-        const SIGNUP_API_URL = userType == 'user' 
-            ? 'http://127.0.0.1:8080/api/v1/users/signup' 
-            : 'http://127.0.0.1:8080/api/v1/shelter/signup';
+    register = () => {
+        const { name, email, password } = this.state;
+        let entity;
+        let entityData;
+        const { showUserReg, showShelterReg } = this.state;
 
-        axios.post(SIGNUP_API_URL, {
-            full_name,
-            email,
-            password,
-        }).then(response => {
-            console.log('Реєстрація пройшла успішно:', response.data);
+        if (showUserReg) {
+            entity = 'users';
+            entityData = {
+                full_name: name,
+                email: email,
+                password: password
+            }
+        } else if (showShelterReg) {
+            entity = 'shelter';
+            entityData = {
+                full_name: name,
+                email: email,
+                password: password
+            }
+        }
+
+        const SIGNUP_API_URL = `http://127.0.0.1:8080/api/v1/${entity}/signup`;
+
+        axios.post(SIGNUP_API_URL, entityData).then(response => {
+            console.log('Реєстрацію пройдено успішно:', response.data);
+            this.props.navigate("/login");
         }).catch(error => {
             console.error('Користувач із такою електронною поштою вже існує.', error.message);
         });
@@ -76,75 +69,74 @@ class Signup extends Component {
 
 
     render() {
-    return (
-    <>
-      <h1 className="form-header">РЕЄСТРАЦІЯ</h1>
+        return (
+            <>
+                <h1 className="form-header">РЕЄСТРАЦІЯ</h1>
 
-      <div className="form">
+                <div className="form">
 
-      <button className={`${this.state.showUserReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleUser}>Користувач</button>
-      <button className={`${this.state.showShelterReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleShelter}>Притулок</button>
+                    <button className={`${this.state.showUserReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleUser}>Користувач</button>
+                    <button className={`${this.state.showShelterReg ? 'activeToggle' : 'inactiveToggle'}`} onClick={this.toggleShelter}>Притулок</button>
 
-      {this.state.showUserReg &&
-      <form className="registration-form">
+                    {this.state.showUserReg &&
+                        <form className="registration-form">
 
-        <div className="form-field">
-          <label>Ім'я користувача</label>
-          <input
-            type="text"
-            onChange={(e) => this.handleInputChange('full_name', e.target.value)}
-          />
-        </div>
+                            <div className="form-field">
+                                <label>Ім'я користувача</label>
+                                <input
+                                    type="text"
+                                    onChange={(event) => this.handleInputChange('name', event.target.value)}
+                                />
+                            </div>
 
-        <div className="form-field">
-          <label>Електронна адреса</label>
-          <input
-            type="email"
-            onChange={(e) => this.handleInputChange('email', e.target.value)}
-          />
-        </div>
+                            <div className="form-field">
+                                <label>Електронна адреса</label>
+                                <input
+                                    type="email"
+                                    onChange={(event) => this.handleInputChange('email', event.target.value)}
+                                />
+                            </div>
 
-        <div className="form-field">
-          <label>Пароль</label>
-          <input
-            type="password"
-            onChange={(e) => this.handleInputChange('password', e.target.value)}
-          />
-        </div>
+                            <div className="form-field">
+                                <label>Пароль</label>
+                                <input
+                                    type="password"
+                                    onChange={(event) => this.handleInputChange('password', event.target.value)}
+                                />
+                            </div>
 
-      </form>}
+                        </form>}
 
 
-      {this.state.showShelterReg && <form className="registration-form">
+                    {this.state.showShelterReg && <form className="registration-form">
 
-          <div className="form-field">
-            <label>Ім'я притулку</label>
-            <input type="text"
-            onChange={(e) => this.handleInputChange('full_name', e.target.value)} />
-            
-          </div>
+                        <div className="form-field">
+                            <label>Ім'я притулку</label>
+                            <input type="text"
+                            onChange={(event) => this.handleInputChange('name', event.target.value)}/>
+                        </div>
 
-          <div className="form-field">
-            <label>Електронна адреса</label>
-            <input type="email" 
-            onChange={(e) => this.handleInputChange('email', e.target.value)} />
-          </div>
+                        <div className="form-field">
+                            <label>Електронна адреса</label>
+                            <input type="email"
+                            onChange={(event) => this.handleInputChange('email', event.target.value)} />
+                        </div>
 
-          <div className="form-field">
-            <label>Пароль</label>
-            <input type="password" 
-            onChange={(e) => this.handleInputChange('password', e.target.value)}/>
-          </div>
+                        <div className="form-field">
+                            <label>Пароль</label>
+                            <input type="password"
+                            onChange={(event) => this.handleInputChange('password', event.target.value)} />
+                        </div>
 
-          </form>}
+                    </form>}
 
-      <Link to={this.state.registrationPath}><button className="button-reg" onClick={this.registerUser}>Зареєструватися</button></Link>
+                    <button className="button-reg" onClick={this.register}>Зареєструватися</button>
 
-      </div>
-    </>
-    );
-  }
+                </div>
+            </>
+        );
+    }
 }
 
 
-export default Signup;
+export default withoutAuth(Signup);
