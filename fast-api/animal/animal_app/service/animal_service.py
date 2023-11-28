@@ -59,6 +59,19 @@ class AnimalService(AnimaServicelInterface):
 
         return animals_local 
     
+    def get_animals_by_shelter_id(self, id:int) -> list[AnimalLocalOut]:
+        # Retrieve all animals from the database using the AnimalController
+        animals_db = self._animal_controller.get_animals_by_shelter_id(shelter_id=id)
+
+        # Convert each AnimalDB object to AnimalLocalOut
+        animals_local = [
+            AnimalLocalOut(**animal_db.__dict__)
+            for animal_db in animals_db
+        ]    
+            
+
+        return animals_local
+    
     def is_shelter_presented(self, shelter_id: int) -> bool:
         request = f'{self._shelter_url}{shelter_id}'
         logger.info(f"{__name__} : Sending request {request=}")

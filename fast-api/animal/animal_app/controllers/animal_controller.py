@@ -54,6 +54,9 @@ class AnimalController(AnimalControllerInterface):
     
     def get_all_animals(self) -> list[AnimalDB]:
         return self._db.query(AnimalDB).all()
+    
+    def get_animals_by_shelter_id(self, shelter_id:int) -> list[AnimalDB]:
+        return self._db.query(AnimalDB).filter(AnimalDB.shelter_id == shelter_id).all()
 
     def delete_animal(self, animal_id: int) -> bool:
         return super().delete_animal(animal_id)
