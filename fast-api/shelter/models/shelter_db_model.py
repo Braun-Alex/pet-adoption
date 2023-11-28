@@ -6,15 +6,14 @@ from database import Base
 class ShelterDB(Base):
     __tablename__ = "shelters"
 
-    id = Column(String, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     email = Column(String, unique=True, index=True)
-    name = Column(String, unique=True, index=True)
+    name = Column(String)
     password = Column(String)
     salt = Column(String)
-    address = Column(String)
-    number = Column(String, unique=True, index=True)
-    description = Column(String)
-    status = Column(Integer)
+    address = Column(String, nullable=True)
+    number = Column(String, unique=True, index=True, nullable=True)
+    description = Column(String, nullable=True)
 
     def to_dict(self):
         return {
@@ -24,7 +23,6 @@ class ShelterDB(Base):
             "address": self.address,
             "number": self.number,
             "description": self.description,
-            "status": self.status
         }
 
     def to_json(self):

@@ -14,6 +14,3 @@ class AnimalLocalUpdate(BaseModel):
     name: Optional[str] = None
     breed: Optional[str] = None
     shelter_id: Optional[int] = None
-
-
-

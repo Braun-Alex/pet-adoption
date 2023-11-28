@@ -3,6 +3,8 @@ from user_app.models.user_local_model import UserLocalBase, UserLocalOtput, User
 from user_app.controllers.user_controller import UserController
 from user_app.models.user_db_model import UserDB
 from fastapi import status, HTTPException
+
+from user_app.utilities.converter import convert_from_user_db_to_local
 # from user_app.utilities.utilities import hash_data
 
 
@@ -33,7 +35,7 @@ class UserService(UserServiceInterface):
     def __init__(self, user_controller: UserController):
         self._user_controller = user_controller
 
-    def register_user(self, user:UserLocalRegistration) -> UserLocalOtput:
+    def register_user(self, user:UserLocalRegistration) -> bool:
         logger.info(f"Registrating user with email: {user.email}")
         user_db = self._user_controller.get_user_by_email(user.email)        
         
@@ -61,14 +63,14 @@ class UserService(UserServiceInterface):
         logger.info(f"{user_db=}")
 
         if not user_db:
-            logger.info(f"User with id: {user_id} doesn't exist. Sending 404 error.")
+            logger.info(f"{__name__}: User with id: {user_id} doesn't exist.")
             raise HTTPException(status.HTTP_404_NOT_FOUND)
         
         logger.info(f"{user_db.email= }, {user_db.full_name= }, {user_id=}")
 
         # return str(user_db)
-        return(UserLocalOtput(id=user_db.id, full_name=user_db.full_name, email=self._user_controller._encrypter.decrypt_data(user_db.email)))
-       
+        # return(UserLocalOtput(id=user_db.id, full_name=user_db.full_name, email=self._user_controller._encrypter.decrypt_data(user_db.email)))
+        return convert_from_user_db_to_local(user_db=user_db)
 
     # def get_user(self, user_id: str) -> str:
     #     user_db = self._user_controller.get_user_by_id(user_id)
