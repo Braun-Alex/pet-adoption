@@ -57,6 +57,8 @@ class CreateAnimal extends Component {
                 shelter_id: shelterId
             });
             console.log('Тварина успішно зареєстрована:', response.data);
+            this.props.onHide();
+            //window.location.reload();
         } catch (error) {
             console.error('Помилка при реєстрації тварини:', error.message);
         }

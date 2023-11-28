@@ -19,7 +19,6 @@ const AnimalTableItem = ({animal}) => {
                     <div>Деталі: {animal.description}</div>
                 </div>
                 <botton className="animal-info-button">Подати заявку</botton>
-                
             </div>
         </div>
     );
