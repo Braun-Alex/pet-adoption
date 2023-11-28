@@ -44,7 +44,8 @@ class AnimalService(AnimaServicelInterface):
         logger.info(f"Shelter with shelter_id: {animal_local.shelter_id} exists")
         animal_db = self._animal_controller.create_animal(animal=animal_local)
         logger.info(f"{animal_db=}")
-        return AnimalLocalOut(id=animal_db.id, name=animal_db.name, breed=animal_db.breed, shelter_id=animal_db.shelter_id, description=animal_db.description)
+        # return AnimalLocalOut(id=animal_db.id, name=animal_db.name, breed=animal_db.breed, shelter_id=animal_db.shelter_id, description=animal_db.description)
+        return AnimalLocalOut(**animal_db.__dict__)
     
     def get_all_animals(self) -> list[AnimalLocalOut]:
         # Retrieve all animals from the database using the AnimalController
@@ -52,13 +53,7 @@ class AnimalService(AnimaServicelInterface):
 
         # Convert each AnimalDB object to AnimalLocalOut
         animals_local = [
-            AnimalLocalOut(
-                id=animal_db.id,
-                name=animal_db.name,
-                breed=animal_db.breed,
-                shelter_id=animal_db.shelter_id,
-                description=animal_db.description,
-            )
+            AnimalLocalOut(**animal_db.__dict__)
             for animal_db in animals_db
         ]       
 

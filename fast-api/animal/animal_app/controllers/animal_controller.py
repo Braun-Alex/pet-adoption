@@ -34,12 +34,13 @@ class AnimalController(AnimalControllerInterface):
         self._db = db
 
     def create_animal(self, animal: AnimalLocalIn) -> Optional[AnimalDB]:
-        animal_db = AnimalDB(
-                        name=animal.name,
-                        breed=animal.breed,
-                        shelter_id=animal.shelter_id,
-                        description=animal.description,
-                    )
+        # animal_db = AnimalDB(
+        #                 name=animal.name,
+        #                 breed=animal.breed,
+        #                 shelter_id=animal.shelter_id,
+        #                 description=animal.description,
+        #             )
+        animal_db = AnimalDB(**animal.model_dump())
         self._db.add(animal_db)
         self._db.commit()
         self._db.refresh(animal_db)
