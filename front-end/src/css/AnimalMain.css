@@ -44,8 +44,17 @@
     justify-content: center;
     height: 230px;
     width: 230px;
-    background-color: rgb(255, 253, 248);
+    background-color: #F2F1ED;
     margin: 8px 0px;
+    overflow: hidden;
+}
+
+.animal-photo img {
+    max-width: 100%; /* забезпечує, що зображення не виходить за межі ширини контейнера */
+    max-height: 100%; /* забезпечує, що зображення не виходить за межі висоти контейнера */
+    height: auto; /* зберігає пропорції зображення */
+    width: auto; /* зберігає пропорції зображення */
+    object-fit: contain; /* забезпечує, що зображення вміщується повністю в контейнер */
 }
 
 .grup-animal-info {

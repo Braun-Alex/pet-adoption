@@ -39,8 +39,8 @@ class CreateAnimal extends Component {
 
     // Функція для відправки даних на сервер
     registerAnimal = async () => {
-        const { name, breed, shelter_id, description } = this.state.animalData;
-        console.log('Дані тварини:', name, breed, shelter_id, description);
+        const { name, type, sex, month, year, description, shelter_id } = this.state.animalData;
+        console.log('Дані тварини:', name, type, sex, month, year, description, shelter_id);
         // Вказати URL вашого API
         const API_URL = 'http://127.0.0.1:8080/api/v1/animals/add';
         const { shelter } = this.context;
@@ -110,7 +110,7 @@ class CreateAnimal extends Component {
                              value={defaultOption}
                              placeholder="вид тваринки"
                              className="animal-type"
-                             onChange={(option) => this.handleInputChange('breed', option.value)}
+                             onChange={(option) => this.handleInputChange('type', option.value)}
                              />                        
                         </div>
                         <div>
@@ -118,18 +118,21 @@ class CreateAnimal extends Component {
                             options={sex}
                             value={defaultOption}
                             placeholder="стать"
-                            className="animal-sex"/>
+                            className="animal-sex"
+                            onChange={(option) => this.handleInputChange('sex', option.value)}/>
                         </div>
                         <div class="select-date" >
                             <Dropdown options={mounths}
                             value={defaultOption}
-                            placeholder="місяць" />
+                            placeholder="місяць"
+                            onChange={(option) => this.handleInputChange('month', option.value)}/>
 
                             <Dropdown 
                             options={years} 
                             value={defaultOption} 
                             placeholder="рік" 
-                            className='year'/>
+                            className='year'
+                            onChange={(option) => this.handleInputChange('year', option.value)}/>
                         </div>
                         <div className="animal-desc">
                             <label>Опис</label>
