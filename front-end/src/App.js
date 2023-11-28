@@ -11,7 +11,6 @@ import ShelterAcc from './Pages/ShelterAcc';
 import Animal from './Pages/Animal';
 import AnimalMain from './Pages/AnimalMain';
 
-import './App.css';
 import './css/Auth.css';
 import './css/ShelterAcc.css';
 

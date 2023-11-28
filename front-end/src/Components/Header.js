@@ -1,6 +1,7 @@
 import React, {useContext} from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../Contexts/AuthContext";
+import '../css/Header.css';
 
 function Header() {
     const { isAuthenticated, entityType, entityName, logout } = useContext(AuthContext);

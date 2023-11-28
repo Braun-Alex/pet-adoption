@@ -79,7 +79,7 @@ class ShelterAcc extends Component {
     if (file) {
       const reader = new FileReader();
       reader.onload = (e) => {
-        setPhoto(e.target.result);
+        this.setState({ photo: e.target.result });
       };
       reader.readAsDataURL(file);
     }
