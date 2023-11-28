@@ -20,14 +20,13 @@ export default class DB {
         this._requests = [
             { id: 1, userId: 1, animalId: 2, status: 0 },
             { id: 2, userId: 1, animalId: 3, status: 2 },
-            { id: 3, userId: 2, animalId: 1, status: 2 },
+            { id: 3, userId: 2, animalId: 1, status: 1 },
             { id: 4, userId: 2, animalId: 1, status: 2 },
             { id: 5, userId: 2, animalId: 1, status: 2 },
-            { id: 6, userId: 2, animalId: 1, status: 2 },
+            { id: 6, userId: 2, animalId: 1, status: 1 },
             { id: 7, userId: 2, animalId: 1, status: 2 },
             { id: 8, userId: 2, animalId: 1, status: 2 },
-            { id: 9, userId: 2, animalId: 1, status: 2 },
-            { id: 10, userId: 2, animalId: 1, status: 2 }
+            { id: 9, userId: 2, animalId: 1, status: 2 }
 
         ]
 
