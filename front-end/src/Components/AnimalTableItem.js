@@ -7,7 +7,7 @@ const AnimalTableItem = ({animal}) => {
                 <div>{animal.name}</div>
                 <div class="animal-photo">фото тваринки</div>
                 <div className="grup-animal-info">
-                    <div>Стать: {animal.sex}</div>
+                    <div>Тип тварини: {animal.sex}</div>
                     <div>Вид тваринки: {animal.type}</div>
                     <div>Вік: {animal.age}</div>
                 </div>
