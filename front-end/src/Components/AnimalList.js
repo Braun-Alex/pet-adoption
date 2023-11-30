@@ -41,18 +41,9 @@ class AnimalList extends Component {
     setCreateAnimalVisible = (isVisible) => {
         this.setState({ createAnimalVisible: isVisible });
     }
-    //const [createAnimalVisible, setCreateAnimalVisible] = useState(false);
-    //const { db } = useContext(Context);
-   
-    //const filteredAnimals = db.animals.filter(anim => anim.shelterId === currentShelterId);
-
-    //console.log('createAnimalVisible:', createAnimalVisible);
 
     render() {
         const { createAnimalVisible } = this.state;
-        //const { shelter } = this.context;
-        //var ID = shelter.shelterID;
-       // const animalImage = animal.type == 'кіт' ? catImage : dogImage;
 
     return (
         <div class="animal-from-shelter">
