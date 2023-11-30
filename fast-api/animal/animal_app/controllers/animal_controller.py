@@ -50,7 +50,7 @@ class AnimalController(AnimalControllerInterface):
         return super().update_animal(animal_id, updated_data)
 
     def get_animal(self, animal_id: int) -> Optional[AnimalDB]:
-        return super().get_animal(animal_id)
+        return self._db.query(AnimalDB).filter(AnimalDB.id == animal_id).first()
 
     def get_all_animals(self) -> list[AnimalDB]:
         return self._db.query(AnimalDB).all()

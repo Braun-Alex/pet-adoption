@@ -41,8 +41,8 @@ def get_all_animals():
 
 
 @animals_router.get("/animal/{id}", response_model=AnimalLocalOut)
-def get_animal(animal_id: int):
-    return animal_service.get_animal(animal_id=animal_id)
+def get_animal(id: int):
+    return animal_service.get_animal(animal_id=id)
 
 
 @animals_router.get("/get/", response_model=List[AnimalLocalOut])

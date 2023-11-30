@@ -61,12 +61,12 @@ class AnimalService(AnimaServicelInterface):
 
     def get_animal(self, animal_id: int) -> AnimalLocalOut:
         # Retrieve animal from the database using the AnimalController
-        animal_db = self._animal_controller.get_animal(animal_id=animal_id)
+        animal_db = self._animal_controller.get_animal(animal_id)
 
         # Convert AnimalDB object to AnimalLocalOut
         animal_local = AnimalLocalOut(**animal_db.__dict__)
 
-        return animal_local(animal_id=id)
+        return animal_local
 
     def get_animals_by_shelter_id(self, id: int) -> list[AnimalLocalOut]:
         # Retrieve all animals from the database using the AnimalController

@@ -12,6 +12,7 @@ class RequestList extends Component {
     this.state = {
       requests: [], // This will hold the requests after we fetch them
       users: [],
+      animals: [],
       applications: [],
     };
   }
@@ -29,6 +30,7 @@ class RequestList extends Component {
       this.setState({ requests: response.data });
       console.log(response.data);
       this.loadUserNames(response.data);
+      this.loadAnimalNames(response.data);
       /*const userId = response.data.user_id;
       const response1 = await axios.get(`http://127.0.0.1:8080/api/v1/users/exists/${userId}`);
       this.setState({ users: response1.data });*/
@@ -40,6 +42,7 @@ class RequestList extends Component {
   loadUserNames = async (requests) => {
     // Load user names for each request
     const users = {};
+    try {
     const userPromises = requests.map(async (request) => {
         const response = await axios.get(`http://127.0.0.1:8080/api/v1/users/exists/${request.user_id}`);
         users[request.id] = response.data.full_name; // Assuming the response contains the user's name
@@ -47,7 +50,26 @@ class RequestList extends Component {
     });
     await Promise.all(userPromises);
     this.setState({ users });
-};
+  } catch (error) {
+    console.error('No requests available');
+  }
+  };
+
+  loadAnimalNames = async (requests) => {
+    // Load user names for each request
+    const animals = {};
+    try {
+    const animalPromises = requests.map(async (request) => {
+        const response = await axios.get(`http://127.0.0.1:8080/api/v1/animals/animal/${request.animal_id}`);
+        animals[request.id] = response.data.name; // Assuming the response contains the user's name
+        console.log(animals);
+    });
+    await Promise.all(animalPromises);
+    this.setState({ animals });
+  } catch (error) {
+    console.error('No requests available');
+  }
+  }
 
   handleAcceptReject = async (requestId, status) => {
     console.log(`Updating request ${requestId} with status ${status}`);
@@ -86,10 +108,11 @@ class RequestList extends Component {
           {this.state.requests.map(requestItem => {
             // Assuming the requestItem includes the user and animal data
             const userName = this.state.users[requestItem.id] || 'Loading...';
+            const animalName = this.state.animals[requestItem.id] || 'Loading...';
             return (
               <li key={requestItem.id} className='list-item-2'>
                 <div className='user-animal'>
-                  {`${userName} хоче прихистити ${requestItem.animal_id}`}
+                  {`${userName} хоче прихистити ${animalName}`}
                 </div>
 
                 {requestItem.status === 2 ? (
