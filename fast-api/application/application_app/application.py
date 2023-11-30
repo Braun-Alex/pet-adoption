@@ -47,7 +47,7 @@ def get_application(shelter_id: int):
     logger.info(f"Get applications from DB: {applications}")
     return applications if applications else [ApplicationOut]
 
-@application_router.post(UPDATE_STATUS_URI, FastApiStatus)
+@application_router.post(UPDATE_STATUS_URI)
 def update_status(application_update: ApplicationUpdate):
     logger.info(f"Handling {UPDATE_STATUS_URI}: {application_update=}")
     a = application_service.update_application(application_update=application_update)

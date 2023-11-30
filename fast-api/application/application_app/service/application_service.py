@@ -118,13 +118,9 @@ class ApplicationService(ApplicationServiceInterface):
         return self._controller.get_application_by_shelter_id(shelter_id=shelter_id)
 
     def update_application(self, application_update: ApplicationUpdate) -> Optional[ApplicationOut]:
-<<<<<<< HEAD
         updated_application = self._controller.update_application(application_update)
         logger.info(f"{updated_application=}")
         return updated_application
-=======
-        return self._controller.update_application(application_update)
->>>>>>> main
 
     def delete_application(self, application_id: int) -> Optional[ApplicationOut]:
         return self._controller.delete_application(application_id)
