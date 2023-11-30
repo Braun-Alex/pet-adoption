@@ -40,7 +40,7 @@ const RequestList = () => {
           const { animal, user } = getRequestDetails(requestItem.id);
           if (animal && user) {
             return (
-              <li key={requestItem.id} className='list-item'>
+              <li key={requestItem.id} className='list-item-2'>
                 <div className='user-animal'>
                   {`${user.name} хоче прихистити ${animal.name}`}
                 </div>

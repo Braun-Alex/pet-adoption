@@ -3,7 +3,7 @@ import { AuthContext } from "../Contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export function withAuth(Component) {
-    return () => {
+    return (props) => {
         const { isAuthenticated } = useContext(AuthContext);
         const navigate = useNavigate();
         useEffect(() => {
@@ -11,6 +11,6 @@ export function withAuth(Component) {
                 navigate("/login");
             }
         }, [isAuthenticated, navigate]);
-        return <Component />;
+        return <Component {...props}/>;
     };
 }

@@ -1,49 +1,74 @@
-import React, {useState} from 'react';
+import React, {useState, Component} from 'react';
 import '../css/Modal.css'
 import Modal from 'react-modal';
 import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
-
+import { AuthContext } from '../Contexts/AuthContext';
+import { withAuth } from '../Wrappers/WithAuth';
 //const CreateAnimal = ({ show, onHide }) => {
 import axios from 'axios';
 
-const CreateAnimal = ({ show, onHide }) => {
-    // Стан для зберігання даних форми
-    const [animalData, setAnimalData] = useState({
-        name: '',
-        type: '',
-        sex: '',
-        birthMonth: '',
-        birthYear: '',
-        description: ''
-    });
+class CreateAnimal extends Component {
+    static contextType = AuthContext;
+    // Оновлений стан для зберігання даних форми
+    constructor(props) {
+        super(props);
+        this.state = {
+            animalData: {
+                name: '',
+                type: '',
+                sex: '',
+                month: '',
+                year: '',
+                description: '',
+                shelter_id: 0,
+            }
+            // інші змінні стану, якщо потрібно
+        };
+    }
 
     // Функція для обробки змін у полях вводу
-    const handleInputChange = (field, value) => {
+   /* const handleInputChange = (field, value) => {
         setAnimalData({ ...animalData, [field]: value });
+    };*/
+    handleInputChange = (field, value) => {
+        this.setState(prevState => ({
+            animalData: { ...prevState.animalData, [field]: value }
+        }));
     };
 
     // Функція для відправки даних на сервер
-    const registerAnimal = async () => {
-        const { name, type, sex, birthMonth, birthYear, description } = animalData;
-        console.log('Дані тварини:', name, type, sex, birthMonth, birthYear, description);
+    registerAnimal = async () => {
+        const { name, type, sex, month, year, description, shelter_id } = this.state.animalData;
+        console.log('Дані тварини:', name, type, sex, month, year, description, shelter_id);
         // Вказати URL вашого API
-        const API_URL = 'http://127.0.0.1:8080/api/v1/animals/register';
-
+        const API_URL = 'http://127.0.0.1:8080/api/v1/animals/add';
+        const { shelter } = this.context;
+        console.log(shelter);
+        const shelterId = shelter.shelterID;
         try {
             const response = await axios.post(API_URL, {
                 name,
                 type,
                 sex,
-                birthMonth,
-                birthYear,
-                description
+                month,
+                year,
+                description,
+                shelter_id: shelterId
             });
             console.log('Тварина успішно зареєстрована:', response.data);
+            this.props.onHide();
+            //window.location.reload();
         } catch (error) {
             console.error('Помилка при реєстрації тварини:', error.message);
         }
     };
+
+    render() {
+
+    const { show, onHide } = this.props;
+    console.log(this.props);
+    const { animalData } = this.state;
 
     const modalStyles = {
         display: show ? 'block' : 'none',
@@ -79,26 +104,46 @@ const CreateAnimal = ({ show, onHide }) => {
                     <form className='add-animal-container'>
                         <div className="animal-name">
                             <label>Ім'я тваринки</label>
-                            <input type="text" />
+                            <input type="text" onChange={(e) => this.handleInputChange('name', e.target.value)}/>
                         </div>
                         <div>
-                             <Dropdown options={types} value={defaultOption} placeholder="вид тваринки"  className="animal-type"/>                        
+                             <Dropdown 
+                             options={types}
+                             value={defaultOption}
+                             placeholder="вид тваринки"
+                             className="animal-type"
+                             onChange={(option) => this.handleInputChange('type', option.value)}
+                             />                        
                         </div>
                         <div>
-                            <Dropdown options={sex} value={defaultOption} placeholder="стать" className="animal-sex"/>
+                            <Dropdown
+                            options={sex}
+                            value={defaultOption}
+                            placeholder="стать"
+                            className="animal-sex"
+                            onChange={(option) => this.handleInputChange('sex', option.value)}/>
                         </div>
                         <div class="select-date" >
-                            <Dropdown options={mounths} value={defaultOption} placeholder="місяць" />
-                            <Dropdown options={years} value={defaultOption} placeholder="рік" className='year'/>
+                            <Dropdown options={mounths}
+                            value={defaultOption}
+                            placeholder="місяць"
+                            onChange={(option) => this.handleInputChange('month', option.value)}/>
+
+                            <Dropdown 
+                            options={years} 
+                            value={defaultOption} 
+                            placeholder="рік" 
+                            className='year'
+                            onChange={(option) => this.handleInputChange('year', option.value)}/>
                         </div>
                         <div className="animal-desc">
                             <label>Опис</label>
-                            <textarea rows="4" ></textarea>
+                            <textarea rows="4" onChange={(e) => this.handleInputChange('description', e.target.value)}></textarea>
                         </div>
                     </form>
                 </div>
 
-                <button className="create-animal-button" onClick={registerAnimal}>Додати</button>
+                <button className="create-animal-button" onClick={this.registerAnimal}>Додати</button>
 
             </div>
             
@@ -107,8 +152,9 @@ const CreateAnimal = ({ show, onHide }) => {
         </div>
         </>
         
-        
-  );
-}
+    )
+    }
+};
 
-export default CreateAnimal;
+export default withAuth(CreateAnimal);
+//export default CreateAnimal;
