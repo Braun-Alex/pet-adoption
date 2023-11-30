@@ -1,6 +1,8 @@
 from typing import Optional
 from pydantic import BaseModel
 
+from utilities.common import ApplicatioStatus
+
 class ApplicationIn(BaseModel):
     """
         At this moment status:
@@ -11,17 +13,16 @@ class ApplicationIn(BaseModel):
     user_id: int
     animal_id: int 
     #TODO: add status Enum
-    status: int
 
 class ApplicationOut(ApplicationIn):
     shelter_id: Optional[int]= None
     user_id :  Optional[int]= None
     animal_id: Optional[int]= None
     #TODO: add status Enum
-    status :  Optional[int]= None
+    status :  Optional[ApplicatioStatus]= None
     id :  Optional[int]= None
 
-class ApplicationUpdate:
+class ApplicationUpdate(BaseModel):
     """
         At this moment status:
         1. status=0: application is opened
@@ -29,4 +30,5 @@ class ApplicationUpdate:
     """
     #TODO: add status Enum
     id: int
-    status: int
+    status: ApplicatioStatus
+    shelter_id: int

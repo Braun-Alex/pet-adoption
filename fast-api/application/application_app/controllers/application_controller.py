@@ -3,6 +3,8 @@ from typing import List, Optional
 
 from sqlalchemy.orm import Session
 
+from fastapi import HTTPException, status
+
 #from  import Application  # Подразумевается, что модель Application уже определена в вашем приложении
 from application_app.models.application_local_models import ApplicationIn, ApplicationOut, ApplicationUpdate
 from application_app.models.application_db_models import ApplicationDB
@@ -88,6 +90,10 @@ class ApplicationController(ApplicationControllerInterface):
     def __init__(self, db: Session):
         self._db = db  # You need to inject a database session into the controller
 
+    def __get_application(self, id: int) -> Optional[ApplicationOut]:
+        return self._db.query(ApplicationDB).filter(ApplicationDB.id == id).first()
+        
+
     def create_application(self, application_in: ApplicationIn) -> bool:
         new_application = ApplicationDB(**application_in.model_dump())
         self._db.add(new_application)
@@ -96,7 +102,7 @@ class ApplicationController(ApplicationControllerInterface):
         return True
 
     def get_application(self, application_id: int) -> Optional[ApplicationOut]:
-        application = self._db.query(ApplicationDB).filter(ApplicationDB.id == application_id).first()
+        application = self.__get_application(id=application_id)
         if application:
             return ApplicationOut(**application.__dict__)
         return None
@@ -115,12 +121,19 @@ class ApplicationController(ApplicationControllerInterface):
         return applications_local
 
     def update_application(self, application_update: ApplicationUpdate) -> Optional[ApplicationOut]:
-        application = self.get_application(application_update.id)
-        if application:
-            for field, value in application_update.dict(exclude={"id"}).items():
-                setattr(application, field, value)
+        logger.info(f"Changing application with id: {application_update.id}")
+        application_db = self.__get_application(id=application_update.id)
+        if application_db:
+            for field, value in application_update.model_dump(exclude={"id"}).items():
+                # logger.info(f"{}")
+                logger.info(f"Changing {field} --> {value} ")
+                setattr(application_db, field, value)
+            updated_application_local = ApplicationOut(**application_db.__dict__)
+            # application_db.status = application_update.status
             self._db.commit()
-            return ApplicationOut(**application.__dict__)
+            # self._db.refresh(application_db)
+            logger.info(f"Updated object: {updated_application_local=}")
+            return updated_application_local
         return None
 
     def delete_application(self, application_id: int) -> Optional[ApplicationOut]:

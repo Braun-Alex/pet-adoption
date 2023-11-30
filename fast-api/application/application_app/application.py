@@ -4,7 +4,7 @@ from fastapi import FastAPI, Depends, HTTPException, APIRouter, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 
-from fastapi import FastAPI, Depends, HTTPException, APIRouter, status
+from fastapi import FastAPI, Depends, HTTPException, APIRouter, status as FastApiStatus
 
 from application_app.service.application_service import ApplicationService
 from application_app.controllers.application_controller import ApplicationController
@@ -17,11 +17,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+UPDATE_STATUS_URI = "/update_status"
 
 db = SessionLocal()
 
 Base.metadata.create_all(bind=engine)
 
+logger.info(f"Creating instance of application_service!!!!!!")
 application_service = ApplicationService(controller=ApplicationController(db=db))
 
 application_router = APIRouter()
@@ -44,3 +46,10 @@ def get_application(shelter_id: int):
     applications = application_service.get_application_by_shelter_id(shelter_id=shelter_id) 
     logger.info(f"Get applications from DB: {applications}")
     return applications if applications else [ApplicationOut]
+
+@application_router.post(UPDATE_STATUS_URI, FastApiStatus)
+def update_status(application_update: ApplicationUpdate):
+    logger.info(f"Handling {UPDATE_STATUS_URI}: {application_update=}")
+    a = application_service.update_application(application_update=application_update)
+    if a == None:
+        HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
