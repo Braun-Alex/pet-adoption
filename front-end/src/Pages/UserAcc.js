@@ -6,9 +6,9 @@ import mailicon from '../img/mailicon.png';
 import RequestList from '../Components/RequestList';
 import AnimalList from '../Components/AnimalList';
 import { AuthContext } from '../Contexts/AuthContext';
-import { withShelterAuth } from '../Wrappers/WithShelterAuth';
+import { withUserAuth } from '../Wrappers/WithUserAuth';
 
-class ShelterAcc extends Component {
+class UserAcc extends Component {
     static contextType = AuthContext;
 
     constructor(props) {
@@ -78,10 +78,9 @@ class ShelterAcc extends Component {
 
     render() {
         const { photo, showShelterAcc, showEditAcc, showRequestList, showAnimal } = this.state;
-        const { shelter } = this.context;
+        const { user } = this.context;
 
-        if (!shelter) {
-            console.log(shelter);
+        if (!user) {
             return <div>Завантаження...</div>;
         }
 
@@ -119,16 +118,16 @@ class ShelterAcc extends Component {
                     <div>
                         {showShelterAcc && (
                             <div>
-                                <div className="shelter-greeting">Вітаємо, {shelter.shelterName}!</div>
+                                <div className="shelter-greeting">Вітаємо, {user.userFullName}!</div>
                                 <div className="shelterInfo">
                                     <p>
                                         <label>Ім'я: </label>
-                                        <span id="name">{shelter.shelterName}</span>
+                                        <span id="name">{user.userFullName}</span>
                                     </p>
 
                                     <p>
                                         <label>Email: </label>
-                                        <span id="email">{shelter.shelterEmail}</span>
+                                        <span id="email">{user.userEmail}</span>
                                     </p>
 
                                     <p>
@@ -192,4 +191,4 @@ class ShelterAcc extends Component {
     }
 }
 
-export default withShelterAuth(ShelterAcc);
+export default withUserAuth(UserAcc);

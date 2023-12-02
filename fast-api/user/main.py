@@ -1,7 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from user_app.models.user_local_model import TokenSchema
+from typing import Optional
+from user_app.dependencies.dependencies import refresh_access_token
 
-import logging  
+import logging
 
 from user_app.users import users_route
 
@@ -29,7 +32,9 @@ app.include_router(users_route, prefix='/api/v1/users', tags=["users"])
 @app.get("/")
 def biba():
     return {"message": "Biba handler"}
-# def read_root():
-#     return {"Hi from user": os.urandom(32).hex()}
+
+@app.get("/api/v1/token/refresh", response_model=Optional[TokenSchema])
+def refresh_token(tokens: TokenSchema = Depends(refresh_access_token)):
+    return tokens
 
 
