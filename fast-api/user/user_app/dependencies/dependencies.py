@@ -6,6 +6,7 @@ from user_app.utilities.utilities import TokenPayload, ALGORITHM, JWT_SECRET_KEY
 from jose import jwt
 from pydantic import ValidationError
 
+
 import logging 
 
 logger = logging.getLogger(__name__)
@@ -28,7 +29,9 @@ def get_current_user(token: str = Depends(reusable_oauth)) -> TokenPayload:
         logger.info(f"{payload=}")
         token_data = TokenPayload(**payload)
 
-        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+        # if datetime.fromtimestamp(token_data.exp) < datetime.now():
+        naive_exp = token_data.exp.replace(tzinfo=None)
+        if naive_exp < datetime.now():
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 headers={"WWW-Authenticate": "Bearer"}

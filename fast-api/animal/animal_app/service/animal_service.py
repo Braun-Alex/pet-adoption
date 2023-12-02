@@ -37,35 +37,52 @@ class AnimalService(AnimaServicelInterface):
 
     def add_animal(self, animal_local: AnimalLocalIn) -> Optional[AnimalLocalOut]:
         logger.info(f"Verifying if shelter with shelter_id: {animal_local.shelter_id} exists...")
-        if not self.is_shelter_presented(animal_local.shelter_id):            
+        if not self.is_shelter_presented(animal_local.shelter_id):
             logger.warn(f"Shelter with shelter_id: {animal_local.shelter_id} doesn't exist")
             raise HTTPException(status_code=404, detail=f"Shelter with shelter_id: {animal_local.shelter_id} doesn't exist")
 
         logger.info(f"Shelter with shelter_id: {animal_local.shelter_id} exists")
         animal_db = self._animal_controller.create_animal(animal=animal_local)
         logger.info(f"{animal_db=}")
-        return AnimalLocalOut(id=animal_db.id, name=animal_db.name, breed=animal_db.breed, shelter_id=animal_db.shelter_id, description=animal_db.description)
-    
+        # return AnimalLocalOut(id=animal_db.id, name=animal_db.name, breed=animal_db.breed, shelter_id=animal_db.shelter_id, description=animal_db.description)
+        return AnimalLocalOut(**animal_db.__dict__)
+
     def get_all_animals(self) -> list[AnimalLocalOut]:
         # Retrieve all animals from the database using the AnimalController
         animals_db = self._animal_controller.get_all_animals()
 
         # Convert each AnimalDB object to AnimalLocalOut
         animals_local = [
-            AnimalLocalOut(
-                id=animal_db.id,
-                name=animal_db.name,
-                breed=animal_db.breed,
-                shelter_id=animal_db.shelter_id,
-                description=animal_db.description,
-            )
+            AnimalLocalOut(**animal_db.__dict__)
             for animal_db in animals_db
-        ]       
+        ]
 
-        return animals_local 
-    
+        return animals_local
+
+    def get_animal(self, animal_id: int) -> AnimalLocalOut:
+        # Retrieve animal from the database using the AnimalController
+        animal_db = self._animal_controller.get_animal(animal_id)
+
+        # Convert AnimalDB object to AnimalLocalOut
+        animal_local = AnimalLocalOut(**animal_db.__dict__)
+
+        return animal_local
+
+    def get_animals_by_shelter_id(self, id: int) -> list[AnimalLocalOut]:
+        # Retrieve all animals from the database using the AnimalController
+        animals_db = self._animal_controller.get_animals_by_shelter_id(shelter_id=id)
+
+        # Convert each AnimalDB object to AnimalLocalOut
+        animals_local = [
+            AnimalLocalOut(**animal_db.__dict__)
+            for animal_db in animals_db
+        ]
+
+
+        return animals_local
+
     def is_shelter_presented(self, shelter_id: int) -> bool:
-        request = f'{self._shelter_url}exists/{shelter_id}'
+        request = f'{self._shelter_url}{shelter_id}'
         logger.info(f"{__name__} : Sending request {request=}")
         r = httpx.get(request)
         logger.info(f"{__name__} : {r.content=}")

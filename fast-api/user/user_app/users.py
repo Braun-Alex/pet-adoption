@@ -34,8 +34,8 @@ def read_root():
 def get_user_by_id(id: int):
     logger.info(f"Handling request /users/{id}")
     # return False
-    return True if user_service.get_user(user_id=id) is not None else False
-    # return True if user_service.get_user(user_id=id)
+    # return True if user_service.get_user(user_id=id) is not None else False
+    return user_service.get_user(user_id=id)
 
 @users_route.post("/signup", response_model=bool)
 def register_user(user: UserLocalRegistration):
