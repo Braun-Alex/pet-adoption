@@ -116,6 +116,10 @@ class ApplicationService(ApplicationServiceInterface):
     def get_application_by_shelter_id(self, shelter_id: int) -> Optional[ApplicationOut]:
         logger.info(f"Application Service: {shelter_id=}")
         return self._controller.get_application_by_shelter_id(shelter_id=shelter_id)
+    
+    def get_application_by_user_id(self, user_id: int) -> Optional[ApplicationOut]:
+        logger.info(f"Application Service: {user_id=}")
+        return self._controller.get_application_by_user_id(user_id=user_id)
 
     def update_application(self, application_update: ApplicationUpdate) -> Optional[ApplicationOut]:
         updated_application = self._controller.update_application(application_update)
