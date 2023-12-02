@@ -11,7 +11,7 @@ app = FastAPI(openapi_url="/api/v1/shelter/openapi.json", docs_url="/api/v1/shel
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # або "*" для дозволу всіх джерел
+    allow_origins=["*"],  # або "*" для дозволу всіх джерел
     allow_credentials=True,
     allow_methods=["*"],  # Дозволяє всі методи
     allow_headers=["*"],  # Дозволяє всі заголовки
