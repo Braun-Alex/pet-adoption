@@ -28,6 +28,7 @@ class TokenSchema(BaseModel):
 class TokenPayload(BaseModel):
     sub: str = None
     exp: int = None
+    is_shelter: bool = None
 
 
 class JWTTokenTypeExpiration(Enum):
@@ -96,7 +97,7 @@ def create_jwt_token(subject: Union[str, Any], expires_delta: timedelta = None,
         expires_delta = (datetime.utcnow() +
                          timedelta(minutes=jwt_token_type_expiration))
 
-    to_encode = {"exp": expires_delta, "sub": str(subject)}
+    to_encode = {"exp": expires_delta, "sub": str(subject), "is_shelter": True}
     encoded_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, ALGORITHM)
     return encoded_jwt
 

@@ -12,7 +12,7 @@ from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad, unpad
 
-from user_app.models.user_local_model import TokenPayload, TokenSchema 
+from user_app.models.user_local_model import TokenPayload, TokenSchema
 
 import logging
 
@@ -23,10 +23,9 @@ load_dotenv()
 SECRET_KEY_LENGTH = 32
 ALGORITHM = "HS256"
 JWT_SECRET_KEY = os.environ['JWT_SECRET_KEY']
+
+
 # AES_SECRET_KEY = os.environ['AES_SECRET_KEY']
-
-
-
 
 
 class JWTTokenTypeExpiration(Enum):
@@ -97,7 +96,22 @@ def create_jwt_token(subject: Union[str, Any], expires_delta: timedelta = None,
     logger.info(f"create_jwt_token: {type(expires_delta)}")
 
     to_encode = TokenPayload(sub=str(subject), exp=expires_delta, is_shelter=False)
-    #to_encode = {"exp": expires_delta, "sub": str(subject), "is_shelter": ""}
+    # to_encode = {"exp": expires_delta, "sub": str(subject), "is_shelter": ""}
+    encoded_jwt = jwt.encode(to_encode.__dict__, JWT_SECRET_KEY, ALGORITHM)
+    return encoded_jwt
+
+
+def create_custom_access_token(subject: Union[str, Any], expires_delta: timedelta = None,
+                               jwt_token_type_expiration: int = None, is_shelter: bool = None) -> str:
+    if expires_delta is not None:
+        expires_delta = datetime.utcnow() + expires_delta
+    else:
+        expires_delta = (datetime.utcnow() +
+                         timedelta(minutes=JWTTokenTypeExpiration.ACCESS_TOKEN_EXPIRATION.value))
+    logger.info(f"create_jwt_token: {type(expires_delta)}")
+
+    to_encode = TokenPayload(sub=str(subject), exp=expires_delta, is_shelter=is_shelter)
+    # to_encode = {"exp": expires_delta, "sub": str(subject), "is_shelter": ""}
     encoded_jwt = jwt.encode(to_encode.__dict__, JWT_SECRET_KEY, ALGORITHM)
     return encoded_jwt
 

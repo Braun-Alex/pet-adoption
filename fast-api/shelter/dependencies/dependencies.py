@@ -19,7 +19,7 @@ def get_current_shelter(token: str = Depends(reusable_oauth)) -> TokenPayload:
         )
         token_data = TokenPayload(**payload)
 
-        if datetime.fromtimestamp(token_data.exp) < datetime.now():
+        if not token_data.is_shelter or datetime.fromtimestamp(token_data.exp) < datetime.now():
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 headers={"WWW-Authenticate": "Bearer"}
