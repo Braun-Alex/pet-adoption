@@ -64,6 +64,7 @@ class Signup extends Component {
             this.props.navigate("/login");
         }).catch(error => {
             console.error('Користувач із такою електронною поштою вже існує.', error.message);
+            alert('Користувач із такою електронною поштою вже існує. Спробуйте використати іншу пошту.');
         });
     }
 

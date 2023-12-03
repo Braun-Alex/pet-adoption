@@ -132,7 +132,7 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(true);
             return true;
         }
-        logout();
+        //logout();
         return false;
     }
 
@@ -145,7 +145,7 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(true);
             return true;
         }
-        logout();
+        //logout();
         return false;
     }
 
