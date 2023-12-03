@@ -22,7 +22,7 @@ load_dotenv()
 
 SECRET_KEY_LENGTH = 32
 ALGORITHM = "HS256"
-JWT_SECRET_KEY = os.environ['JWT_SECRET_KEY']
+JWT_SECRET_KEY = os.environ['JWT_SECRET_KEY'] if os.environ['JWT_SECRET_KEY'] else "aboba"
 
 
 # AES_SECRET_KEY = os.environ['AES_SECRET_KEY']

@@ -24,9 +24,9 @@ jobs:
         docker-compose up -d --build
         docker-compose ps
 
-    - name: Run tests (replace with your testing commands)
+    - name: Run tests for user_service (replace with your testing commands)
       run: |
-        # Add your testing commands here
+        docker exec user_service pytest
 
     - name: Stop Docker Compose services
       run: docker-compose down

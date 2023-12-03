@@ -4,3 +4,4 @@ uvicorn
 httpx
 psycopg2
 PyYAML
+pytest
