@@ -7,8 +7,22 @@ import axios from 'axios';
 class AnimalTableItem extends Component {
     static contextType = AuthContext;
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            photo: null,
+            showShelterAcc: true,
+            showEditAcc: false,
+            showRequestList: false,
+            showAnimal: false
+        };
+
+        this.handleSubmitApplication = this.handleSubmitApplication.bind(this);
+    }
+
     handleSubmitApplication = async () => {
-        const { user } = this.context;
+        const { user, tryLoginUser } = this.context;
         const { animal } = this.props;
 
         try {
@@ -17,10 +31,11 @@ class AnimalTableItem extends Component {
                 user_id: user.userID,
                 animal_id: animal.id
             });
+            await tryLoginUser();
             console.log(response.data);
             alert('Заявку подано успішно!');
         } catch (error) {
-            console.error('Помилка при подачі заявки:', error);
+            console.error('Помилка при подачі заявки:', error.message);
             alert('Сталася помилка при подачі заявки.');
         }
     }
@@ -32,7 +47,6 @@ class AnimalTableItem extends Component {
 
         return (
             <div>
-                {!user && (
                 <div className='animal-item'>
                     <div>{animal.name}</div>
                     <div className="animal-photo">
@@ -44,23 +58,10 @@ class AnimalTableItem extends Component {
                         <div>Дата народження: {animal.month + "." + animal.year}</div>
                         <div>Деталі: {animal.description}</div>
                     </div>
-                </div>
-                )}
-                {user && (
-                    <div className='animal-item'>
-                        <div>{animal.name}</div>
-                        <div className="animal-photo">
-                            <img src={animalImage} alt={'Фото ' + animal.type}/>
-                        </div>
-                        <div className="grup-animal-info">
-                            <div>Вид тваринки: {animal.type}</div>
-                            <div>Стать: {animal.sex}</div>
-                            <div>Дата народження: {animal.month + "." + animal.year}</div>
-                            <div>Деталі: {animal.description}</div>
-                        </div>
+                    {user && (
                         <button className="animal-info-button" onClick={this.handleSubmitApplication}>Подати заявку</button>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         );
     }

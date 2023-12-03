@@ -3,55 +3,28 @@ import '../css/List.css';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../Contexts/AuthContext';
 import { withUserAuth } from '../Wrappers/WithUserAuth';
-import axios from 'axios';
 
 class ApplicationList extends Component {
     static contextType = AuthContext;
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            applications: []
-        };
-    }
-
-    componentDidMount() {
-        this.fetchApplications();
-    }
-
-    fetchApplications = async () => {
-        const { user } = this.context;
-        try {
-            const applicationsResponse = await axios.get(`http://127.0.0.1:8080/api/v1/applications/get/?user_id=${user.userID}`);
-            const applications = applicationsResponse.data;
-            for (const application of applications) {
-                const animalResponse = await axios.get(`http://127.0.0.1:8080/api/v1/animals/animal/${application.animal_id}`);
-                application.name = animalResponse.data.name;
-                application.type = animalResponse.data.type;
-                application.sex = animalResponse.data.sex;
-                application.month = animalResponse.data.month;
-                application.year = animalResponse.data.year;
-                application.description = animalResponse.data.description;
-            }
-            this.setState({ applications });
-        } catch (error) {
-            console.error('Помилка при завантаженні даних заявок:', error);
-        }
-    }
-
     render() {
+        const { userApplications } = this.context;
         return (
             <div class="animal-from-shelter">
                 <Link to="/animal-main">
-                <button
-                    aria-controls=''
-                    className='add-animal-button'
-                >
-                    Прихистити нову тваринку
-                </button>
+                    <button
+                        aria-controls=''
+                        className='add-animal-button'
+                    >
+                        Прихистити нову тваринку
+                    </button>
                 </Link>
-                <ul class="list">
-                    {this.state.applications.map(animal =>
+                {!userApplications && (
+                    <div>Заявки на прихисток є відсутніми.</div>
+                )}
+                {userApplications && (
+                    <ul class="list">
+                        {userApplications.map(animal =>
                             <li class="list-item">
                                 <p><strong>Ім'я тваринки:</strong> {animal.name}</p>
                                 <p><strong>Вид тваринки:</strong> {animal.type}</p>
@@ -64,9 +37,9 @@ class ApplicationList extends Component {
                                             animal.status === 0 ? "відхилено притулком" : "помилка обробки"
                                 }</p>
                             </li>
-                    )}
-                </ul>
-
+                        )}
+                    </ul>
+                )}
             </div>
         );
     }

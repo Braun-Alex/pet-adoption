@@ -4,6 +4,7 @@ import axios from 'axios';
 const initialState = {
     isAuthenticated: false,
     user: null,
+    userApplications: null,
     shelter: null,
     entityType: '',
     entityName: '',
@@ -13,6 +14,7 @@ const initialState = {
     tryRefreshAccessToken: () => {},
     getUserData: () => {},
     getShelterData: () => {},
+    getUserApplications: () => {},
     tryLoginUser: () => {},
     tryLoginShelter: () => {},
     logout: () => {}
@@ -23,6 +25,7 @@ export const AuthContext = createContext(initialState);
 export const AuthProvider = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = useState(true);
     const [user, setUser] = useState(null);
+    const [userApplications, setUserApplications] = useState(null);
     const [shelter, setShelter] = useState(null);
     const [entityType, setEntityType] = useState('');
     const [entityName, setEntityName] = useState('');
@@ -97,15 +100,39 @@ export const AuthProvider = ({ children }) => {
         return null;
     }
 
+    const getUserApplications = async (user) => {
+        try {
+            const applicationsResponse = await axios.get(`http://127.0.0.1:8080/api/v1/applications/get/?user_id=${user.userID}`);
+            const applications = applicationsResponse.data;
+            for (const application of applications) {
+                const animalResponse = await axios.get(`http://127.0.0.1:8080/api/v1/animals/animal/${application.animal_id}`);
+                application.name = animalResponse.data.name;
+                application.type = animalResponse.data.type;
+                application.sex = animalResponse.data.sex;
+                application.month = animalResponse.data.month;
+                application.year = animalResponse.data.year;
+                application.description = animalResponse.data.description;
+            }
+            return applications;
+        } catch (error) {
+            return null;
+        }
+    }
+
     const tryLoginUser = async () => {
         const userData = await getUserData();
         if (userData) {
             setUser(userData);
             setEntityType('user');
             setEntityName(userData.userFullName);
+            const applications = await getUserApplications(userData);
+            if (applications) {
+                setUserApplications(applications);
+            }
             setIsAuthenticated(true);
             return true;
         }
+        logout();
         return false;
     }
 
@@ -118,6 +145,7 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(true);
             return true;
         }
+        logout();
         return false;
     }
 
@@ -126,6 +154,7 @@ export const AuthProvider = ({ children }) => {
         localStorage.removeItem('refresh_token');
         setAuthHeader(null);
         setUser(null);
+        setUserApplications(null);
         setShelter(null);
         setEntityType('');
         setEntityName('');
@@ -150,7 +179,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, shelter, entityType, entityName, saveTokens, tryLoginUser, tryLoginShelter, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, userApplications, shelter, entityType, entityName, saveTokens, tryLoginUser, tryLoginShelter, logout }}>
             {children}
         </AuthContext.Provider>
     );
