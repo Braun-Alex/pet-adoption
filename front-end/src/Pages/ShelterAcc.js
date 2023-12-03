@@ -81,7 +81,6 @@ class ShelterAcc extends Component {
         const { shelter } = this.context;
 
         if (!shelter) {
-            console.log(shelter);
             return <div>Завантаження...</div>;
         }
 
@@ -122,27 +121,27 @@ class ShelterAcc extends Component {
                                 <div className="shelter-greeting">Вітаємо, {shelter.shelterName}!</div>
                                 <div className="shelterInfo">
                                     <p>
-                                        <label>Ім'я: </label>
+                                        <label><strong>Ім'я: </strong></label>
                                         <span id="name">{shelter.shelterName}</span>
                                     </p>
 
                                     <p>
-                                        <label>Email: </label>
+                                        <label><strong>Електронна пошта: </strong></label>
                                         <span id="email">{shelter.shelterEmail}</span>
                                     </p>
 
                                     <p>
-                                        <label>Номер телефону: </label>
-                                        <span id="phone">{"Немає"}</span>
+                                        <label><strong>Номер телефону: </strong></label>
+                                        <span id="phone">{"немає"}</span>
                                     </p>
                                     <p>
-                                        <label>Адреса: </label>
-                                        <span id="address">{"Немає"}</span>
+                                        <label><strong>Адреса: </strong></label>
+                                        <span id="address">{"немає"}</span>
                                     </p>
 
                                     <p>
-                                        <label>Опис: </label>
-                                        <span id="description">{"Немає"}</span>
+                                        <label><strong>Опис: </strong></label>
+                                        <span id="description">{"немає"}</span>
                                     </p>
                                 </div>
                             </div>
@@ -153,27 +152,27 @@ class ShelterAcc extends Component {
                         {showEditAcc && (<div>
                                 <form className="shelter-edit-info">
                                     <div className="shelterEditInfo-field">
-                                        <label>Ім'я</label>
+                                        <label><strong>Ім'я</strong></label>
                                         <input type="text" name="shelterName" />
                                     </div>
 
                                     <div className="shelterEditInfo-field">
-                                        <label>Електронна пошта</label>
+                                        <label><strong>Електронна пошта</strong></label>
                                         <input type="tel" name="shelterPhone" />
                                     </div>
 
                                     <div className="shelterEditInfo-field">
-                                        <label>Номер телефону</label>
+                                        <label><strong>Номер телефону</strong></label>
                                         <input type="tel" name="shelterPhone" />
                                     </div>
 
                                     <div className="shelterEditInfo-field">
-                                        <label>Адреса</label>
+                                        <label><strong>Адреса</strong></label>
                                         <input type="text" name="shelterAddress" />
                                     </div>
 
                                     <div className="shelterEditInfo-field-desc">
-                                        <label>Опис</label>
+                                        <label><strong>Опис</strong></label>
                                         <textarea rows="4"></textarea>
                                     </div>
                                     <button className='shelterEditInfo-button'>Зберегти зміни</button>
