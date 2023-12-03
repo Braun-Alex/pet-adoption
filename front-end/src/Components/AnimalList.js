@@ -1,15 +1,10 @@
-import React, {useContext, useState, Component} from 'react';
-import { Context } from "../index";
+import React, { Component } from 'react';
 import '../css/List.css';
 import CreateAnimal from "./CreateAnimal";
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../Contexts/AuthContext';
-import { withAuth } from '../Wrappers/WithAuth';
+import { withShelterAuth } from '../Wrappers/WithShelterAuth';
 import axios from 'axios';
-import catImage from '../img/cat.jpg'; // Шлях до зображення кота
-import dogImage from '../img/dog.jpg'; // Шлях до зображення собаки
-
-const currentShelterId = 2;
 
 class AnimalList extends Component {
     static contextType = AuthContext;
@@ -62,17 +57,17 @@ class AnimalList extends Component {
                             <p><strong>Ім'я:</strong> {animal.name}</p>
                             <p><strong>Вид тваринки:</strong> {animal.type}</p>
                             <p><strong>Стать:</strong> {animal.sex}</p>
-                            <p><strong>Дата народження:</strong> {animal.month+"."+animal.year}</p>
+                            <p><strong>Місяць народження:</strong> {animal.month + "." + animal.year}</p>
                             <p><strong>Деталі:</strong> {animal.description}</p>
                         </li>
                     </Link>
-                    
+
                 )}
             </ul>
-            
+
         </div>
     );
     }
 
 }
-export default withAuth(AnimalList);
+export default withShelterAuth(AnimalList);

@@ -7,7 +7,6 @@ const initialState = {
     shelter: null,
     entityType: '',
     entityName: '',
-    isShelter: false,
     setAuthHeader: () => {},
     saveTokens: () => {},
     getData: () => {},
@@ -27,7 +26,6 @@ export const AuthProvider = ({ children }) => {
     const [shelter, setShelter] = useState(null);
     const [entityType, setEntityType] = useState('');
     const [entityName, setEntityName] = useState('');
-    const [isShelter, setIsShelter] = useState(false);
 
     const setAuthHeader = (accessToken) => {
         axios.defaults.headers.common['Authorization'] = accessToken ? `Bearer ${accessToken}` : '';
@@ -49,11 +47,15 @@ export const AuthProvider = ({ children }) => {
             if (accessToken) {
                 const success = await tryRefreshAccessToken();
                 if (success) {
-                    return await getData(apiUrl);
+                    try {
+                        const response = await axios.get(apiUrl);
+                        return response.data;
+                    } catch(error) {
+                        return null;
+                    }
                 }
             }
         }
-        return null;
     }
 
     const tryRefreshAccessToken = async () => {
@@ -61,7 +63,6 @@ export const AuthProvider = ({ children }) => {
         try {
             setAuthHeader(refreshToken);
             const response = await axios.get('http://127.0.0.1:8000/api/v1/token/refresh');
-            console.log(response);
             const accessToken = response.data.access_token;
             localStorage.setItem('access_token', accessToken);
             setAuthHeader(accessToken);
@@ -102,7 +103,6 @@ export const AuthProvider = ({ children }) => {
             setUser(userData);
             setEntityType('user');
             setEntityName(userData.userFullName);
-            setIsShelter(false);
             setIsAuthenticated(true);
             return true;
         }
@@ -115,7 +115,6 @@ export const AuthProvider = ({ children }) => {
             setShelter(shelterData);
             setEntityType('shelter');
             setEntityName(shelterData.shelterName);
-            setIsShelter(true);
             setIsAuthenticated(true);
             return true;
         }
@@ -130,7 +129,6 @@ export const AuthProvider = ({ children }) => {
         setShelter(null);
         setEntityType('');
         setEntityName('');
-        setIsShelter(false);
         setIsAuthenticated(false);
     }
 
@@ -152,7 +150,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, shelter, isShelter, entityType, entityName, saveTokens, tryLoginUser, tryLoginShelter, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, shelter, entityType, entityName, saveTokens, tryLoginUser, tryLoginShelter, logout }}>
             {children}
         </AuthContext.Provider>
     );
