@@ -20,28 +20,25 @@ function Header() {
                     </div>
 
                     <div className="header-left">
-                        <Link to="/">Головна</Link>
-                        <Link to="/donate">Допомогти</Link>
-                        <Link to="/contacts">Контакти</Link>
-                    </div>
+                <Link to="/">Головна</Link>
+                <Link to="/animal-main">Знайти друга</Link>
+            </div>
 
-                    <div className="header-right">
-                        {isAuthenticated ? (
-                            <>
-                                <Link to={registrationPath} className="userName-header">{entityName}</Link>
-                                <Link to="/" className="logout-button" onClick={logout}>Вийти</Link>
-                            </>
-                        ): (
-                            <>
-                                <Link to="/login" className="login-button">Увійти</Link>
-                                <Link to="/signup" className="signup-button">Зареєструватися</Link>
-                            </>
-                        )}
-                    </div>
-
-                </div>
-                
-            </header>           
+            <div className="header-right">
+                {isAuthenticated ? (
+                    <>
+                        <Link to={registrationPath} className="userName-header">{entityName}</Link>
+                        <Link to="/" className="logout-button" onClick={logout}>Вийти</Link>
+                    </>
+                ): (
+                    <>
+                        <Link to="/login" className="login-button">Увійти</Link>
+                        <Link to="/signup" className="signup-button">Зареєструватися</Link>
+                    </>
+                )}
+            </div>
+            </div>
+        </header>        
             <Menu menuActive={menuActive} setMenuActive={setMenuActive}/>
         </>
         

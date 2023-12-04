@@ -50,6 +50,18 @@ class ApplicationControllerInterface(ABC):
         Returns:
             Optional[ApplicationOut]: Information about the application if found, else None.
         """
+    
+    @abstractmethod
+    def get_application_by_user_id(self, user_id: int) -> Optional[List[ApplicationOut]]:
+        """
+        Get information about an application by shelter ID.
+
+        Args:
+            application_id (int): The ID of the application to retrieve.
+
+        Returns:
+            Optional[ApplicationOut]: Information about the application if found, else None.
+        """
 
     @abstractmethod
     def update_application(self, application_update: ApplicationUpdate) -> Optional[ApplicationOut]:
@@ -109,6 +121,19 @@ class ApplicationController(ApplicationControllerInterface):
 
     def get_application_by_shelter_id(self, shelter_id: int) -> Optional[List[ApplicationOut]]:
         applications = self._db.query(ApplicationDB).filter(ApplicationDB.shelter_id == shelter_id).all()
+        logger.info(f"Application Controller: {applications=}")
+        if applications:
+            applications_local = [ 
+                                    ApplicationOut(**application.__dict__)
+                                    for application in applications
+                                 ]
+            
+            return applications_local
+        applications_local = [ApplicationOut(id=None, user_id=None, animal_id=None, status=None, shelter_id=None)]
+        return applications_local
+    
+    def get_application_by_user_id(self, user_id: int) -> Optional[List[ApplicationOut]]:
+        applications = self._db.query(ApplicationDB).filter(ApplicationDB.user_id == user_id).all()
         logger.info(f"Application Controller: {applications=}")
         if applications:
             applications_local = [ 

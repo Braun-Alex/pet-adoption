@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../Contexts/AuthContext';
-import { withAuth } from '../Wrappers/WithAuth';
+import { withShelterAuth } from '../Wrappers/WithShelterAuth';
 import '../css/List.css';
 
 const currentShelterId = 2;
@@ -75,7 +75,7 @@ class RequestList extends Component {
 
   handleAcceptReject = async (requestId, status) => {
     console.log(`Updating request ${requestId} with status ${status}`);
-    
+
     const { shelter } = this.context; // Get shelter context
     const shelterId = shelter.shelterID; // Assuming shelterID is available in the context
 
@@ -126,7 +126,7 @@ class RequestList extends Component {
                       &#x2716;
                     </button>
                   </div>
-                ) : 
+                ) :
                   requestItem.status === 1 ? <div>прийнято</div> : <div>відхилено</div>
                 }
               </li>
@@ -138,4 +138,4 @@ class RequestList extends Component {
   }
 }
 
-export default withAuth(RequestList);
+export default withShelterAuth(RequestList);

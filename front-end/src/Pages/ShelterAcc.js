@@ -1,5 +1,4 @@
-import React, { Component, useContext, useState } from 'react';
-import { Context } from "../index";
+import React, { Component } from 'react';
 import usericon from '../img/usericon.png';
 import animalicon from '../img/animalicon.png';
 import editicon from '../img/editicon.png';
@@ -7,64 +6,55 @@ import mailicon from '../img/mailicon.png';
 import RequestList from '../Components/RequestList';
 import AnimalList from '../Components/AnimalList';
 import { AuthContext } from '../Contexts/AuthContext';
-import { withAuth } from '../Wrappers/WithAuth';
+import { withShelterAuth } from '../Wrappers/WithShelterAuth';
 import "../css/ShelterAcc.css";
-
-const currentShelterId = 2;
 
 class ShelterAcc extends Component {
     static contextType = AuthContext;
 
     constructor(props) {
-      super(props);
-      this.state = {
-          photo: null,
-          showShelterAcc: true,
-          showEditAcc: false,
-          showRequestList: false,
-          showAnimal: false,
-          // інші змінні стану
-      };
-      // Прив'язування методів до контексту класу
-      this.handleFileChange = this.handleFileChange.bind(this);
-      this.toggleShelterAcc = this.toggleShelterAcc.bind(this);
-      this.toggleEditAcc = this.toggleEditAcc.bind(this);
-      this.toggleRequest = this.toggleRequest.bind(this);
-      this.toggleAnimal = this.toggleAnimal.bind(this);
+        super(props);
+
+        this.state = {
+            photo: null,
+            showShelterAcc: true,
+            showEditAcc: false,
+            showRequestList: false,
+            showAnimal: false
+        };
+
+        this.handleFileChange = this.handleFileChange.bind(this);
+        this.toggleShelterAcc = this.toggleShelterAcc.bind(this);
+        this.toggleEditAcc = this.toggleEditAcc.bind(this);
+        this.toggleRequest = this.toggleRequest.bind(this);
+        this.toggleAnimal = this.toggleAnimal.bind(this);
     }
-    //const { db } = useContext(Context);
-    
-    /*const [photo, setPhoto] = useState(null);
-    const [showShelterAcc, setShowShelterAcc] = useState(true);
-    const [showEditAcc, setShowEditAcc] = useState(false);
-    const [showRequestList, setShowRequestList] = useState(false);
-    const [showAnimal, setShowAnimal] = useState(false);*/
 
     toggleShelterAcc = () => {
-      this.setState({
-        showShelterAcc: true,
-        showEditAcc: false,
-        showRequestList: false,
-        showAnimal: false
-    });
+        this.setState({
+            showShelterAcc: true,
+            showEditAcc: false,
+            showRequestList: false,
+            showAnimal: false
+        });
     };
 
     toggleEditAcc = () => {
-      this.setState({
-        showShelterAcc: false,
-        showEditAcc: true,
-        showRequestList: false,
-        showAnimal: false
-    });
+        this.setState({
+            showShelterAcc: false,
+            showEditAcc: true,
+            showRequestList: false,
+            showAnimal: false
+        });
     };
 
     toggleRequest = () => {
-      this.setState({
-        showShelterAcc: false,
-        showEditAcc: false,
-        showRequestList: true,
-        showAnimal: false
-    });
+        this.setState({
+            showShelterAcc: false,
+            showEditAcc: false,
+            showRequestList: true,
+            showAnimal: false
+        });
     };
 
     toggleAnimal = () => {
@@ -91,10 +81,9 @@ class ShelterAcc extends Component {
 
   render() {
     const { photo, showShelterAcc, showEditAcc, showRequestList, showAnimal } = this.state;
-    const { user, shelter } = this.context;
+    const { shelter } = this.context;
 
     if (!shelter) {
-      console.log(shelter);
       return <div>Завантаження...</div>; // або будь-який інший варіант заповнення
     }
 
@@ -135,26 +124,26 @@ class ShelterAcc extends Component {
                 <div className="shelter-greeting">Вітаємо, {shelter.shelterName}!</div>
                 <div className="shelterInfo">
                   <p>
-                    <label>Ім'я: </label>
+                    <label><strong>Ім'я:</strong> </label>
                     <span id="name">{shelter.shelterName}</span>
                   </p>
 
                   <p>
-                    <label>Email: </label>
+                    <label><strong>Email: </strong></label>
                     <span id="email">{shelter.shelterEmail}</span>
                   </p>
 
                   <p>
-                    <label>Номер телефону: </label>
+                    <label><strong>Номер телефону: </strong></label>
                     <span id="phone">{"Немає"}</span>
                   </p>
                   <p>
-                    <label>Адреса: </label>
+                    <label><strong>Адреса:</strong> </label>
                     <span id="address">{"Немає"}</span>
                   </p>
 
                   <p>
-                    <label>Опис: </label>
+                    <label><strong>Опис:</strong> </label>
                     <span id="description">{"Немає"}</span>
                   </p>
                 </div>
@@ -165,27 +154,27 @@ class ShelterAcc extends Component {
             {showEditAcc && (
                 <form className="shelter-edit-info">
                 <div className="shelterEditInfo-field">
-                  <label>Ім'я</label>
+                  <label><strong>Ім'я</strong></label>
                   <input type="text" name="shelterName" />
                 </div>
                 
                 <div className="shelterEditInfo-field">
-                  <label>Електронна пошта</label>
+                  <label><strong>Електронна пошта</strong></label>
                   <input type="tel" name="shelterPhone" />
                 </div>
 
                 <div className="shelterEditInfo-field">
-                  <label>Номер телефону</label>
+                  <label><strong>Номер телефону</strong></label>
                   <input type="tel" name="shelterPhone" />
                 </div>
 
                 <div className="shelterEditInfo-field">
-                  <label>Адреса</label>
+                  <label><strong>Адреса</strong></label>
                   <input type="text" name="shelterAddress" />
                 </div>                               
 
                 <div className="shelterEditInfo-field-desc">
-                  <label>Опис</label>
+                  <label><strong>Опис</strong></label>
                   <textarea rows="4"></textarea>
                 </div>  
                 <button className='shelterEditInfo-button'>Зберегти зміни</button>
@@ -202,4 +191,4 @@ class ShelterAcc extends Component {
   }
 };
 
-export default withAuth(ShelterAcc);
+export default withShelterAuth(ShelterAcc);
