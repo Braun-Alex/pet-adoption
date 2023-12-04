@@ -7,8 +7,8 @@ from datetime import datetime, timedelta
 class UserLocalBase(BaseModel):
     email: Optional[str] = None
     full_name: Optional[str] = None
-    photo: Optional[str] = None
-    description: Optional[str] = None
+    photo: Optional[str] = ""
+    description: Optional[str] = ""
  
 class UserLocalOtput(UserLocalBase):
     id: int

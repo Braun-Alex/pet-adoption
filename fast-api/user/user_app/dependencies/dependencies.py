@@ -19,7 +19,6 @@ reusable_oauth = OAuth2PasswordBearer(
     scheme_name="JWT"
 )
 
-
 def get_current_user(token: str = Depends(reusable_oauth)) -> TokenPayload:
     try:
         payload = jwt.decode(

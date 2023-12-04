@@ -8,3 +8,5 @@ python-jose
 pycryptodome
 python-dotenv
 python-multipart
+pytest
+pytest-lazy-fixture
