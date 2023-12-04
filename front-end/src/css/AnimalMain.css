@@ -14,7 +14,9 @@
     display: flex;
     width: 84%;
     align-self: center;
-
+    /*align-items: center;
+    justify-content: center;
+    align-items: center;*/
 }
 
 .animal-table {

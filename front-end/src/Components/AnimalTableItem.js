@@ -29,7 +29,7 @@ class AnimalTableItem extends Component {
             });
             await tryLoginUser();
             this.setState( { showAnimal: false } );
-            alert('Заявку подано успішно!');
+            //alert('Заявку подано успішно!');
         } catch (error) {
             alert('Сталася помилка при подачі заявки.');
         }
