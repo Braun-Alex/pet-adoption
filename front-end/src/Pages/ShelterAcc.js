@@ -8,6 +8,7 @@ import RequestList from '../Components/RequestList';
 import AnimalList from '../Components/AnimalList';
 import { AuthContext } from '../Contexts/AuthContext';
 import { withAuth } from '../Wrappers/WithAuth';
+import "../css/ShelterAcc.css";
 
 const currentShelterId = 2;
 
@@ -75,15 +76,16 @@ class ShelterAcc extends Component {
     });
   };
   handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setPhoto(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      this.setState({ photo: e.target.result });
+    };
+    reader.readAsDataURL(file);
+  }
+};
+
 
    //const filteredShelter = db.shelters.filter((shel) => shel.id === currentShelterId);
 
@@ -127,9 +129,9 @@ class ShelterAcc extends Component {
         </div>
 
         <div className="shelter-options-open">
-          <div>
+
             {showShelterAcc && (
-              <div>
+              <>
                 <div className="shelter-greeting">Вітаємо, {shelter.shelterName}!</div>
                 <div className="shelterInfo">
                   <p>
@@ -156,12 +158,11 @@ class ShelterAcc extends Component {
                     <span id="description">{"Немає"}</span>
                   </p>
                 </div>
-              </div>
+              </>
             )}
-          </div>
 
-          <div>
-            {showEditAcc && (<div>
+
+            {showEditAcc && (
                 <form className="shelter-edit-info">
                 <div className="shelterEditInfo-field">
                   <label>Ім'я</label>
@@ -188,14 +189,12 @@ class ShelterAcc extends Component {
                   <textarea rows="4"></textarea>
                 </div>  
                 <button className='shelterEditInfo-button'>Зберегти зміни</button>
-              </form>
-            </div>              
+              </form>             
             )}            
-          </div>
 
-          <div>{showRequestList && <RequestList />}</div>
+            {showRequestList && <RequestList />}
 
-          <div>{showAnimal && <AnimalList />}</div>
+            {showAnimal && <AnimalList />}
           
         </div>
       </div>

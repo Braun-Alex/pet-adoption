@@ -1,53 +1,98 @@
 header {
     position: fixed;
     display: flex;
+    align-items: center;
+    justify-content: center;
     top: 0;
-    justify-content: space-around;
     background-color: #D8CFB9;
-    padding-top: 17px;
-    padding-bottom: 17px;
+    height: 64px;
     width: 100%;
     right: inherit;
 }
-
-.header-left a {
-  color: #241D11;
-  text-decoration: none;
-  margin-right: 20px;
-  font-size: 17px;
+.header-container{
+    display: flex;
+    width: 90%;
+    justify-content: space-between;
 }
 
-a {
-  text-decoration: none;
+.header-left a {
+    color: #241D11;
+    text-decoration: none;
+    margin-right: 20px;
+    font-size: 17px;
 }
 
 .userName-header {
-  color: rgba(36, 29, 17, 0.65);
-  font-size: 18px;
-  font-weight: 500;
-  margin-right: 15px;
+    color: rgba(36, 29, 17, 0.65);
+    font-size: 18px;
+    font-weight: 500;
+    margin-right: 15px;
+    text-decoration: none;
 }
 
 .logout-button,
 .login-button {
-  background-color: #D8CFB9;
-  color: #F2F1ED;
-  border: 2px solid #F2F1ED;
-  letter-spacing: 1px;
-  padding: 5px 15px;
-  border-radius: 50px;
-  cursor: pointer;  
-  font-size: 16px;
+    background-color: #D8CFB9;
+    color: #F2F1ED;
+    border: 2px solid #F2F1ED;
+    letter-spacing: 1px;
+    padding: 5px 15px;
+    border-radius: 50px;
+    cursor: pointer;  
+    font-size: 16px;
+    text-decoration: none;
 }
 .signup-button {
-  background-color: #F2F1ED;
-  color: #645A4C;
-  letter-spacing: 1px;
-  border: none;
-  padding: 6px 16px;
-  border-radius: 50px;
-  margin-left: 15px;
-  cursor: pointer;  
-  font-size: 16px;
+    background-color: #F2F1ED;
+    color: #645A4C;
+    letter-spacing: 1px;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 50px;
+    margin-left: 10px;
+    cursor: pointer;  
+    font-size: 16px;
+    text-decoration: none;
 }
 
+@media (min-width: 701px) {
+  .mob-menu{
+    display: none;
+  }
+  
+}
+
+@media (max-width: 700px) {
+    .header-left  {
+      display: none;
+    }
+    .burger-btn {
+        cursor: pointer;
+        width: 32px;
+        height: 20px;
+        position: relative;
+    }
+
+    .burger-btn span {
+        position: absolute;
+        top: 9px;
+        width: 30px;
+        border: 2px solid #645A4C;
+    }
+
+    .burger-btn::before {
+        content: ' ';
+        position: absolute;
+        top: 0;
+        width: 30px;
+        border: 2px solid #645A4C;
+    }
+
+    .burger-btn::after {
+        content: ' ';
+        position: absolute;
+        bottom: 0;
+        width: 30px;
+        border: 2px solid #645A4C;
+    }
+}

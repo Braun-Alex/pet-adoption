@@ -31,11 +31,11 @@ class AnimalTableItem extends Component {
         const animalImage = animal.type === 'кіт' ? catImage : dogImage;
 
         return (
-            <div>
+            <div className='animal-item-container'>
                 <div className='animal-item'>
                     <div>{animal.name}</div>
-                    <div className="animal-photo">
-                        <img src={animalImage} alt={'Фото ' + animal.type}/>
+                    <div >
+                        <img src={animalImage} alt={'Фото ' + animal.type} className="animal-photo"/>
                     </div>
                     <div className="grup-animal-info">
                         <div>Вид тваринки: {animal.type}</div>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../Contexts/AuthContext';
 import { withoutAuth } from '../Wrappers/WithoutAuth';
+import "../css/Auth.css"
 
 class Login extends Component {
     static contextType = AuthContext;

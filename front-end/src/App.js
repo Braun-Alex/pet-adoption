@@ -1,5 +1,5 @@
 // App.js
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Home from './Pages/Home';
 import Contacts from './Pages/Contacts';
@@ -10,11 +10,10 @@ import Header from './Components/Header';
 import ShelterAcc from './Pages/ShelterAcc';
 import Animal from './Pages/Animal';
 import AnimalMain from './Pages/AnimalMain';
-
+import './App.css'
 
 function App() {
   return (
-
       <div>
       <Header />
       <Routes>
@@ -27,6 +26,7 @@ function App() {
         <Route path="/animal/:animalId" element={<Animal />} />
         <Route path="/animal-main" element={<AnimalMain />} />
       </Routes>
+      
       </div>
 
   );

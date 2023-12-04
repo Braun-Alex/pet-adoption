@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { withoutAuth } from '../Wrappers/WithoutAuth';
+import "../css/Auth.css"
 
 class Signup extends Component {
     constructor(props) {
