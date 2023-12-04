@@ -108,4 +108,4 @@ def test_get_info_by_token(authorization_header:dict, client: TestClient, expect
     logger.info(f"{expected_user_profile=}")
 
     profile_response = client.get("/api/v1/users/profile", headers=authorization_header)
-    assert profile_response.json() == expected_user_profile.model_dump(), f"Expected: {expected_user_profile}\nReceived: {profile_response}"
+    assert profile_response.json() == expected_user_profile.model_dump(), f"Expected: {expected_user_profile}\nReceived: {profile_response.json()}"
