@@ -5,6 +5,7 @@ import editicon from '../img/editicon.png';
 import mailicon from '../img/mailicon.png';
 import RequestList from '../Components/RequestList';
 import AnimalList from '../Components/AnimalList';
+import shelterImage from '../img/shelter.png';
 import { AuthContext } from '../Contexts/AuthContext';
 import { withShelterAuth } from '../Wrappers/WithShelterAuth';
 import "../css/ShelterAcc.css";
@@ -92,8 +93,8 @@ class ShelterAcc extends Component {
         <div className="shelter-photo-greeting">
           <label className="photo-container">
             <input type="file" accept="image/*" onChange={this.handleFileChange} style={{ display: 'none' }} />
-            {photo ? (
-              <img src={photo} alt="Фото" className="selected-photo" style={{ objectFit: 'cover' }} />
+            {shelterImage ? (
+              <img src={shelterImage} alt="Фото" className="selected-photo" style={{ objectFit: 'cover' }} />
             ) : (
               <div>фото</div>
             )}

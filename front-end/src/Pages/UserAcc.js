@@ -5,6 +5,7 @@ import ApplicationList from '../Components/ApplicationList';
 import { AuthContext } from '../Contexts/AuthContext';
 import { withUserAuth } from '../Wrappers/WithUserAuth';
 import animalicon from "../img/animalicon.png";
+import userImage from '../img/user.png';
 import "../css/ShelterAcc.css";
 
 class UserAcc extends Component {
@@ -75,8 +76,8 @@ class UserAcc extends Component {
                 <div className="shelter-photo-greeting">
                     <label className="photo-container">
                         <input type="file" accept="image/*" onChange={this.handleFileChange} style={{ display: 'none' }} />
-                        {photo ? (
-                            <img src={photo} alt="Фото" className="selected-photo" style={{ objectFit: 'cover' }} />
+                        {userImage ? (
+                            <img src={userImage} alt="Фото" className="selected-photo" style={{ objectFit: 'cover' }} />
                         ) : (
                             <div>фото</div>
                         )}
