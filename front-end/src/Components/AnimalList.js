@@ -52,7 +52,7 @@ class AnimalList extends Component {
             <CreateAnimal show={createAnimalVisible} onHide={() => {this.setCreateAnimalVisible(false); this.fetchAnimals();}}/>
             <ul class="list">
                 {this.state.animals.map(animal =>
-                    <Link to={`/animal/${animal.id}`}>
+                    <Link to={`/animal/${animal.id}`} className="no-underline">
                         <li class="list-item">
                             <p><strong>Ім'я:</strong> {animal.name}</p>
                             <p><strong>Вид тваринки:</strong> {animal.type}</p>

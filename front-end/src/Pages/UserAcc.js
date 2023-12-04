@@ -5,6 +5,7 @@ import ApplicationList from '../Components/ApplicationList';
 import { AuthContext } from '../Contexts/AuthContext';
 import { withUserAuth } from '../Wrappers/WithUserAuth';
 import animalicon from "../img/animalicon.png";
+import "../css/ShelterAcc.css";
 
 class UserAcc extends Component {
     static contextType = AuthContext;
@@ -96,9 +97,9 @@ class UserAcc extends Component {
                 </div>
 
                 <div className="shelter-options-open">
-                    <div>
+                    
                         {showShelterAcc && (
-                            <div>
+                            <>
                                 <div className="shelter-greeting">Вітаємо, {user.userFullName}!</div>
                                 <div className="shelterInfo">
                                     <p>
@@ -111,12 +112,12 @@ class UserAcc extends Component {
                                         <span id="email">{user.userEmail}</span>
                                     </p>
                                 </div>
-                            </div>
+                            </>
                         )}
-                    </div>
+                    
 
-                    <div>
-                        {showEditAcc && (<div>
+                    
+                        {showEditAcc && (
                                 <form className="shelter-edit-info">
                                     <div className="shelterEditInfo-field">
                                         <label><strong>Ім'я</strong></label>
@@ -129,11 +130,10 @@ class UserAcc extends Component {
                                     </div>
                                     <button className='shelterEditInfo-button'>Зберегти зміни</button>
                                 </form>
-                            </div>
                         )}
-                    </div>
+                    
 
-                    <div>{showAnimal && <ApplicationList />}</div>
+                    {showAnimal && <ApplicationList />}
 
                 </div>
             </div>

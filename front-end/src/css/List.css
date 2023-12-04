@@ -27,12 +27,16 @@
     border: 2px solid #D8CFB9;
     margin-bottom: 10px;
     padding: 8px 10px;
-    color: #4b4132;    
+    color: #4b4132; 
 }
 
 .list-item p {
-    
+    text-decoration: none;
     margin: 5px 0; /* Відступи зверху та знизу для кожного параграфу */
+}
+
+.list-item strong {
+    text-decoration: none;
 }
 
 .animal-image {
@@ -61,6 +65,25 @@
     font-size: 18px;
     width: 90%;
     margin-bottom: 30px;
+   /*display: flex;
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;*/
+}
+
+.link{
+    display: flex;
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.no-underline p{
+    text-decoration: none;
+}
+
+.no-underline{
+    text-decoration: none;
 }
 
 .user-animal{

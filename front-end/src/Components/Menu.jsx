@@ -8,8 +8,7 @@ const Menu = ({menuActive, setMenuActive}) => {
             <div className='blur'/>
             <div className='menu-content'>
                 <Link to="/" className="menu-item">Головна</Link>
-                <Link to="/donate" className="menu-item">Допомогти</Link>
-                <Link to="/contacts" className="menu-item">Контакти</Link>
+                <Link to="/animal-main" className="menu-item">Знайти друга</Link>
             </div>
         </div>
     );

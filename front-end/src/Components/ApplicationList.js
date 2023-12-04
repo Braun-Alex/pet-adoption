@@ -11,7 +11,7 @@ class ApplicationList extends Component {
         const { userApplications } = this.context;
         return (
             <div class="animal-from-shelter">
-                <Link to="/animal-main">
+                <Link to="/animal-main" className="link">
                     <button
                         aria-controls=''
                         className='add-animal-button'
@@ -29,7 +29,7 @@ class ApplicationList extends Component {
                                 <p><strong>Ім'я тваринки:</strong> {animal.name}</p>
                                 <p><strong>Вид тваринки:</strong> {animal.type}</p>
                                 <p><strong>Стать тваринки:</strong> {animal.sex}</p>
-                                <p><strong>Місяць народження тваринки:</strong> {animal.month + "." + animal.year}</p>
+                                <p><strong>Дата народження тваринки:</strong> {animal.month + "." + animal.year}</p>
                                 <p><strong>Деталі про тваринку:</strong> {animal.description}</p>
                                 <p><strong>Статус заявки:</strong> {
                                     animal.status === 2 ? "надіслано до розгляду" :
