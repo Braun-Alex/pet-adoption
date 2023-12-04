@@ -1,3 +1,4 @@
+from httpx import Response
 import pytest
 import logging
 
@@ -5,90 +6,106 @@ import json
 
 from fastapi.testclient import TestClient
 
-from user_app.models.user_local_model import UserLocalRegistration, UserLocalAuthorization\
+from user_app.models.user_local_model import UserLocalRegistration, UserLocalAuthorization, UserLocalOtput
 
 import random
 import string
 
 from fastapi.security import OAuth2PasswordRequestForm
 
+from user_app.dependencies.dependencies import get_current_user
+
+from pytest_lazyfixture import lazy_fixture
+
 from main import app 
-
-
-
 
 
 logger = logging.getLogger(__name__)
 
-
-@pytest.fixture()
+@pytest.fixture(scope="module")
 def client() -> TestClient:
     logger.info(f"FIXTURE")
-    return TestClient(app)
+    yield TestClient(app)
 
-# @pytest.fixture()
-# def new_user() -> UserLocalRegistration:
-#     email=random.choices(string.ascii_lowercase)
-#     return UserLocalRegistration(email="autotest", full_name="autotest", password="autotest")
+@pytest.fixture(scope="function")
+def signup_user_fixture():
+    return UserLocalRegistration(
+                                    email=''.join(random.choice(string.ascii_lowercase) for _ in range(5)),
+                                    full_name=''.join(random.choice(string.ascii_lowercase) for _ in range(5)),
+                                    password="autotest"
+                                )
+    
 
-# def test_signup(user_app_client: TestClient, new_user:UserLocalRegistration):
-#     test_client = user_app_client
-#     # logger.info("Test started")
-#     # logger.debug("DEBUG")
-#     # logger.warning("warning")
-#     # logger.error("error")
+@pytest.fixture(scope="function")
+def login_user_valid_fixture(signup_user_fixture: UserLocalRegistration):
+    return {
+                "username": signup_user_fixture.email,
+                "password": signup_user_fixture.password,
+            }
 
-#     logger.debug(f"Model to JSON: {new_user.model_dump()}")
+@pytest.fixture(scope="function")
+def login_user_invalid_fixture(signup_user_fixture: UserLocalRegistration):
+    return {
+                "username": signup_user_fixture.email,
+                "password": "shit",
+            }
 
-#     # response = test_client.get("/api/v1/users/exists/1")
-#     response  = test_client.post(
-#                                     "/api/v1/users/signup/",
-#                                     json=new_user.model_dump(),
-#                                 )
-#     logger.info(f"{response=}")
+def sign_up(user: UserLocalRegistration, client: TestClient)->Response:
+    logger.info(f"Registrating user: {user=}")
+    return client.post("/api/v1/users/signup/", json=user.model_dump())
 
+def log_in(user:dict, client:TestClient) ->Response:
+    logger.info(f"Authorizating user: {user=}")
 
-VALID_NAME = ''.join(random.choice(string.ascii_lowercase) for _ in range(5))
-VALID_EMAIL = ''.join(random.choice(string.ascii_lowercase) for _ in range(5))
+    return client.post(
+        "/api/v1/users/login/", data=user, 
+    )
 
-VALID_NAME2 = ''.join(random.choice(string.ascii_lowercase) for _ in range(5))
-VALID_EMAIL2 = ''.join(random.choice(string.ascii_lowercase) for _ in range(5))
-
-test_data = [
-    (
-        UserLocalRegistration(email=VALID_EMAIL, full_name=VALID_NAME, password="autotest"), 
-        # OAuth2PasswordRequestForm(username=VALID_EMAIL, password="autotest"),
-        {
-            "username": VALID_EMAIL,
-            "password":"autotest",
-        },
-        200,  # Expected status code for registration
-        200,  # Expected status code for login
-
-    ),
-    (
-        UserLocalRegistration(email=VALID_NAME2, full_name=VALID_NAME2, password="autotest1"), 
-        {
-            "username": VALID_EMAIL,
-            "password":"shit",
-        },
-        200,  # Expected status code for registration
-        401,  # Expected status code for login
-    ),
-    # Add more test cases here as needed
-]
-
-@pytest.mark.parametrize("signin_user, login_user, registration_status_code, login_status_code", test_data, ids=["ValidLogIn", "NonValidLogIn"])
-def test_registration_and_login(client: TestClient, signin_user: UserLocalRegistration, login_user, registration_status_code, login_status_code):
+@pytest.mark.parametrize(
+                            "signup_user, login_user, registration_status_code, login_status_code", 
+                            [
+                                pytest.param(lazy_fixture("signup_user_fixture"), lazy_fixture("login_user_valid_fixture"),200,200, id="ValidLogIn"),
+                                pytest.param(lazy_fixture("signup_user_fixture"), lazy_fixture("login_user_invalid_fixture"),200,401, id="InValidLogIn"),
+                            ],
+                        )
+def test_registration_and_login(client: TestClient, signup_user: UserLocalRegistration, login_user, registration_status_code, login_status_code):
     # Registration test
 
-    logger.info(f"{signin_user= }, \n{login_user=}\n{registration_status_code=}\n {login_status_code=}")
+    logger.info(f"{signup_user= }, \n{login_user=}\n{registration_status_code=}\n {login_status_code=}")
 
-    registration_response = client.post("/api/v1/users/signup/", json=signin_user.model_dump())
+    registration_response = sign_up(user=signup_user, client=client)
     assert registration_response.status_code == registration_status_code, f"Sign Up procedure failed. \n Expected code: {registration_status_code=},  Recieved code: {registration_response=}"
 
     # If registration was successful, proceed to login
-    login_response = client.post(
-        "/api/v1/users/login/", data=login_user, 
-    )
+    login_response = log_in(user=login_user, client=client)
     assert login_response.status_code == login_status_code, f"LogIn Procedure failed.\nExpeceted code {login_status_code}, Recieved: {login_response=}"
+
+@pytest.fixture(scope="function") 
+def jwt_token(signup_user_fixture: UserLocalRegistration, login_user_valid_fixture, client: TestClient)->str:
+    sign_up_data = signup_user_fixture
+    log_in_data = login_user_valid_fixture
+    assert sign_up(user=sign_up_data, client=client).status_code ==200, "Sign Up procedure failed"
+    log_in_response = log_in(user=log_in_data, client=client)
+    assert log_in_response.status_code ==200, "Log In procedure failed"
+
+    token = log_in_response.json()['access_token']
+    logger.debug(f"{token=}")
+    return token
+
+@pytest.fixture(scope="function") 
+def authorization_header(jwt_token:str) -> str:
+    return {  "Authorization": f"Bearer {jwt_token}" }
+
+@pytest.fixture(scope="function") 
+def expected_user_profile(jwt_token:str, signup_user_fixture:UserLocalRegistration):
+    user_id=get_current_user(token=jwt_token).sub
+    return UserLocalOtput(id=user_id, email=signup_user_fixture.email, full_name=signup_user_fixture.full_name)
+
+
+def test_get_info_by_token(authorization_header:dict, client: TestClient, expected_user_profile: UserLocalOtput):
+    logger.info(f"test_get_info_by_token")
+
+    logger.info(f"{expected_user_profile=}")
+
+    profile_response = client.get("/api/v1/users/profile", headers=authorization_header)
+    assert profile_response.json() == expected_user_profile.model_dump(), f"Expected: {expected_user_profile}\nReceived: {profile_response}"

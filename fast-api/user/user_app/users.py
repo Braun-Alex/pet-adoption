@@ -1,6 +1,6 @@
-# user_service.py
-from fastapi import Depends, HTTPException, APIRouter, status
-
+# user.py
+from fastapi import FastAPI, Depends, HTTPException, APIRouter, status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 
 from user_app.dependencies.dependencies import get_current_user
@@ -9,7 +9,7 @@ from user_app.utilities.utilities import TokenSchema, TokenPayload
 
 from user_app.models.user_local_model import UserLocalAuthorization, UserLocalBase, UserLocalOtput, UserLocalRegistration
 
-import logging
+import logging  
 
 from user_app.config import config_service
 
@@ -34,8 +34,8 @@ def read_root():
 def get_user_by_id(id: int):
     logger.info(f"Handling request /users/{id}")
     # return False
-    # return True if user_service.get_user(user_id=id) is not None else False
-    return user_service.get_user(user_id=id)
+    return True if user_service.get_user(user_id=id) is not None else False
+    # return True if user_service.get_user(user_id=id)
 
 @users_route.post("/signup", response_model=bool)
 def register_user(user: UserLocalRegistration):
@@ -53,9 +53,9 @@ def authorize_user(user: OAuth2PasswordRequestForm = Depends()):
     logger.info(f"Handling {LOGIN_URL}: User from request: {user}")
     return user_service.authorize_user(user=user)
 
-
+    
 @users_route.get(PROFILE_URL, response_model=UserLocalOtput)
 def get_user(token_payload: TokenPayload = Depends(get_current_user)):
     logger.info(f"Handling {PROFILE_URL}: {token_payload=}")
     return user_service.get_user(user_id=token_payload.sub)
-
+    
