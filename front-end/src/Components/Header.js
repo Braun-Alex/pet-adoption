@@ -1,15 +1,25 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from "../Contexts/AuthContext";
 import '../css/Header.css';
+import Menu from './Menu';
 
 function Header() {
+    const [menuActive, setMenuActive] = useState(false);
     const { isAuthenticated, entityType, entityName, logout } = useContext(AuthContext);
     let registrationPath;
     {entityType === "shelter" ? registrationPath = '/shelter-account': registrationPath = '/user-account'}
     return (
-        <header>
-            <div className="header-left">
+        <>
+            <header>
+                <div className='header-container'>
+                    <div className="mob-menu">
+                    <div class="burger-btn" onClick={() => setMenuActive(!menuActive)}> 
+                        <span/>
+                    </div>
+                    </div>
+
+                    <div className="header-left">
                 <Link to="/">Головна</Link>
                 <Link to="/animal-main">Знайти друга</Link>
             </div>
@@ -27,7 +37,11 @@ function Header() {
                     </>
                 )}
             </div>
-        </header>
+            </div>
+        </header>        
+            <Menu menuActive={menuActive} setMenuActive={setMenuActive}/>
+        </>
+        
     );
 }
 

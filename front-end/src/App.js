@@ -1,5 +1,5 @@
 // App.js
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import Home from './Pages/Home';
 import Contacts from './Pages/Contacts';
@@ -11,14 +11,10 @@ import UserAcc from './Pages/UserAcc';
 import ShelterAcc from './Pages/ShelterAcc';
 import Animal from './Pages/Animal';
 import AnimalMain from './Pages/AnimalMain';
-
-import './css/Auth.css';
-import './css/ShelterAcc.css';
-
+import './App.css'
 
 function App() {
   return (
-
       <div>
           <Header />
           <Routes>

@@ -4,6 +4,8 @@ import { AuthContext } from '../Contexts/AuthContext';
 import { withShelterAuth } from '../Wrappers/WithShelterAuth';
 import '../css/List.css';
 
+const currentShelterId = 2;
+
 class RequestList extends Component {
   static contextType = AuthContext;
 

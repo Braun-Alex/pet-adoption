@@ -118,3 +118,18 @@
     cursor: pointer;
     font-size: 16px;
 }
+
+
+@media (max-width: 500px) {
+    .modal{
+        width:75%;
+    }
+
+    .animal-name{
+        width: 95%;
+    }
+    .animal-desc{   
+        width: 95%;
+    }
+
+}
