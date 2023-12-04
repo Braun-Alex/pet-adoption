@@ -42,7 +42,6 @@ class UserControllerInterface(ABC):
 
 class UserController(UserControllerInterface):
     def __init__(self, db: Session, encrypter: Encrypter, hasher: Hasher) -> None:
-        super().__init__()
         self._db = db
         self._encrypter = encrypter
         self._hasher = hasher
@@ -65,10 +64,8 @@ class UserController(UserControllerInterface):
             return False
         return True
 
-    def get_user_by_id(self, user_id: int) -> Optional[UserLocalOtput]:
+    def get_user_by_id(self, user_id: int) -> Optional[UserDB]:
         return self._db.query(UserDB).filter(UserDB.id == user_id).first()
-
-        
 
     def get_user_by_email(self, email: str) -> Optional[UserDB]:
         deterministically_encrypted_email = self._encrypter.deterministic_encrypt_data(email)
