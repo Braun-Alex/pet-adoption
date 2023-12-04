@@ -99,7 +99,7 @@ def authorization_header(jwt_token:str) -> str:
 @pytest.fixture(scope="function") 
 def expected_user_profile(jwt_token:str, signup_user_fixture:UserLocalRegistration):
     user_id=get_current_user(token=jwt_token).sub
-    return UserLocalOtput(id=user_id, email=signup_user_fixture.email, full_name=signup_user_fixture.full_name)
+    return UserLocalOtput(id=user_id, email=signup_user_fixture.email, full_name=signup_user_fixture.full_name, photo=None, description=None)
 
 
 def test_get_info_by_token(authorization_header:dict, client: TestClient, expected_user_profile: UserLocalOtput):
