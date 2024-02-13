@@ -2,28 +2,43 @@ version: '3'
 services:
   frontend:
     build: ./front-end
+    volumes:
+      - ./front-end:/app
+      - /app/node_modules
     ports:
       - "3000:3000"
+    environment:
+      - WDS_SOCKET_HOST=127.0.0.1
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - FAST_REFRESH=false
+      - WDS_SOCKET_PORT=3000
     container_name: frontend-container
     command: npm start
     restart: on-failure
+    depends_on:
+      - user_service
+      - animal_service
+      - shelter_service
+      - application_service
     networks:
       - my-network
-    # volumes:
-    #   - ./front-end/:/app/
-  
+
   user_service:
     build: ./fast-api/user
     container_name: user_service
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
+    command: /usr/local/bin/db-check.sh user_db 5432 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
     volumes:
       - ./fast-api/user/:/app/
     ports:
       - "8000:8000"
     environment:
-      - DATABASE_URI=postgresql://user_db_user:user_db_password@user_db/user_db_dev
-      - JWT_SECRET_KEY=61f16943d3be6938417e2143bd8c2b9516eadf678d82ea399384085084fd4309
-      - AES_SECRET_KEY=a1fd6e8ee6e95b25d8d3bd0f8df50076150cea8eaa808455e24c8e7a44f32609
+      - POSTGRES_DB=${USER_POSTGRES_DB}
+      - POSTGRES_USER=${USER_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${USER_POSTGRES_PASSWORD}
+      - DATABASE_URI=postgresql://${USER_POSTGRES_USER}:${USER_POSTGRES_PASSWORD}@user_db/${USER_POSTGRES_DB}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - AES_SECRET_KEY=${AES_SECRET_KEY}
     depends_on:
       - user_db
     networks:
@@ -35,13 +50,14 @@ services:
     image: postgres:16.0-alpine3.17
     container_name: user_db_container
     environment:
-      POSTGRES_DB: user_db_dev
-      POSTGRES_USER: user_db_user
-      POSTGRES_PASSWORD: user_db_password
-    ports: 
+      POSTGRES_DB: ${USER_POSTGRES_DB}
+      POSTGRES_USER: ${USER_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${USER_POSTGRES_PASSWORD}
+    ports:
       - "5432:5432"
     volumes:
-      - user_db_data:/var/lib/postgresql/data
+      - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+      - user_data_db:/var/lib/postgresql/data
     restart: on-failure
     networks:
       - my-network
@@ -49,14 +65,16 @@ services:
   animal_service:
     build: ./fast-api/animal
     container_name: animal_service
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
+    command: /usr/local/bin/db-check.sh animal_db 5432 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
     volumes:
       - ./fast-api/animal/:/app/
     ports:
       - "8001:8000"
     environment:
-      - DATABASE_URI=postgresql://animal_db_admin:animal_db_password@animal_db/animal_db_dev
-      # TODO: change user_service URL for shelter_service!!!!!
+      - POSTGRES_DB=${ANIMAL_POSTGRES_DB}
+      - POSTGRES_USER=${ANIMAL_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${ANIMAL_POSTGRES_PASSWORD}
+      - DATABASE_URI=postgresql://${ANIMAL_POSTGRES_USER}:${ANIMAL_POSTGRES_PASSWORD}@animal_db/${ANIMAL_POSTGRES_DB}
       - SHELTER_SERVICE_HOST_URL=http://shelter_service:8000/api/v1/shelter/
     depends_on:
       - animal_db
@@ -67,15 +85,16 @@ services:
 
   animal_db:
     image: postgres:16.0-alpine3.17
-    container_name: animal_db_container 
+    container_name: animal_db_container
     environment:
-      POSTGRES_USER: animal_db_admin
-      POSTGRES_PASSWORD: animal_db_password
-      POSTGRES_DB: animal_db_dev
-    ports: 
+      POSTGRES_DB: ${ANIMAL_POSTGRES_DB}
+      POSTGRES_USER: ${ANIMAL_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${ANIMAL_POSTGRES_PASSWORD}
+    ports:
       - "5433:5432"
     volumes:
-      - animal_db_data:/var/lib/postgresql/data
+      - ./init-animal-db.sh:/docker-entrypoint-initdb.d/init-animal-db.sh
+      - animal_data_db:/var/lib/postgresql/data
     restart: on-failure
     networks:
       - my-network
@@ -97,29 +116,33 @@ services:
     image: postgres:16.0-alpine3.17
     container_name: shelter_db_container
     environment:
-      POSTGRES_DB: shelter_db_dev
-      POSTGRES_USER: shelter_db_user
-      POSTGRES_PASSWORD: shelter_db_password
-    ports: 
+      POSTGRES_DB: ${SHELTER_POSTGRES_DB}
+      POSTGRES_USER: ${SHELTER_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${SHELTER_POSTGRES_PASSWORD}
+    ports:
       - "5434:5432"
     volumes:
-      - shelter_db_data:/var/lib/postgresql/data
+      - ./init-shelter-db.sh:/docker-entrypoint-initdb.d/init-shelter-db.sh
+      - shelter_data_db:/var/lib/postgresql/data
     restart: on-failure
     networks:
       - my-network
-  
+
   shelter_service:
     build: ./fast-api/shelter
     container_name: shelter_service
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
+    command: /usr/local/bin/db-check.sh shelter_db 5432 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
     volumes:
       - ./fast-api/shelter/:/app/
     ports:
       - "8002:8000"
     environment:
-      - DATABASE_URI=postgresql://shelter_db_user:shelter_db_password@shelter_db/shelter_db_dev
-      - JWT_SECRET_KEY=61f16943d3be6938417e2143bd8c2b9516eadf678d82ea399384085084fd4309
-      - AES_SECRET_KEY=a1fd6e8ee6e95b25d8d3bd0f8df50076150cea8eaa808455e24c8e7a44f32609
+      - POSTGRES_DB=${SHELTER_POSTGRES_DB}
+      - POSTGRES_USER=${SHELTER_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${SHELTER_POSTGRES_PASSWORD}
+      - DATABASE_URI=postgresql://${SHELTER_POSTGRES_USER}:${SHELTER_POSTGRES_PASSWORD}@shelter_db/${SHELTER_POSTGRES_DB}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - AES_SECRET_KEY=${AES_SECRET_KEY}
     depends_on:
       - shelter_db
     networks:
@@ -130,15 +153,16 @@ services:
   application_service:
     build: ./fast-api/application
     container_name: application
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
+    command: /usr/local/bin/db-check.sh application_db 5432 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
     volumes:
       - ./fast-api/application:/app/
     ports:
       - "8003:8000"
     environment:
-      - DATABASE_URI=postgresql://application_db_user:application_db_password@application_db/application_db_dev
-    #   - JWT_SECRET_KEY=61f16943d3be6938417e2143bd8c2b9516eadf678d82ea399384085084fd4309
-    #   - AES_SECRET_KEY=a1fd6e8ee6e95b25d8d3bd0f8df50076150cea8eaa808455e24c8e7a44f32609
+      - POSTGRES_DB=${APPLICATION_POSTGRES_DB}
+      - POSTGRES_USER=${APPLICATION_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${APPLICATION_POSTGRES_PASSWORD}
+      - DATABASE_URI=postgresql://${APPLICATION_POSTGRES_USER}:${APPLICATION_POSTGRES_PASSWORD}@application_db/${APPLICATION_POSTGRES_DB}
     depends_on:
       - application_db
     networks:
@@ -148,24 +172,25 @@ services:
     image: postgres:16.0-alpine3.17
     container_name: application_db_container
     environment:
-      POSTGRES_DB: application_db_dev
-      POSTGRES_USER: application_db_user
-      POSTGRES_PASSWORD: application_db_password
-    ports: 
+      POSTGRES_DB: ${APPLICATION_POSTGRES_DB}
+      POSTGRES_USER: ${APPLICATION_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${APPLICATION_POSTGRES_PASSWORD}
+    ports:
       - "5435:5432"
     volumes:
-      - application_db_data:/var/lib/postgresql/data
+      - ./init-application-db.sh:/docker-entrypoint-initdb.d/init-application-db.sh
+      - application_data_db:/var/lib/postgresql/data
     restart: on-failure
     networks:
       - my-network
 
 volumes:
-  user_db_data:
-  animal_db_data:
-  shelter_db_data:
-  application_db_data:
+  user_data_db: {}
+  animal_data_db: {}
+  shelter_data_db: {}
+  application_data_db: {}
 
 networks:
   my-network:
     driver: bridge
-      
+

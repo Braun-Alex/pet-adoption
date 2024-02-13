@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, Enum as EnumType
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
-from utilities.common import ApplicatioStatus
+from utilities.common import ApplicationStatus
 
 from application_app.db.database import Base
 
@@ -14,4 +14,4 @@ class ApplicationDB(Base):
     shelter_id = Column(Integer)
     user_id = Column(Integer)
     animal_id = Column(Integer)
-    status = Column(EnumType(ApplicatioStatus), default=ApplicatioStatus.CREATED)
+    status = Column(EnumType(ApplicationStatus), default=ApplicationStatus.CREATED)

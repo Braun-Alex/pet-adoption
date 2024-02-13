@@ -1,6 +1,6 @@
 from enum import Enum
 
-class ApplicatioStatus(Enum):
+class ApplicationStatus(Enum):
     REJECTED = 0
     ACCEPTED = 1
     CREATED  = 2
