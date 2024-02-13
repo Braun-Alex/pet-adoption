@@ -1,5 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import Swal from "sweetalert2";
+import {toast} from "react-toastify";
 
 const initialState = {
     isAuthenticated: false,
@@ -132,7 +134,6 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(true);
             return true;
         }
-        //logout();
         return false;
     }
 
@@ -145,20 +146,41 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(true);
             return true;
         }
-        //logout();
         return false;
     }
 
-    const logout = () => {
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-        setAuthHeader(null);
-        setUser(null);
-        setUserApplications(null);
-        setShelter(null);
-        setEntityType('');
-        setEntityName('');
-        setIsAuthenticated(false);
+    const logout = async () => {
+        try {
+            await Swal.fire({
+                title: 'Ви впевнені, що хочете вийти з облікового запису?',
+                icon: 'question',
+                showConfirmButton: true,
+                confirmButtonText: 'Так, вийти',
+                showCancelButton: true,
+                cancelButtonText: 'Ні, не виходити'
+            }).then(async (finalResult) => {
+                if (finalResult.isConfirmed) {
+                    localStorage.removeItem('access_token');
+                    localStorage.removeItem('refresh_token');
+                    setAuthHeader(null);
+                    setUser(null);
+                    setUserApplications(null);
+                    setShelter(null);
+                    setEntityType('');
+                    setEntityName('');
+                    setIsAuthenticated(false);
+                    await Swal.fire({
+                        title: 'Ви успішно вийшли з облікового запису!',
+                        icon: 'info',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true
+                    });
+                }
+            });
+        } catch (error) {
+            toast.error("Сталася помилка під час виходу з облікового запису: " + error.message);
+        }
     }
 
     useEffect(() => {

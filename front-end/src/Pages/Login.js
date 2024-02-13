@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { AuthContext } from '../Contexts/AuthContext';
 import { withoutAuth } from '../Wrappers/WithoutAuth';
-import "../css/Auth.css"
+import { toast } from "react-toastify";
+import "../css/Auth.css";
 
 class Login extends Component {
     static contextType = AuthContext;
@@ -48,6 +49,25 @@ class Login extends Component {
         const { saveTokens, tryLoginUser, tryLoginShelter } = this.context;
         const { email, password, showUserAuth } = this.state;
 
+        if (email === '' || password === '') {
+            toast.error("Всі поля є обов'язковими до заповнення!");
+            return;
+        }
+
+        const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+        if (!EMAIL_REGEX.test(email)) {
+            toast.error("Введено некоректний формат електронної пошти!");
+            return;
+        }
+
+        const PASSWORD_MINIMAL_LENGTH = 9;
+
+        if (password.length < PASSWORD_MINIMAL_LENGTH) {
+            toast.error("Пароль має містити не менше 9 символів!");
+            return;
+        }
+
         const formData = new URLSearchParams();
         formData.append('username', email);
         formData.append('password', password);
@@ -60,17 +80,21 @@ class Login extends Component {
             saveTokens(response.data);
             const successAuth = showUserAuth ? await tryLoginUser(): await tryLoginShelter();
             if (successAuth) {
-                console.log('Авторизацію пройшдено успішно:', response.data);
-                this.setState({ errorMessage: 'Авторизацію пройдено успішно' });
+                toast.success("Вас успішно авторизовано!");
             }
         } catch (error) {
-            console.error('Введено некоректну електронну пошту або пароль.', error.message);
-            this.setState({ errorMessage: 'Введено некоректну електронну пошту або пароль' });
+            if (error.response) {
+                toast.error("Введено некоректні автентифікаційні дані!");
+            } else if (error.request) {
+                toast.error("Сервер не відповідає на запити!");
+            } else {
+                toast.error("Щось пішло не так: " + error.message);
+            }
         }
     }
 
     render() {
-        const { email, password, errorMessage } = this.state;
+        const { email, password } = this.state;
 
         return (
             <>
@@ -97,10 +121,6 @@ class Login extends Component {
                                 onChange={(event) => this.handleInputChange('password', event.target.value)}
                             />
                         </div>
-
-                        {errorMessage && <div className="error-message">{errorMessage}</div>}
-
-                        {/* <Link to={this.state.registrationPath}><button type="submit" className="button-reg" onClick={this.registerUser}>Увійти</button></Link> */}
 
                         <button type="submit" className="button-login">Увійти</button>
                     </form>

@@ -59,137 +59,134 @@ class ShelterAcc extends Component {
     };
 
     toggleAnimal = () => {
-      this.setState({
-        showShelterAcc: false,
-        showEditAcc: false,
-        showRequestList: false,
-        showAnimal: true
-    });
-  };
-  handleFileChange = (event) => {
-  const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      this.setState({ photo: e.target.result });
+        this.setState({
+            showShelterAcc: false,
+            showEditAcc: false,
+            showRequestList: false,
+            showAnimal: true
+        });
     };
-    reader.readAsDataURL(file);
-  }
-};
+    handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                this.setState({ photo: e.target.result });
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    render() {
+        const { showShelterAcc, showEditAcc, showRequestList, showAnimal } = this.state;
+        const { shelter } = this.context;
+
+        if (!shelter) {
+            return <div>Завантаження...</div>;
+        }
+
+        return (
+            <div className="container">
+                <div className="shelter-photo-greeting">
+                    <label className="photo-container">
+                        <input type="file" accept="image/*" onChange={this.handleFileChange} style={{ display: 'none' }} />
+                        {shelterImage ? (
+                            <img src={shelterImage} alt="Фото" className="selected-photo" style={{ objectFit: 'cover' }} />
+                        ) : (
+                            <div>фото</div>
+                        )}
+                    </label>
+                    <div className="shelter-options">
+                        <button className={`${showShelterAcc ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleShelterAcc}>
+                            <img src={usericon} alt="[ ]" /> Акаунт
+                        </button>
+
+                        <button className={`${showEditAcc ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleEditAcc}>
+                            <img src={editicon} alt="[ ]" /> Редагувати профіль
+                        </button>
+
+                        <button className={`${showRequestList ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleRequest}>
+                            <img src={mailicon} alt="[ ]" /> Список заявок
+                        </button>
+
+                        <button className={`${showAnimal ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleAnimal}>
+                            <img src={animalicon} alt="[ ]" /> Тваринки
+                        </button>
+                    </div>
+                </div>
+
+                <div className="shelter-options-open">
+
+                    {showShelterAcc && (
+                        <>
+                            <div className="shelter-greeting">Вітаємо, {shelter.shelterName}!</div>
+                            <div className="shelterInfo">
+                                <p>
+                                    <label><strong>Ім'я:</strong> </label>
+                                    <span id="name">{shelter.shelterName}</span>
+                                </p>
+
+                                <p>
+                                    <label><strong>Email: </strong></label>
+                                    <span id="email">{shelter.shelterEmail}</span>
+                                </p>
+
+                                <p>
+                                    <label><strong>Номер телефону: </strong></label>
+                                    <span id="phone">{"Немає"}</span>
+                                </p>
+                                <p>
+                                    <label><strong>Адреса:</strong> </label>
+                                    <span id="address">{"Немає"}</span>
+                                </p>
+
+                                <p>
+                                    <label><strong>Опис:</strong> </label>
+                                    <span id="description">{"Немає"}</span>
+                                </p>
+                            </div>
+                        </>
+                    )}
 
 
-   //const filteredShelter = db.shelters.filter((shel) => shel.id === currentShelterId);
+                    {showEditAcc && (
+                        <form className="shelter-edit-info">
+                            <div className="shelterEditInfo-field">
+                                <label><strong>Ім'я</strong></label>
+                                <input type="text" name="shelterName" />
+                            </div>
 
-  render() {
-    const { photo, showShelterAcc, showEditAcc, showRequestList, showAnimal } = this.state;
-    const { shelter } = this.context;
+                            <div className="shelterEditInfo-field">
+                                <label><strong>Електронна пошта</strong></label>
+                                <input type="tel" name="shelterPhone" />
+                            </div>
 
-    if (!shelter) {
-      return <div>Завантаження...</div>; // або будь-який інший варіант заповнення
+                            <div className="shelterEditInfo-field">
+                                <label><strong>Номер телефону</strong></label>
+                                <input type="tel" name="shelterPhone" />
+                            </div>
+
+                            <div className="shelterEditInfo-field">
+                                <label><strong>Адреса</strong></label>
+                                <input type="text" name="shelterAddress" />
+                            </div>
+
+                            <div className="shelterEditInfo-field-desc">
+                                <label><strong>Опис</strong></label>
+                                <textarea rows="4"></textarea>
+                            </div>
+                            <button className='shelterEditInfo-button'>Зберегти зміни</button>
+                        </form>
+                    )}
+
+                    {showRequestList && <RequestList />}
+
+                    {showAnimal && <AnimalList />}
+
+                </div>
+            </div>
+        )
     }
-
-    return (
-      <div className="container">
-        <div className="shelter-photo-greeting">
-          <label className="photo-container">
-            <input type="file" accept="image/*" onChange={this.handleFileChange} style={{ display: 'none' }} />
-            {shelterImage ? (
-              <img src={shelterImage} alt="Фото" className="selected-photo" style={{ objectFit: 'cover' }} />
-            ) : (
-              <div>фото</div>
-            )}
-          </label>
-          <div className="shelter-options">
-            <button className={`${showShelterAcc ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleShelterAcc}>
-              <img src={usericon} alt="[ ]" /> Акаунт
-            </button>
-
-            <button className={`${showEditAcc ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleEditAcc}>
-              <img src={editicon} alt="[ ]" /> Редагувати профіль
-            </button>
-
-            <button className={`${showRequestList ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleRequest}>
-              <img src={mailicon} alt="[ ]" /> Список заявок
-            </button>
-
-            <button className={`${showAnimal ? 'active-shelter-option' : 'inactive-shelter-option'}`} onClick={this.toggleAnimal}>
-              <img src={animalicon} alt="[ ]" /> Тваринки
-            </button>
-          </div>
-        </div>
-
-        <div className="shelter-options-open">
-
-            {showShelterAcc && (
-              <>
-                <div className="shelter-greeting">Вітаємо, {shelter.shelterName}!</div>
-                <div className="shelterInfo">
-                  <p>
-                    <label><strong>Ім'я:</strong> </label>
-                    <span id="name">{shelter.shelterName}</span>
-                  </p>
-
-                  <p>
-                    <label><strong>Email: </strong></label>
-                    <span id="email">{shelter.shelterEmail}</span>
-                  </p>
-
-                  <p>
-                    <label><strong>Номер телефону: </strong></label>
-                    <span id="phone">{"Немає"}</span>
-                  </p>
-                  <p>
-                    <label><strong>Адреса:</strong> </label>
-                    <span id="address">{"Немає"}</span>
-                  </p>
-
-                  <p>
-                    <label><strong>Опис:</strong> </label>
-                    <span id="description">{"Немає"}</span>
-                  </p>
-                </div>
-              </>
-            )}
-
-
-            {showEditAcc && (
-                <form className="shelter-edit-info">
-                <div className="shelterEditInfo-field">
-                  <label><strong>Ім'я</strong></label>
-                  <input type="text" name="shelterName" />
-                </div>
-                
-                <div className="shelterEditInfo-field">
-                  <label><strong>Електронна пошта</strong></label>
-                  <input type="tel" name="shelterPhone" />
-                </div>
-
-                <div className="shelterEditInfo-field">
-                  <label><strong>Номер телефону</strong></label>
-                  <input type="tel" name="shelterPhone" />
-                </div>
-
-                <div className="shelterEditInfo-field">
-                  <label><strong>Адреса</strong></label>
-                  <input type="text" name="shelterAddress" />
-                </div>                               
-
-                <div className="shelterEditInfo-field-desc">
-                  <label><strong>Опис</strong></label>
-                  <textarea rows="4"></textarea>
-                </div>  
-                <button className='shelterEditInfo-button'>Зберегти зміни</button>
-              </form>             
-            )}            
-
-            {showRequestList && <RequestList />}
-
-            {showAnimal && <AnimalList />}
-          
-        </div>
-      </div>
-    )
-  }
-};
+}
 
 export default withShelterAuth(ShelterAcc);

@@ -3,6 +3,8 @@ import catImage from '../img/cat.jpg';
 import dogImage from '../img/dog.jpg';
 import { AuthContext } from '../Contexts/AuthContext';
 import axios from 'axios';
+import { toast } from "react-toastify";
+import Swal from "sweetalert2";
 
 class AnimalTableItem extends Component {
     static contextType = AuthContext;
@@ -22,16 +24,48 @@ class AnimalTableItem extends Component {
         const { animal } = this.props;
 
         try {
-            await axios.post('http://127.0.0.1:8080/api/v1/applications/create', {
-                shelter_id: animal.shelter_id,
-                user_id: user.userID,
-                animal_id: animal.id
+            await Swal.fire({
+                title: 'Ви впевнені, що хочете подати заявку на прихисток даної тваринки?',
+                text: 'Тваринка - це велика відповідальність. Ви маєте це усвідомлювати',
+                icon: 'question',
+                showConfirmButton: true,
+                confirmButtonText: 'Так, подати заявку',
+                showCancelButton: true,
+                cancelButtonText: 'Ні, відмінити подання'
+            }).then(async (finalResult) => {
+                if (finalResult.isConfirmed) {
+                    await axios.post('http://127.0.0.1:8080/api/v1/applications/create', {
+                        shelter_id: animal.shelter_id,
+                        user_id: user.userID,
+                        animal_id: animal.id
+                    });
+                    await tryLoginUser();
+                    this.setState( { showAnimal: false } );
+                    await Swal.fire({
+                        title: 'Заявку на прихисток подано успішно!',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 5000,
+                        timerProgressBar: true
+                    });
+                } else if (finalResult.isDismissed) {
+                    await Swal.fire({
+                        title: 'Подачу заявки на прихисток відхилено!',
+                        icon: 'error',
+                        showConfirmButton: false,
+                        timer: 5000,
+                        timerProgressBar: true
+                    });
+                }
             });
-            await tryLoginUser();
-            this.setState( { showAnimal: false } );
-            alert('Заявку подано успішно!');
         } catch (error) {
-            alert('Сталася помилка при подачі заявки.');
+            if (error.response) {
+                toast.error("Сервер відхилив виконання запиту на прихисток тваринки!");
+            } else if (error.request) {
+                toast.error("Сервер не відповідає на запити!");
+            } else {
+                toast.error("Щось пішло не так: " + error.message);
+            }
         }
     }
 

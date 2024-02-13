@@ -3,6 +3,7 @@ import axios from 'axios';
 import { AuthContext } from "../Contexts/AuthContext";
 import AnimalTableItem from "./AnimalTableItem";
 import "../css/AnimalMain.css";
+import { toast } from "react-toastify";
 
 const AnimalTable = () => {
     const { user, userApplications, tryLoginUser } = useContext(AuthContext);
@@ -32,7 +33,13 @@ const AnimalTable = () => {
                     setAnimals(response.data);
                 }
             } catch (error) {
-                console.error('Помилка при завантаженні даних про тварин:', error);
+                if (error.response) {
+                    toast.error("Сервер відхилив у запиті на завантаження даних про тваринок на головній сторінці!");
+                } else if (error.request) {
+                    toast.error("Сервер не відповідає на запити!");
+                } else {
+                    toast.error("Щось пішло не так: " + error.message);
+                }
             }
         };
 

@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { withoutAuth } from '../Wrappers/WithoutAuth';
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 import "../css/Auth.css"
 
 class Signup extends Component {
@@ -38,6 +40,26 @@ class Signup extends Component {
 
     register = () => {
         const { name, email, password } = this.state;
+
+        if (name === '' || email === '' || password === '') {
+            toast.error("Всі поля є обов'язковими до заповнення!");
+            return;
+        }
+
+        const EMAIL_REGEX = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
+        if (!EMAIL_REGEX.test(email)) {
+            toast.error("Введено некоректний формат електронної пошти!");
+            return;
+        }
+
+        const PASSWORD_MINIMAL_LENGTH = 9;
+
+        if (password.length < PASSWORD_MINIMAL_LENGTH) {
+            toast.error("Пароль має містити не менше 9 символів!");
+            return;
+        }
+
         let entity;
         let entityData;
         const { showUserReg, showShelterReg } = this.state;
@@ -60,12 +82,23 @@ class Signup extends Component {
 
         const SIGNUP_API_URL = `http://127.0.0.1:8080/api/v1/${entity}/signup`;
 
-        axios.post(SIGNUP_API_URL, entityData).then(response => {
-            console.log('Реєстрацію пройдено успішно:', response.data);
+        axios.post(SIGNUP_API_URL, entityData).then(async () => {
+            await Swal.fire({
+                title: 'Вітаємо, ' + name + ', Вас успішно зареєстровано!',
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 5000,
+                timerProgressBar: true
+            });
             this.props.navigate("/login");
-        }).catch(error => {
-            console.error('Користувач із такою електронною поштою вже існує.', error.message);
-            alert('Користувач із такою електронною поштою вже існує. Спробуйте використати іншу пошту.');
+        }).catch((error) => {
+            if (error.response) {
+                toast.error("Користувач із такою електронною поштою вже існує!");
+            } else if (error.request) {
+                toast.error("Сервер не відповідає на запити!");
+            } else {
+                toast.error("Щось пішло не так: " + error.message);
+            }
         });
     }
 
