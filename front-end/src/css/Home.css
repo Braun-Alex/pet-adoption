@@ -42,7 +42,7 @@
 
   .main-photo {
     max-width: 25vw;
-    opacity: 0.8;
+    opacity: 0.9;
     height: auto;
     border-radius: 378px 0px 378px 378px;
   }
@@ -67,7 +67,7 @@
     max-width: 90vw;
     margin-top: 115px;
     border-radius: 0px 380px 380px 380px;
-    opacity: 0.8;
+    opacity: 0.9;
     position: absolute;
     z-index: -1;
   }

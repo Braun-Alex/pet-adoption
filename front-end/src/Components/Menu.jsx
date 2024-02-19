@@ -9,6 +9,7 @@ const Menu = ({menuActive, setMenuActive}) => {
             <div className='menu-content'>
                 <Link to="/" className="menu-item">Головна</Link>
                 <Link to="/animal-main" className="menu-item">Знайти друга</Link>
+                <Link to="/donate" className="menu-item">Підтримати проєкт</Link>
             </div>
         </div>
     );
