@@ -34,9 +34,9 @@ const AnimalTable = () => {
                 }
             } catch (error) {
                 if (error.response) {
-                    toast.error("Сервер відхилив у запиті на завантаження даних про тваринок на головній сторінці!");
+                    toast.error("Сервер відхилив у запиті на завантаження даних про тваринок на головній сторінці: " + error.message);
                 } else if (error.request) {
-                    toast.error("Сервер не відповідає на запити!");
+                    toast.error("Сервер не відповідає на запити: " + error.message);
                 } else {
                     toast.error("Щось пішло не так: " + error.message);
                 }
