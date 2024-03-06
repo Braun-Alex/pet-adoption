@@ -47,7 +47,7 @@ class AnimalList extends Component {
         const { createAnimalVisible } = this.state;
 
         return (
-            <div class="animal-from-shelter">
+            <div className="animal-from-shelter">
                 <button
                     aria-controls=''
                     onClick={() => this.setCreateAnimalVisible(true)}
@@ -56,10 +56,10 @@ class AnimalList extends Component {
                     Додати нову тваринку
                 </button>
                 <CreateAnimal show={createAnimalVisible} onHide={() => {this.setCreateAnimalVisible(false); this.fetchAnimals();}}/>
-                <ul class="list">
+                <ul className="list">
                     {this.state.animals.map(animal =>
                         <Link to={`/animal/${animal.id}`} className="no-underline">
-                            <li class="list-item">
+                            <li className="list-item">
                                 <p><strong>Ім'я:</strong> {animal.name}</p>
                                 <p><strong>Вид тваринки:</strong> {animal.type}</p>
                                 <p><strong>Стать:</strong> {animal.sex}</p>

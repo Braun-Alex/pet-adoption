@@ -14,7 +14,7 @@ function Header() {
             <header>
                 <div className='header-container'>
                     <div className="mob-menu">
-                    <div class="burger-btn" onClick={() => setMenuActive(!menuActive)}> 
+                    <div className="burger-btn" onClick={() => setMenuActive(!menuActive)}>
                         <span/>
                     </div>
                     </div>
@@ -38,10 +38,10 @@ function Header() {
                 )}
             </div>
             </div>
-        </header>        
+        </header>
             <Menu menuActive={menuActive} setMenuActive={setMenuActive}/>
         </>
-        
+
     );
 }
 

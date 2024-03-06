@@ -10,7 +10,7 @@ class ApplicationList extends Component {
     render() {
         const { userApplications } = this.context;
         return (
-            <div class="animal-from-shelter">
+            <div className="animal-from-shelter">
                 <Link to="/animal-main" className="link">
                     <button
                         aria-controls=''
@@ -23,9 +23,9 @@ class ApplicationList extends Component {
                     <div>Заявки на прихисток є відсутніми.</div>
                 )}
                 {userApplications && (
-                    <ul class="list">
+                    <ul className="list">
                         {userApplications.map(animal =>
-                            <li class="list-item">
+                            <li className="list-item">
                                 <p><strong>Ім'я тваринки:</strong> {animal.name}</p>
                                 <p><strong>Вид тваринки:</strong> {animal.type}</p>
                                 <p><strong>Стать тваринки:</strong> {animal.sex}</p>

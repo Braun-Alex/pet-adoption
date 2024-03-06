@@ -147,7 +147,7 @@ class CreateAnimal extends Component {
                                             onChange={(option) => this.handleInputChange('sex', option.value)}/>
                                     </div>
 
-                                    <div class="select-date" >
+                                    <div className="select-date" >
                                         <Dropdown options={mounths}
                                                   value={defaultOption}
                                                   placeholder="місяць"
