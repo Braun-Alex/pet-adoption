@@ -34,11 +34,11 @@ const AnimalTable = () => {
                 }
             } catch (error) {
                 if (error.response) {
-                    toast.error("Сервер відхилив у запиті на завантаження даних про тваринок на головній сторінці: " + error.message);
+                    toast.error(`Сервер відхилив у запиті на завантаження даних про тваринок на головній сторінці. Back-End hostname: ${process.env.REACT_APP_BACKEND_HOSTNAME}, Back-End port: ${process.env.REACT_APP_BACKEND_PORT}, error: ` + error.message);
                 } else if (error.request) {
-                    toast.error("Сервер не відповідає на запити: " + error.message);
+                    toast.error(`Сервер не відповідає на запити. Back-End hostname: ${process.env.REACT_APP_BACKEND_HOSTNAME}, Back-End port: ${process.env.REACT_APP_BACKEND_PORT}, error: ` + error.message);
                 } else {
-                    toast.error("Щось пішло не так: " + error.message);
+                    toast.error(`Щось пішло не так. Back-End hostname: ${process.env.REACT_APP_BACKEND_HOSTNAME}, Back-End port: ${process.env.REACT_APP_BACKEND_PORT}, error: ` + error.message);
                 }
             }
         };
