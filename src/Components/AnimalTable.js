@@ -11,7 +11,6 @@ const AnimalTable = () => {
 
     useEffect(() => {
         const fetchAnimals = async () => {
-            try {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/animals/all`);
                 console.log(response);
                 await tryLoginUser();
@@ -32,15 +31,6 @@ const AnimalTable = () => {
                 } else {
                     setAnimals(response.data);
                 }
-            } catch (error) {
-                if (error.response) {
-                    toast.error(`Сервер відхилив у запиті на завантаження даних про тваринок на головній сторінці. Back-End hostname: ${process.env.REACT_APP_BACKEND_HOSTNAME}, Back-End port: ${process.env.REACT_APP_BACKEND_PORT}, error: ` + error);
-                } else if (error.request) {
-                    toast.error(`Сервер не відповідає на запити. Back-End hostname: ${process.env.REACT_APP_BACKEND_HOSTNAME}, Back-End port: ${process.env.REACT_APP_BACKEND_PORT}, error: ` + error);
-                } else {
-                    toast.error(`Щось пішло не так. Back-End hostname: ${process.env.REACT_APP_BACKEND_HOSTNAME}, Back-End port: ${process.env.REACT_APP_BACKEND_PORT}, error: ` + error);
-                }
-            }
         };
 
         fetchAnimals();
