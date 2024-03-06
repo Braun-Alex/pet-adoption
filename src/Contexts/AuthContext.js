@@ -19,6 +19,8 @@ const initialState = {
     getUserApplications: () => {},
     tryLoginUser: () => {},
     tryLoginShelter: () => {},
+    logoutNotValidEntity: () => {},
+    logoutValidEntity: () => {},
     logout: () => {}
 };
 
@@ -73,7 +75,6 @@ export const AuthProvider = ({ children }) => {
             setAuthHeader(accessToken);
             return true;
         } catch (error) {
-            logout();
             return false;
         }
     }
@@ -149,7 +150,19 @@ export const AuthProvider = ({ children }) => {
         return false;
     }
 
-    const logout = async () => {
+    const logoutNotValidEntity = () => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        setAuthHeader(null);
+        setUser(null);
+        setUserApplications(null);
+        setShelter(null);
+        setEntityType('');
+        setEntityName('');
+        setIsAuthenticated(false);
+    }
+
+    const logoutValidEntity = async () => {
         try {
             await Swal.fire({
                 title: 'Ви впевнені, що хочете вийти з облікового запису?',
@@ -160,15 +173,7 @@ export const AuthProvider = ({ children }) => {
                 cancelButtonText: 'Ні, не виходити'
             }).then(async (finalResult) => {
                 if (finalResult.isConfirmed) {
-                    localStorage.removeItem('access_token');
-                    localStorage.removeItem('refresh_token');
-                    setAuthHeader(null);
-                    setUser(null);
-                    setUserApplications(null);
-                    setShelter(null);
-                    setEntityType('');
-                    setEntityName('');
-                    setIsAuthenticated(false);
+                    logoutNotValidEntity();
                     await Swal.fire({
                         title: 'Ви успішно вийшли з облікового запису!',
                         icon: 'info',
@@ -193,6 +198,9 @@ export const AuthProvider = ({ children }) => {
                 if (!success) {
                     success = await tryLoginShelter();
                 }
+                if (!success) {
+                    logoutNotValidEntity();
+                }
             }
             setIsAuthenticated(success);
         };
@@ -201,7 +209,7 @@ export const AuthProvider = ({ children }) => {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ isAuthenticated, user, userApplications, shelter, entityType, entityName, saveTokens, tryLoginUser, tryLoginShelter, logout }}>
+        <AuthContext.Provider value={{ isAuthenticated, user, userApplications, shelter, entityType, entityName, saveTokens, tryLoginUser, tryLoginShelter, logoutValidEntity }}>
             {children}
         </AuthContext.Provider>
     );
