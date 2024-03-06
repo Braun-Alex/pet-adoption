@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class Donate extends Component {
   render() {
-    return (<div>Donate Page</div>)
+    return (<div>Сторінка благодійних внесків</div>)
   }
 }
 

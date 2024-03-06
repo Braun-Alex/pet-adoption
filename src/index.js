@@ -4,12 +4,14 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import DB from './List/DB';
+import DB from './DB/DB';
+import { AuthProvider } from './Contexts/AuthContext';
 
-export const Context = createContext(null)
+export const Context = createContext(null);
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+    <AuthProvider>
   <Context.Provider value={{
     db: new DB(),
   }}>
@@ -19,6 +21,6 @@ root.render(
     </Routes>
   </BrowserRouter>
   </Context.Provider>
-  
+    </AuthProvider>
 );
 reportWebVitals();
