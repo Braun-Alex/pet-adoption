@@ -1,0 +1,172 @@
+version: '3'
+services:
+  user_service:
+    build: ./fast-api/user
+    container_name: user_service
+    command: /usr/local/bin/db-check.sh user_db 5432 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
+    volumes:
+      - ./fast-api/user/:/app/
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_DB=${USER_POSTGRES_DB}
+      - POSTGRES_USER=${USER_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${USER_POSTGRES_PASSWORD}
+      - DATABASE_URI=postgresql://${USER_POSTGRES_USER}:${USER_POSTGRES_PASSWORD}@user_db/${USER_POSTGRES_DB}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - AES_SECRET_KEY=${AES_SECRET_KEY}
+    depends_on:
+      - user_db
+    networks:
+      - my-network
+    restart: on-failure
+
+
+  user_db:
+    image: postgres:16.0-alpine3.17
+    container_name: user_db_container
+    environment:
+      POSTGRES_DB: ${USER_POSTGRES_DB}
+      POSTGRES_USER: ${USER_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${USER_POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+      - user_data_db:/var/lib/postgresql/data
+    restart: on-failure
+    networks:
+      - my-network
+
+  animal_service:
+    build: ./fast-api/animal
+    container_name: animal_service
+    command: /usr/local/bin/db-check.sh animal_db 5432 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
+    volumes:
+      - ./fast-api/animal/:/app/
+    ports:
+      - "8001:8000"
+    environment:
+      - POSTGRES_DB=${ANIMAL_POSTGRES_DB}
+      - POSTGRES_USER=${ANIMAL_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${ANIMAL_POSTGRES_PASSWORD}
+      - DATABASE_URI=postgresql://${ANIMAL_POSTGRES_USER}:${ANIMAL_POSTGRES_PASSWORD}@animal_db/${ANIMAL_POSTGRES_DB}
+      - SHELTER_SERVICE_HOST_URL=http://shelter_service:8000/api/v1/shelter/
+    depends_on:
+      - animal_db
+    networks:
+      - my-network
+    restart: on-failure
+
+
+  animal_db:
+    image: postgres:16.0-alpine3.17
+    container_name: animal_db_container
+    environment:
+      POSTGRES_DB: ${ANIMAL_POSTGRES_DB}
+      POSTGRES_USER: ${ANIMAL_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${ANIMAL_POSTGRES_PASSWORD}
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./init-animal-db.sh:/docker-entrypoint-initdb.d/init-animal-db.sh
+      - animal_data_db:/var/lib/postgresql/data
+    restart: on-failure
+    networks:
+      - my-network
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./nginx_config.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - animal_service
+      - user_service
+    networks:
+      - my-network
+
+  shelter_db:
+    image: postgres:16.0-alpine3.17
+    container_name: shelter_db_container
+    environment:
+      POSTGRES_DB: ${SHELTER_POSTGRES_DB}
+      POSTGRES_USER: ${SHELTER_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${SHELTER_POSTGRES_PASSWORD}
+    ports:
+      - "5434:5432"
+    volumes:
+      - ./init-shelter-db.sh:/docker-entrypoint-initdb.d/init-shelter-db.sh
+      - shelter_data_db:/var/lib/postgresql/data
+    restart: on-failure
+    networks:
+      - my-network
+
+  shelter_service:
+    build: ./fast-api/shelter
+    container_name: shelter_service
+    command: /usr/local/bin/db-check.sh shelter_db 5432 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
+    volumes:
+      - ./fast-api/shelter/:/app/
+    ports:
+      - "8002:8000"
+    environment:
+      - POSTGRES_DB=${SHELTER_POSTGRES_DB}
+      - POSTGRES_USER=${SHELTER_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${SHELTER_POSTGRES_PASSWORD}
+      - DATABASE_URI=postgresql://${SHELTER_POSTGRES_USER}:${SHELTER_POSTGRES_PASSWORD}@shelter_db/${SHELTER_POSTGRES_DB}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - AES_SECRET_KEY=${AES_SECRET_KEY}
+    depends_on:
+      - shelter_db
+    networks:
+      - my-network
+    restart: on-failure
+
+
+  application_service:
+    build: ./fast-api/application
+    container_name: application
+    command: /usr/local/bin/db-check.sh application_db 5432 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
+    volumes:
+      - ./fast-api/application:/app/
+    ports:
+      - "8003:8000"
+    environment:
+      - POSTGRES_DB=${APPLICATION_POSTGRES_DB}
+      - POSTGRES_USER=${APPLICATION_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${APPLICATION_POSTGRES_PASSWORD}
+      - DATABASE_URI=postgresql://${APPLICATION_POSTGRES_USER}:${APPLICATION_POSTGRES_PASSWORD}@application_db/${APPLICATION_POSTGRES_DB}
+    depends_on:
+      - application_db
+    networks:
+      - my-network
+
+  application_db:
+    image: postgres:16.0-alpine3.17
+    container_name: application_db_container
+    environment:
+      POSTGRES_DB: ${APPLICATION_POSTGRES_DB}
+      POSTGRES_USER: ${APPLICATION_POSTGRES_USER}
+      POSTGRES_PASSWORD: ${APPLICATION_POSTGRES_PASSWORD}
+    ports:
+      - "5435:5432"
+    volumes:
+      - ./init-application-db.sh:/docker-entrypoint-initdb.d/init-application-db.sh
+      - application_data_db:/var/lib/postgresql/data
+    restart: on-failure
+    networks:
+      - my-network
+
+volumes:
+  user_data_db: {}
+  animal_data_db: {}
+  shelter_data_db: {}
+  application_data_db: {}
+
+networks:
+  my-network:
+    driver: bridge
+

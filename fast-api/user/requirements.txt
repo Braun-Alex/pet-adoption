@@ -1,0 +1,12 @@
+fastapi
+SQLAlchemy
+uvicorn
+httpx
+psycopg2
+PyYAML
+python-jose
+pycryptodome
+python-dotenv
+python-multipart
+pytest
+pytest-lazy-fixture
