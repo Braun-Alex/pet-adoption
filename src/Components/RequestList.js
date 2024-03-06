@@ -28,7 +28,7 @@ class RequestList extends Component {
     const shelterId = shelter.shelterID; // Assuming shelterID is available in the context
 
     try {
-      const response = await axios.get(`${process.env.BACKEND_HOSTNAME}:${process.env.BACKEND_PORT}/api/v1/applications/get/?shelter_id=${shelterId}`);
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/applications/get/?shelter_id=${shelterId}`);
       this.setState({ requests: response.data });
       console.log(response.data);
       this.loadUserNames(response.data);
@@ -43,7 +43,7 @@ class RequestList extends Component {
     const users = {};
     try {
     const userPromises = requests.map(async (request) => {
-        const response = await axios.get(`${process.env.BACKEND_HOSTNAME}:${process.env.BACKEND_PORT}/api/v1/users/exists/${request.user_id}`);
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/users/exists/${request.user_id}`);
         users[request.id] = response.data.full_name; // Assuming the response contains the user's name
         console.log(users);
     });
@@ -59,7 +59,7 @@ class RequestList extends Component {
     const animals = {};
     try {
     const animalPromises = requests.map(async (request) => {
-        const response = await axios.get(`${process.env.BACKEND_HOSTNAME}:${process.env.BACKEND_PORT}/api/v1/animals/animal/${request.animal_id}`);
+        const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/animals/animal/${request.animal_id}`);
         animals[request.id] = response.data.name; // Assuming the response contains the user's name
         console.log(animals);
     });
@@ -78,7 +78,7 @@ class RequestList extends Component {
 
     try {
         // Make the POST request to the API to update the status
-        const response = await axios.post(`${process.env.BACKEND_HOSTNAME}:${process.env.BACKEND_PORT}/api/v1/applications/update_status`, {
+        const response = await axios.post(`${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/applications/update_status`, {
             id: requestId,
             status: status,
             shelter_id: shelterId

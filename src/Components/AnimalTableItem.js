@@ -34,7 +34,7 @@ class AnimalTableItem extends Component {
                 cancelButtonText: 'Ні, відмінити подання'
             }).then(async (finalResult) => {
                 if (finalResult.isConfirmed) {
-                    await axios.post(`${process.env.BACKEND_HOSTNAME}:${process.env.BACKEND_PORT}/api/v1/applications/create`, {
+                    await axios.post(`${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/applications/create`, {
                         shelter_id: animal.shelter_id,
                         user_id: user.userID,
                         animal_id: animal.id
