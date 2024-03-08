@@ -45,3 +45,14 @@ class ShelterService(ShelterServiceInterface):
         if not shelter_local:
             raise HTTPException(status.HTTP_404_NOT_FOUND)
         return shelter_local
+
+
+def update_shelter(self, shelter_id: str, new_shelter: dict):
+        shelter = self._shelter_controller.get_shelter_by_id(shelter_id)
+        if not shelter:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Shelter not found")
+        if new_shelter:
+            return self._shelter_controller.update_shelter(shelter_id, new_shelter)
+        else:
+            return shelter
+        

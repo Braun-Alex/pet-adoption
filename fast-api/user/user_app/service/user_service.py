@@ -41,7 +41,9 @@ class UserService(UserServiceInterface):
             logger.warn(error_msg:=f"User with email: {user.email} already exist")
             raise HTTPException(status.HTTP_409_CONFLICT)
 
-        return self._user_controller.create_user(user)
+        user_data = {**user.dict(), "about_me": ""} 
+        return self._user_controller.create_user(UserLocalRegistration(**user_data))
+
 
 
     def authorize_user(self, user: OAuth2PasswordRequestForm) -> Optional[TokenSchema]:
@@ -65,10 +67,12 @@ class UserService(UserServiceInterface):
             raise HTTPException(status.HTTP_404_NOT_FOUND)
 
         logger.info(f"{user_db.email= }, {user_db.full_name= }, {user_id=}")
+        user_output = UserLocalOtput(**user_db.dict())
+        return user_output
 
         # return str(user_db)
         # return(UserLocalOtput(id=user_db.id, full_name=user_db.full_name, email=self._user_controller._encrypter.decrypt_data(user_db.email)))
-        return convert_from_user_db_to_local(user_db=user_db)
+       # return convert_from_user_db_to_local(user_db=user_db)
 
     # def get_user(self, user_id: str) -> str:
     #     user_db = self._user_controller.get_user_by_id(user_id)

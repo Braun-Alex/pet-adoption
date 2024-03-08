@@ -27,7 +27,8 @@ services:
   user_service:
     build: ./fast-api/user
     container_name: user_service
-    command: /usr/local/bin/db-check.sh user_db 5432 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
+    # command: /usr/local/bin/db-check.sh user_db 5432 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
     volumes:
       - ./fast-api/user/:/app/
     ports:

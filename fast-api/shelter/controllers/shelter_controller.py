@@ -98,6 +98,11 @@ class ShelterController(ShelterControllerInterface):
             self._db.commit()
             self._db.refresh(db_shelter)
         return db_shelter
+    
+
+    def update_shelter_info(self, shelter_id: str, new_shelter: dict) -> Optional[ShelterDB]:
+        return self.update_shelter(shelter_id, new_shelter) #проксі до update_shelter
+    
 
     def delete_shelter(self, shelter_id: str) -> bool:
         db_shelter = self.get_shelter_by_id(shelter_id)

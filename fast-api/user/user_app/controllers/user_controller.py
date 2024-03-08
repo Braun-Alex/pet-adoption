@@ -53,8 +53,10 @@ class UserController(UserControllerInterface):
         user_db = UserDB(
                             email=self._encrypter.deterministic_encrypt_data(user.email),
                             full_name=self._encrypter.deterministic_encrypt_data(user.full_name),
+                            #description=self._encrypter.deterministic_encrypt_data(user.description),
                             password=self._hasher.hash_data(data=user.password, salt=random_salt),
                             salt=random_salt
+                           
                         )            
         try:
             self._db.add(user_db)

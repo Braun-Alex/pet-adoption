@@ -1,3 +1,4 @@
+from http.client import HTTPException
 from database import Base, engine, SessionLocal
 from service.shelter_service import ShelterService
 from controllers.shelter_controller import ShelterController
@@ -47,3 +48,14 @@ def get_curent_shelter(token_payload=Depends(get_current_shelter)):
 @shelter_route.get('/{id}', response_model=ShelterLocalOutput)
 def get_shelter(id: int):
     return shelter_service.get_shelter(shelter_id=id)
+
+@shelter_route.put("/{shelter_id}")
+def update_shelter_info(shelter_id: str, new_info: ShelterLocal, shelter_controller: ShelterController = Depends()):
+    try:
+        updated_shelter = shelter_controller.update_shelter_info(shelter_id, new_info.dict())
+        if not updated_shelter:
+            raise HTTPException(status_code=404, detail="Shelter not found")
+        return updated_shelter
+    except HTTPException as http_exception:
+        raise http_exception
+
