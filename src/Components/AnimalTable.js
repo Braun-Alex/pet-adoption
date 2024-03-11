@@ -12,7 +12,7 @@ const AnimalTable = () => {
     useEffect(() => {
         const fetchAnimals = async () => {
             try {
-                const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/animals/all`);
+                const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/animals/all`);
                 await tryLoginUser();
                 let allAnimals = [];
                 if (user && userApplications) {

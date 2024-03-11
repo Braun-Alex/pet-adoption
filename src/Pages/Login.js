@@ -73,7 +73,7 @@ class Login extends Component {
         formData.append('password', password);
 
         const entity = showUserAuth ? 'users' : 'shelter';
-        const AUTH_API_URL = `${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/${entity}/login`;
+        const AUTH_API_URL = `${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/${entity}/login`;
 
         try {
             const response = await axios.post(AUTH_API_URL, formData);

@@ -80,7 +80,7 @@ class Signup extends Component {
             }
         }
 
-        const SIGNUP_API_URL = `${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/${entity}/signup`;
+        const SIGNUP_API_URL = `${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/${entity}/signup`;
 
         axios.post(SIGNUP_API_URL, entityData).then(async () => {
             await Swal.fire({

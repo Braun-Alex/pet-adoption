@@ -26,7 +26,7 @@ class AnimalList extends Component {
         const { shelter } = this.context;
         const shelterId = shelter.shelterID;
         try {
-            const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/animals/get/?shelter_id=${shelterId}`);
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/animals/get/?shelter_id=${shelterId}`);
             this.setState({ animals: response.data });
         } catch (error) {
             if (error.response) {

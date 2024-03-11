@@ -34,7 +34,7 @@ class CreateAnimal extends Component {
 
     registerAnimal = async () => {
         const { name, type, sex, month, year, description } = this.state.animalData;
-        const API_URL = `${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/animals/add`;
+        const API_URL = `${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/animals/add`;
         const { shelter } = this.context;
         const shelterId = shelter.shelterID;
         try {

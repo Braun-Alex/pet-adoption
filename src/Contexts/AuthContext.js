@@ -69,7 +69,7 @@ export const AuthProvider = ({ children }) => {
         const refreshToken = localStorage.getItem('refresh_token');
         try {
             setAuthHeader(refreshToken);
-            const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/token/refresh`);
+            const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/token/refresh`);
             const accessToken = response.data.access_token;
             localStorage.setItem('access_token', accessToken);
             setAuthHeader(accessToken);
@@ -80,7 +80,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const getUserData = async () => {
-        const user = await getData(`${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/users/profile`);
+        const user = await getData(`${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/users/profile`);
         if (user) {
             return {
                 userID: user.id,
@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
     }
 
     const getShelterData = async () => {
-        const shelter = await getData(`${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/shelter/profile`);
+        const shelter = await getData(`${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/shelter/profile`);
         if (shelter) {
             return {
                 shelterID: shelter.id,
@@ -105,10 +105,10 @@ export const AuthProvider = ({ children }) => {
 
     const getUserApplications = async (user) => {
         try {
-            const applicationsResponse = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/applications/get/?user_id=${user.userID}`);
+            const applicationsResponse = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/applications/get/?user_id=${user.userID}`);
             const applications = applicationsResponse.data;
             for (const application of applications) {
-                const animalResponse = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}:${process.env.REACT_APP_BACKEND_PORT}/api/v1/animals/animal/${application.animal_id}`);
+                const animalResponse = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/animals/animal/${application.animal_id}`);
                 application.name = animalResponse.data.name;
                 application.type = animalResponse.data.type;
                 application.sex = animalResponse.data.sex;
