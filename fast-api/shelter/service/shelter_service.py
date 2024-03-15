@@ -1,5 +1,5 @@
 from controllers.shelter_controller import ShelterController
-from models.shelter_local_model import ShelterLocal, ShelterLocalRegistration
+from models.shelter_local_model import ShelterLocal, ShelterLocalRegistration, ShelterLocalUpdate
 from utilities.utilities import hash_data
 from fastapi import status, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
@@ -14,6 +14,8 @@ class ShelterServiceInterface:
         pass
 
     def get_shelter(self, shelter: str):
+        pass
+    def update_shelter_info(self, new_shelter_info: ShelterLocalUpdate):
         pass
 
 
@@ -40,19 +42,21 @@ class ShelterService(ShelterServiceInterface):
             "refresh_token": create_refresh_token(shelter_db.id),
         }
 
-    def get_shelter(self, shelter_id: str) -> str:
+    def get_shelter(self, shelter_id: int) -> str:
         shelter_local = self._shelter_controller.get_shelter_by_id(shelter_id)
         if not shelter_local:
             raise HTTPException(status.HTTP_404_NOT_FOUND)
         return shelter_local
 
 
-def update_shelter(self, shelter_id: str, new_shelter: dict):
-        shelter = self._shelter_controller.get_shelter_by_id(shelter_id)
-        if not shelter:
-            raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Shelter not found")
-        if new_shelter:
-            return self._shelter_controller.update_shelter(shelter_id, new_shelter)
-        else:
-            return shelter
+    def update_shelter(self, new_shelter_info: ShelterLocalUpdate):
+        # shelter = self._shelter_controller.get_shelter_by_id(new_shelter_info.id)
+        # if not shelter:
+        #     raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Shelter not found")
+        
+        return self._shelter_controller.update_shelter_info(shelter_data=new_shelter_info)
+        # if new_shelter:
+        #     return self._shelter_controller.update_shelter(shelter_id, new_shelter)
+        # else:
+        #     return shelter
         

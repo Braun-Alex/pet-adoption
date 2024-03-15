@@ -2,7 +2,7 @@ from http.client import HTTPException
 from database import Base, engine, SessionLocal
 from service.shelter_service import ShelterService
 from controllers.shelter_controller import ShelterController
-from models.shelter_local_model import ShelterLocal, ShelterLocalOutput, ShelterLocalRegistration
+from models.shelter_local_model import ShelterLocal, ShelterLocalOutput, ShelterLocalRegistration, ShelterLocalUpdate
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from dependencies.dependencies import get_current_shelter
@@ -50,9 +50,9 @@ def get_shelter(id: int):
     return shelter_service.get_shelter(shelter_id=id)
 
 @shelter_route.put("/{shelter_id}")
-def update_shelter_info(shelter_id: str, new_info: ShelterLocal, shelter_controller: ShelterController = Depends()):
+def update_shelter_info(shelter_id: int, new_shelter_info: ShelterLocalUpdate):
     try:
-        updated_shelter = shelter_controller.update_shelter_info(shelter_id, new_info.dict())
+        updated_shelter = shelter_service.update_shelter_info(new_shelter_info)
         if not updated_shelter:
             raise HTTPException(status_code=404, detail="Shelter not found")
         return updated_shelter

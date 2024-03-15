@@ -9,7 +9,6 @@ class ShelterLocal(BaseModel):
     phone_number: Optional[str] = None
     description: Optional[str] = None
     address: Optional[str] = None
-    description: Optional[str] = None
 
 
 class ShelterLocalRegistration(BaseModel):
@@ -21,5 +20,11 @@ class ShelterLocaAuthorization(BaseModel):
     email: str
     password: str
 
-class ShelterLocalOutput(ShelterLocal):
+class ShelterLocalUpdate(ShelterLocal):
     id: int
+
+class ShelterLocalOutput(ShelterLocalUpdate):
+    pass
+
+
+    
