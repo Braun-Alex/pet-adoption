@@ -84,6 +84,7 @@ services:
     volumes:
       - ./nginx_config.conf:/etc/nginx/conf.d/default.conf
       - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./data/images:/usr/share/nginx/html/images
     depends_on:
       - animal_service
       - user_service
