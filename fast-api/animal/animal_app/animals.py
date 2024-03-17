@@ -1,4 +1,4 @@
-import shutil
+import os
 import hashlib
 from fastapi import APIRouter, File, UploadFile, Form
 from animal_app.database import Base, engine, get_db, SessionLocal
@@ -22,14 +22,14 @@ Base.metadata.create_all(bind=engine)
 animal_service = AnimalService(AnimalController(db=db))
 
 
-def save_image(file: UploadFile, name: str):
-    image_location = f"/usr/share/nginx/html/images/{name}"
+def save_image(image: bytes, name: str, extension: str):
+    image_location = f"data/images/{name}{extension}"
     with open(image_location, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+        buffer.write(image)
     return image_location
 
 
-def hash_image(file_content: bytes) -> str:
+def hash_image(file_content: bytes):
     return hashlib.sha256(file_content).hexdigest()
 
 
@@ -51,10 +51,11 @@ async def add_animal(
 ):
     contents = await image.read()
     image_name = hash_image(contents)
-    save_image(image, image_name)
+    image_extension = os.path.splitext(image.filename)[1]
+    save_image(contents, image_name, image_extension)
     animal = AnimalLocalIn(
         name=name,
-        photo=f"/usr/share/nginx/html/images/{image_name}",
+        photo=f"https://api.takeapet.me/images/{image_name}",
         type=type,
         sex=sex,
         month=month,

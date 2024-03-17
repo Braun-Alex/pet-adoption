@@ -34,7 +34,7 @@ class AnimalController(AnimalControllerInterface):
         super().__init__()
         self._db = db
 
-    async def create_animal(self, animal: AnimalLocalIn) -> Optional[AnimalDB]:
+    def create_animal(self, animal: AnimalLocalIn) -> Optional[AnimalDB]:
         animal_db = AnimalDB(**animal.model_dump())
         self._db.add(animal_db)
         self._db.commit()
