@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import catImage from '../img/cat.jpg';
-import dogImage from '../img/dog.jpg';
 import { AuthContext } from '../Contexts/AuthContext';
 import axios from 'axios';
-import { toast } from "react-toastify";
-import Swal from "sweetalert2";
+import { toast } from 'react-toastify';
+import Swal from 'sweetalert2';
 
 class AnimalTableItem extends Component {
     static contextType = AuthContext;
@@ -73,7 +71,6 @@ class AnimalTableItem extends Component {
         const { showAnimal } = this.state;
         const { animal } = this.props;
         const { user } = this.context;
-        const animalImage = animal.type === 'кіт' ? catImage : dogImage;
 
         return (
             <div className='animal-item-container'>
@@ -81,7 +78,7 @@ class AnimalTableItem extends Component {
                     <div className='animal-item'>
                         <div>{animal.name}</div>
                         <div>
-                            <img src={animalImage} alt={'Фото ' + animal.type} className="animal-photo"/>
+                            <img src={animal.photo} alt={'Фотографія ' + animal.type} className="animal-photo"/>
                         </div>
                         <div className="grup-animal-info">
                             <div>Вид тваринки: {animal.type}</div>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
 import { AuthContext } from "../Contexts/AuthContext";
 import AnimalTableItem from "./AnimalTableItem";
 import "../css/AnimalMain.css";
@@ -49,7 +49,7 @@ const AnimalTable = () => {
         return (
             <div className="animal-table">
                 {animals.map(animal =>
-                    <AnimalTableItem key={animal.id} animal={animal}/>
+                    <AnimalTableItem key={animal.id} animal={animal} />
                 )}
             </div>
         );

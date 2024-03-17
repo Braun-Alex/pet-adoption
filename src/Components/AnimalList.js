@@ -58,15 +58,19 @@ class AnimalList extends Component {
                 <CreateAnimal show={createAnimalVisible} onHide={() => {this.setCreateAnimalVisible(false); this.fetchAnimals();}}/>
                 <ul className="list">
                     {this.state.animals.map(animal =>
-                        <Link to={`/animal/${animal.id}`} className="no-underline">
+                        <div className="no-underline">
                             <li className="list-item">
                                 <p><strong>Ім'я:</strong> {animal.name}</p>
+                                <p><strong>Фотографія:</strong></p>
+                                <div>
+                                    <img src={animal.photo} alt={'Фото ' + animal.type} className="animal-photo"/>
+                                </div>
                                 <p><strong>Вид тваринки:</strong> {animal.type}</p>
                                 <p><strong>Стать:</strong> {animal.sex}</p>
                                 <p><strong>Місяць народження:</strong> {animal.month + "." + animal.year}</p>
                                 <p><strong>Деталі:</strong> {animal.description}</p>
                             </li>
-                        </Link>
+                        </div>
                     )}
                 </ul>
 
