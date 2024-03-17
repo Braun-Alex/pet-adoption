@@ -22,7 +22,8 @@ class CreateAnimal extends Component {
                 year: '',
                 description: '',
                 shelter_id: 0
-            }
+            },
+            image: null
         };
     }
 
@@ -32,56 +33,73 @@ class CreateAnimal extends Component {
         }));
     };
 
+    handleImageChange = (e) => {
+        this.setState({
+            image: e.target.files[0]
+        });
+    };
+
     registerAnimal = async () => {
         const { name, type, sex, month, year, description } = this.state.animalData;
+        const { image } = this.state;
         const API_URL = `${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/animals/add`;
         const { shelter } = this.context;
         const shelterId = shelter.shelterID;
-        try {
-            await Swal.fire({
-                title: 'Ви впевнені, що хочете додати дану тваринку?',
-                text: 'Впевніться, що всі дані про тваринку є достовірними',
-                icon: 'question',
-                showConfirmButton: true,
-                confirmButtonText: 'Так, додати тваринку',
-                showCancelButton: true,
-                cancelButtonText: 'Ні, відмінити додавання'
-            }).then(async (finalResult) => {
-                if (finalResult.isConfirmed) {
-                    await axios.post(API_URL, {
-                        name,
-                        type,
-                        sex,
-                        month,
-                        year,
-                        description,
-                        shelter_id: shelterId
-                    });
-                    await Swal.fire({
-                        title: 'Тваринку було успішно додано!',
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 5000,
-                        timerProgressBar: true
-                    });
-                } else if (finalResult.isDismissed) {
-                    await Swal.fire({
-                        title: 'Додавання тваринки було скасовано!',
-                        icon: 'error',
-                        showConfirmButton: false,
-                        timer: 5000,
-                        timerProgressBar: true
-                    });
+
+        const formData = new FormData();
+        formData.append('name', name);
+        formData.append('type', type);
+        formData.append('sex', sex);
+        formData.append('month', month);
+        formData.append('year', year);
+        formData.append('description', description);
+        formData.append('shelter_id', shelterId);
+        if (!image) {
+            toast.error("Вам необхідно додати зображення тваринки!");
+        } else {
+            formData.append('image', image);
+            try {
+                await Swal.fire({
+                    title: 'Ви впевнені, що хочете додати дану тваринку?',
+                    text: 'Впевніться, що всі дані про тваринку є достовірними',
+                    icon: 'question',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Так, додати тваринку',
+                    showCancelButton: true,
+                    cancelButtonText: 'Ні, відмінити додавання'
+                }).then(async (finalResult) => {
+                    if (finalResult.isConfirmed) {
+                        await axios.post(API_URL, formData, {
+                            headers: {
+                                'Content-Type': 'multipart/form-data'
+                            }
+                        });
+                        await Swal.fire({
+                            title: 'Тваринку було успішно додано!',
+                            icon: 'success',
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true
+                        });
+                    } else if (finalResult.isDismissed) {
+                        await Swal.fire({
+                            title: 'Додавання тваринки було скасовано!',
+                            icon: 'error',
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true
+                        });
+                    }
+                });
+                this.props.onHide();
+            } catch (error) {
+                if (error.response) {
+                    toast.error("Сервер відхилив виконання запиту на додавання тваринки!");
+                } else if (error.request) {
+                    toast.error("Сервер не відповідає на запити!");
+                } else {
+                    toast.error("Щось пішло не так: " + error.message);
                 }
-            });
-            this.props.onHide();
-        } catch (error) {
-            if (error.response) {
-                toast.error("Сервер відхилив виконання запиту на додавання тваринки!");
-            } else if (error.request) {
-                toast.error("Сервер не відповідає на запити!");
-            } else {
-                toast.error("Щось пішло не так: " + error.message);
             }
         }
     };
@@ -125,7 +143,17 @@ class CreateAnimal extends Component {
                                 <form className='add-animal-container'>
                                     <div className="animal-name">
                                         <label>Ім'я тваринки</label>
-                                        <input type="text" onChange={(e) => this.handleInputChange('name', e.target.value)}/>
+                                        <input type="text"
+                                               onChange={(e) => this.handleInputChange('name', e.target.value)}/>
+                                    </div>
+
+                                    <div className="animal-image-upload">
+                                        <label htmlFor="animal-image">Фотографія: </label>
+                                        <input
+                                            type="file"
+                                            id="animal-image"
+                                            onChange={this.handleImageChange}
+                                        />
                                     </div>
 
                                     <div>
@@ -147,7 +175,7 @@ class CreateAnimal extends Component {
                                             onChange={(option) => this.handleInputChange('sex', option.value)}/>
                                     </div>
 
-                                    <div className="select-date" >
+                                    <div className="select-date">
                                         <Dropdown options={mounths}
                                                   value={defaultOption}
                                                   placeholder="місяць"
@@ -162,7 +190,8 @@ class CreateAnimal extends Component {
 
                                     <div className="animal-desc">
                                         <label>Опис</label>
-                                        <textarea rows="4" onChange={(e) => this.handleInputChange('description', e.target.value)}></textarea>
+                                        <textarea rows="4"
+                                                  onChange={(e) => this.handleInputChange('description', e.target.value)}></textarea>
                                     </div>
                                 </form>
                             </div>
