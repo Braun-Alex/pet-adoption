@@ -1,10 +1,11 @@
 from pydantic import BaseModel
 from typing import Optional
+import enum
 
 
 class ShelterLocal(BaseModel):
-    email: str
-    full_name: str
+    email: Optional[str] = None
+    name: Optional[str] = None
     address: Optional[str] = None
     phone_number: Optional[str] = None
     description: Optional[str] = None
@@ -13,7 +14,7 @@ class ShelterLocal(BaseModel):
 
 class ShelterLocalRegistration(BaseModel):
     email: str
-    full_name: str
+    name: str
     password: str
 
 class ShelterLocaAuthorization(BaseModel):
@@ -25,6 +26,23 @@ class ShelterLocalUpdate(ShelterLocal):
 
 class ShelterLocalOutput(ShelterLocalUpdate):
     pass
+
+
+class ShelterErrors(str, enum.Enum):
+    SHELTER_NOT_FOUND = "Shelter not found"
+    SHELTER_ALREADY_EXISTS = "Shelter already exists"
+    INVALID_PASSWORD = "Invalid password"
+    INVALID_EMAIL = "Invalid email"
+    INVALID_ID = "Invalid id"
+    INVALID_NAME = "Invalid name"
+    INVALID_ADDRESS = "Invalid address"
+    INVALID_PHONE_NUMBER = "Invalid phone number"
+    INVALID_DESCRIPTION = "Invalid description"
+    INVALID_TYPE = "Invalid type"
+  
+
+
+
 
 
     

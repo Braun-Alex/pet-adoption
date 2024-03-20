@@ -74,7 +74,7 @@ class Signup extends Component {
         } else if (showShelterReg) {
             entity = 'shelter';
             entityData = {
-                full_name: name,
+                name: name,
                 email: email,
                 password: password
             }

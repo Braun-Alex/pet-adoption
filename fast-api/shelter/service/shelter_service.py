@@ -15,7 +15,7 @@ class ShelterServiceInterface:
 
     def get_shelter(self, shelter: str):
         pass
-    def update_shelter_info(self, new_shelter_info: ShelterLocalUpdate):
+    def update_shelter_info(self, new_shelter_info: ShelterLocalUpdate) -> bool:
         pass
 
 
@@ -49,14 +49,7 @@ class ShelterService(ShelterServiceInterface):
         return shelter_local
 
 
-    def update_shelter(self, new_shelter_info: ShelterLocalUpdate):
-        # shelter = self._shelter_controller.get_shelter_by_id(new_shelter_info.id)
-        # if not shelter:
-        #     raise HTTPException(status.HTTP_404_NOT_FOUND, detail="Shelter not found")
-        
+    def update_shelter_info(self, new_shelter_info: ShelterLocalUpdate) -> bool:
         return self._shelter_controller.update_shelter_info(shelter_data=new_shelter_info)
-        # if new_shelter:
-        #     return self._shelter_controller.update_shelter(shelter_id, new_shelter)
-        # else:
-        #     return shelter
+
         
