@@ -43,6 +43,5 @@ class ApplicationList extends Component {
             </div>
         );
     }
-
 }
 export default withUserAuth(ApplicationList);

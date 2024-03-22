@@ -6,6 +6,7 @@ import 'react-dropdown/style.css';
 import { AuthContext } from '../Contexts/AuthContext';
 import { withAuth } from '../Wrappers/WithAuth';
 import axios from 'axios';
+import imageCompression from 'browser-image-compression';
 import { toast } from 'react-toastify';
 import Swal from 'sweetalert2';
 
@@ -33,10 +34,48 @@ class CreateAnimal extends Component {
         }));
     };
 
-    handleImageChange = (e) => {
-        this.setState({
-            image: e.target.files[0]
-        });
+    handleImageChange = async (e) => {
+        const originalImage = e.target.files[0];
+        if (!originalImage) {
+            toast.error("Вам необхідно додати зображення тваринки!");
+            return;
+        }
+
+        const options = {
+            maxSizeMB: 1
+        };
+
+        const oneMB = 1024 * 1024;
+        const isLargeImage = originalImage.size > oneMB;
+        const compressionAction = isLargeImage ? "стиснено і": "";
+
+        try {
+            if (isLargeImage) {
+                Swal.fire({
+                    title: 'Стиснення зображення...',
+                    html: 'Ваше зображення є значним за розміром. Зачекайте, будь ласка, поки воно стискається...',
+                    allowOutsideClick: false,
+                    showConfirmButton: false,
+                    willOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+            }
+            let compressedImage = originalImage;
+            while (compressedImage.size > oneMB) {
+                compressedImage = await imageCompression(compressedImage, options);
+            }
+            await Swal.fire({
+                title: `Зображення успішно ${compressionAction} завантажено!`,
+                icon: 'success',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true
+            });
+            this.setState({ image: new File([compressedImage], originalImage.name) });
+        } catch (error) {
+            toast.error("Сталася помилка при обробці зображення!");
+        }
     };
 
     registerAnimal = async () => {
@@ -47,6 +86,12 @@ class CreateAnimal extends Component {
         const shelterId = shelter.shelterID;
 
         const formData = new FormData();
+
+        if (name === "" || type === "" || sex === "" || month === "" || year === "" || description === "") {
+            toast.error("Вам необхідно заповнити всі поля!");
+            return;
+        }
+
         formData.append('name', name);
         formData.append('type', type);
         formData.append('sex', sex);
