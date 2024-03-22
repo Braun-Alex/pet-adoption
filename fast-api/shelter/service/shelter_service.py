@@ -31,8 +31,7 @@ class ShelterService(ShelterServiceInterface):
 
     def authorize_shelter(self, shelter: OAuth2PasswordRequestForm) -> TokenSchema:
         shelter_db = self._shelter_controller.get_shelter_by_email(shelter.username)
-        #if not shelter_db or hash_data(shelter.password + shelter_db.salt) != shelter_db.password:
-        if not shelter_db or shelter.password != shelter_db.password:
+        if not shelter_db or hash_data(shelter.password + shelter_db.salt) != shelter_db.password:
             raise HTTPException(status.HTTP_401_UNAUTHORIZED)
 
         return {

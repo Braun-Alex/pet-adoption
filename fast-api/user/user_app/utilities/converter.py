@@ -7,5 +7,5 @@ def convert_from_user_db_to_local(user_db: UserDB):
                             email=user_db.email if user_db.email is not None else "",
                             full_name=user_db.full_name if user_db.full_name is not None else "",
                             photo=user_db.photo if user_db.photo is not None else "",
-                            description= user_db.description if user_db.description is not None else ""
-                         )       
+                            description=user_db.description if user_db.description is not None else ""
+                         )
