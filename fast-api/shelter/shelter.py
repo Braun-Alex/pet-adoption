@@ -50,9 +50,10 @@ def get_curent_shelter(token_payload=Depends(get_current_shelter)):
 def get_shelter(id: int):
     return shelter_service.get_shelter(shelter_id=id)
 
-@shelter_route.put("/{shelter_id}", response_model=bool)
-def update_shelter_info(shelter_id: int, new_shelter_info: ShelterLocal):
-    logger.info(f"Handling PUT: /shelter/{shelter_id} with {new_shelter_info=}")
+@shelter_route.put("/update", response_model=bool)
+def update_shelter_info(new_shelter_info: ShelterLocal, token_payload=Depends(get_current_shelter)):
+    shelter_id = token_payload.sub
+    logger.info(f"Handling PUT: /shelter/update with {new_shelter_info=}")
     try:
         return shelter_service.update_shelter_info(new_shelter_info=ShelterLocalUpdate(**new_shelter_info.model_dump(), id=shelter_id))
 
