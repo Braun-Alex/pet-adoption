@@ -13,5 +13,5 @@ RUN pip install -r /app/requirements.txt \
 
 COPY . /app/
 
-COPY db-check.sh /usr/local/bin/
+COPY ./db-check.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/db-check.sh

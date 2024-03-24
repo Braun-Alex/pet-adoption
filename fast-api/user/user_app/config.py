@@ -54,6 +54,7 @@ def config_service() -> UserServiceInterface:
     else:
         logger.info("Data hashing is turned OFF")
         hasher = DummyHasher
+        
     
     user_controller = UserController(db=db, encrypter=encrypter, hasher=hasher)
     

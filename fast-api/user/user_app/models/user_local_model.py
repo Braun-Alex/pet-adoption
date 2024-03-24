@@ -8,10 +8,12 @@ class UserLocalBase(BaseModel):
     email: Optional[str] = None
     full_name: Optional[str] = None
     photo: Optional[str] = ""
-    description: Optional[str] = ""
+    description: Optional[str] = "" 
+
  
-class UserLocalOtput(UserLocalBase):
+class UserLocalOutput(BaseModel):
     id: int
+
 
 # Properties to receive via API on creation 
 class UserLocalRegistration(BaseModel):
@@ -35,3 +37,4 @@ class TokenPayload(BaseModel):
     is_shelter: bool = None
 
  
+#тут також треба буде щось додати про юзера. змінну user_data(?)

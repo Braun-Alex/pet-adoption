@@ -15,6 +15,7 @@ class UserDB(Base):
 
     photo = Column(String, nullable=True)
     description =Column(String, nullable=True)
+  
 
     def to_dict(self):
         return {
