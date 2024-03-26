@@ -41,9 +41,19 @@ class AnimalController(AnimalControllerInterface):
         self._db.refresh(animal_db)
         return animal_db
 
-    def update_animal(self, animal_id: int, updated_data: dict) -> Optional[AnimalDB]:
+    #def update_animal(self, animal_id: int, updated_data: dict) -> Optional[AnimalDB]:
         return super().update_animal(animal_id, updated_data)
-
+    def update_animal(self, animal_id: int, updated_data: dict) -> Optional[AnimalDB]:
+        animal_db = self._db.query(AnimalDB).filter(AnimalDB.id == animal_id).first()
+        if animal_db:
+            for field, value in updated_data.items():
+                setattr(animal_db, field, value)
+            self._db.commit()
+            self._db.refresh(animal_db)
+            return animal_db
+        return None
+    
+    
     def get_animal(self, animal_id: int) -> Optional[AnimalDB]:
         return self._db.query(AnimalDB).filter(AnimalDB.id == animal_id).first()
 
@@ -55,3 +65,11 @@ class AnimalController(AnimalControllerInterface):
 
     def delete_animal(self, animal_id: int) -> bool:
         return super().delete_animal(animal_id)
+    
+    def delete_animal(self, animal_id: int) -> bool:
+        animal_db = self._db.query(AnimalDB).filter(AnimalDB.id == animal_id).first()
+        if animal_db:
+            self._db.delete(animal_db)
+            self._db.commit()
+            return True
+        return False

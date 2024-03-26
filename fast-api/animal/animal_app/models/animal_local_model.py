@@ -22,3 +22,4 @@ class AnimalLocalUpdate(BaseModel):
     month:      Optional[str] = None
     year:       Optional[str] = None
     shelter_id: Optional[int] = None
+    description: Optional[str] = None

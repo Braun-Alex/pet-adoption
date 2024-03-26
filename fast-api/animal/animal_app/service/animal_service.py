@@ -29,6 +29,10 @@ class AnimaServicelInterface:
     def is_shelter_presented(shelter_id:int) -> bool:
         pass
 
+    @abstractmethod
+    def update_animal(self, animal_id: int, updated_data: dict) -> Optional[AnimalLocalOut]:
+        pass
+
 class AnimalService(AnimaServicelInterface):
     def __init__(self, animal_controller: AnimalController) -> None:
         super().__init__()
@@ -87,3 +91,14 @@ class AnimalService(AnimaServicelInterface):
         r = httpx.get(request)
         logger.info(f"{__name__} : {r.content=}")
         return True if r.status_code == 200 else False
+    
+    def update_animal(self, animal_id: int, updated_data: dict) -> Optional[AnimalLocalOut]:
+        animal_db = self._animal_controller.get_animal(animal_id)
+        if animal_db:
+            updated_animal = self._animal_controller.update_animal(animal_id, updated_data)
+            if updated_animal:
+                return AnimalLocalOut(**updated_animal.__dict__)
+            else:
+                return None  
+        else:
+            return None

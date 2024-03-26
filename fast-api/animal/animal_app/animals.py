@@ -1,10 +1,11 @@
+from http.client import HTTPException
 import os
 import hashlib
 from fastapi import APIRouter, File, UploadFile, Form
 from animal_app.database import Base, engine, get_db, SessionLocal
 from animal_app.service.animal_service import AnimalService
 from animal_app.controllers.animal_controller import AnimalController
-from animal_app.models.animal_local_model import AnimalLocalIn, AnimalLocalOut
+from animal_app.models.animal_local_model import AnimalLocalIn, AnimalLocalOut, AnimalLocalUpdate
 from typing import Optional
 
 from typing import List
@@ -80,3 +81,39 @@ def get_animal(id: int):
 @animals_router.get("/get/", response_model=List[AnimalLocalOut])
 def get_animals_by_shelter_id(shelter_id: int):
     return animal_service.get_animals_by_shelter_id(id=shelter_id)
+
+
+@animals_router.put("/animal/{id}")
+def update_animal(id: int, updated_data: AnimalLocalUpdate):
+    animal = animal_service.get_animal(id)
+    if not animal:
+        raise HTTPException(status_code=404, detail="Animal not found")
+    updated_animal = animal_service.update_animal(id, updated_data)
+    return updated_animal
+
+
+@animals_router.patch("/animal/{id}")
+def partial_update_animal(id: int, updated_data: AnimalLocalUpdate):
+    animal_db = animal_service.get_animal(id)
+    if animal_db:
+        # Об'єкт тварини знайдено, тому створюємо об'єкт AnimalLocalOut
+        animal_local = AnimalLocalOut(**animal_db.__dict__)
+        # Проводимо оновлення об'єкта animal_local за допомогою даних з updated_data
+        # Наприклад:
+        for field, value in updated_data.dict().items():
+            setattr(animal_local, field, value)
+        # Повертаємо оновлений об'єкт animal_local
+        return animal_local
+    else:
+        # Якщо тварина не знайдена, повертаємо None або розраховуємо на обробку помилки
+        return None
+
+
+
+
+#def partial_update_animal(id: int, updated_data: AnimalLocalUpdate):
+   # animal = animal_service.get_animal(id)
+   # if not animal:
+    #    raise HTTPException(status_code=404, detail="Animal not found")
+    #updated_animal = animal_service.partial_update_animal(id, updated_data)
+    #return updated_animal
