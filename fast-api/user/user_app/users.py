@@ -61,14 +61,3 @@ def authorize_user(user: OAuth2PasswordRequestForm = Depends()):
 def get_user(token_payload: TokenPayload = Depends(get_current_user)):
     logger.info(f"Handling {PROFILE_URL}: {token_payload=}")
     return user_service.get_user(user_id=token_payload.sub)
-
-@users_route.put("/profile", response_model=UserLocalOutput)
-def update_user(user_data: UserLocalRegistration, token_payload: TokenPayload = Depends(get_current_user)):
-    user_id = token_payload.sub
-    updated_user = user_service.update_user(user_id=user_id, user_data=user_data)
-
-    if updated_user is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-
-    return updated_user
-

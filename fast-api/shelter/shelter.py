@@ -61,3 +61,8 @@ def update_shelter_info(new_shelter_info: ShelterLocal, token_payload=Depends(ge
         logger.error(f"RuntimeError: ")
         raise HTTPException(status_code=404, detail=str(error))
 
+@shelter_route.delete("/delete", response_model=bool)
+def remove_shelter(token_payload=Depends(get_current_shelter)):
+    shelter_id = token_payload.sub
+    logger.info(f"Handling DELETE: /shelter/delete with {shelter_id=}")
+    return shelter_service.remove_shelter(shelter_id=shelter_id)

@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from user_app.models.user_db_model import UserDB
-from user_app.models.user_local_model import UserLocalRegistration, UserLocalOtput, UserLocalAuthorization
+from user_app.models.user_local_model import UserLocalRegistration, UserLocalOutput, UserLocalAuthorization
 from uuid import uuid4
 
 from user_app.utilities.converter import convert_from_user_db_to_local
@@ -67,7 +67,7 @@ class UserController(UserControllerInterface):
             return False
         return True
 
-    def get_user_by_id(self, user_id: int) -> Optional[UserLocalOtput]:
+    def get_user_by_id(self, user_id: int) -> Optional[UserDB]:
         return self._db.query(UserDB).filter(UserDB.id == user_id).first()
 
         

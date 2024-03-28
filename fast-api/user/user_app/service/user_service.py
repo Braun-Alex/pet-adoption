@@ -1,5 +1,5 @@
 from typing import Optional
-from user_app.models.user_local_model import UserLocalBase, UserLocalOtput, UserLocalRegistration, UserLocalAuthorization
+from user_app.models.user_local_model import UserLocalBase, UserLocalOutput, UserLocalRegistration, UserLocalAuthorization, UserLocalOutput
 from user_app.controllers.user_controller import UserController
 from fastapi import status, HTTPException
 
@@ -21,7 +21,7 @@ class UserServiceInterface:
     def authorize_user(self, user_local:UserLocalAuthorization):
         pass
 
-    def get_user(self, user_id: int) -> list[UserLocalOtput]:
+    def get_user(self, user_id: int) -> list[UserLocalOutput]:
         pass
 
     def is_user_exists(self, user_id: int) -> bool:
@@ -58,7 +58,7 @@ class UserService(UserServiceInterface):
         return TokenSchema(access_token=create_access_token(user_db.id), refresh_token=create_refresh_token(user_db.id))
 
 
-    def get_user(self, user_id: int) -> UserLocalOtput:
+    def get_user(self, user_id: int) -> UserLocalOutput:
         user_db = self._user_controller.get_user_by_id(user_id)
         logger.info(f"{user_db=}")
 
@@ -67,11 +67,11 @@ class UserService(UserServiceInterface):
             raise HTTPException(status.HTTP_404_NOT_FOUND)
 
         logger.info(f"{user_db.email= }, {user_db.full_name= }, {user_id=}")
-        user_output = UserLocalOtput(**user_db.dict())
+        user_output = UserLocalOutput(**user_db.__dict__())
         return user_output
 
         # return str(user_db)
-        # return(UserLocalOtput(id=user_db.id, full_name=user_db.full_name, email=self._user_controller._encrypter.decrypt_data(user_db.email)))
+        # return(UserLocalOutput(id=user_db.id, full_name=user_db.full_name, email=self._user_controller._encrypter.decrypt_data(user_db.email)))
        # return convert_from_user_db_to_local(user_db=user_db)
 
     # def get_user(self, user_id: str) -> str:

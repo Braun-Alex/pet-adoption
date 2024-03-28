@@ -4,6 +4,8 @@ from utilities.utilities import hash_data
 from fastapi import status, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from utilities.utilities import TokenSchema, create_access_token, create_refresh_token
+import httpx
+import os
 
 
 class ShelterServiceInterface:
@@ -15,7 +17,11 @@ class ShelterServiceInterface:
 
     def get_shelter(self, shelter: str):
         pass
+
     def update_shelter_info(self, new_shelter_info: ShelterLocalUpdate) -> bool:
+        pass
+
+    def remove_shelter(self, shelter_id: int) -> bool:
         pass
 
 
@@ -51,5 +57,13 @@ class ShelterService(ShelterServiceInterface):
 
     def update_shelter_info(self, new_shelter_info: ShelterLocalUpdate) -> bool:
         return self._shelter_controller.update_shelter_info(shelter_data=new_shelter_info)
+    
+    def remove_shelter(self, shelter_id: int) -> bool:
+        pass
+
+    def delete_all_animals(self, shelter_id: int, token: str):
+        request = f"{os.getenv('ANIMAL_SERVICE_HOST_URL')}/delete_all_by_shelter"
+
+        
 
         

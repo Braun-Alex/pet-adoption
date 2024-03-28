@@ -5,6 +5,7 @@ from animal_app.database import Base, engine, get_db, SessionLocal
 from animal_app.service.animal_service import AnimalService
 from animal_app.controllers.animal_controller import AnimalController
 from animal_app.models.animal_local_model import AnimalLocalIn, AnimalLocalOut
+from animal_app.dependencies.dependencies import get_current_shelter
 
 from typing import List
 
@@ -48,3 +49,9 @@ def get_animal(id: int):
 @animals_router.get("/get/", response_model=List[AnimalLocalOut])
 def get_animals_by_shelter_id(shelter_id: int):
     return animal_service.get_animals_by_shelter_id(id=shelter_id)
+
+@animals_router.delete("/delete_all_by_shelter", response_model=bool)
+def delete_all_animals_by_shelter(token = Depends(get_current_shelter)):
+    logger.info(f"Handling /delete_all_by_shelter: shelter_id: {token.sub}")
+    animal_service.delete_all_animals_by_shelter(shelter_id=token.sub)
+    return True

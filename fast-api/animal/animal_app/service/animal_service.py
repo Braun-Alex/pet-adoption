@@ -28,6 +28,8 @@ class AnimaServicelInterface:
     @abstractmethod
     def is_shelter_presented(shelter_id:int) -> bool:
         pass
+    def delete_all_animals_by_shelter(self, shelter_id: int):
+        pass
 
 class AnimalService(AnimaServicelInterface):
     def __init__(self, animal_controller: AnimalController) -> None:
@@ -87,3 +89,7 @@ class AnimalService(AnimaServicelInterface):
         r = httpx.get(request)
         logger.info(f"{__name__} : {r.content=}")
         return True if r.status_code == 200 else False
+    
+    def delete_all_animals_by_shelter(self, shelter_id: int):
+        logger.info(f"Deleting all animals by shelter_id: {shelter_id}")
+        return self._animal_controller.delete_all_animals_by_shelter(shelter_id=shelter_id)

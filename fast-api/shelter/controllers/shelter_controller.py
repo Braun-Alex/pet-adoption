@@ -58,7 +58,7 @@ class ShelterControllerInterface(ABC):
         pass
 
     @abstractmethod
-    def delete_shelter(self, shelter_id: str) -> bool:
+    def remove_shelter(self, shelter_id: int) -> bool:
         pass
 
 
@@ -87,7 +87,8 @@ class ShelterController(ShelterControllerInterface):
 
     def get_shelter_by_id(self, shelter_id: int) -> Optional[ShelterLocalOutput]:
         shelter_bd = self._get_shelter_by_id(shelter_id)
-        return convert_from_shelter_db_to_local(shelter_db=shelter_bd)
+        return ShelterLocalOutput(**shelter_bd.__dict__) if shelter_bd else None
+        # return convert_from_shelter_db_to_local(shelter_db=shelter_bd)
 
     def get_shelter_by_name(self, shelter_name: str) -> Optional[ShelterDB]:
         return self._db.query(ShelterDB).filter(ShelterDB.name == shelter_name).first()
@@ -119,7 +120,7 @@ class ShelterController(ShelterControllerInterface):
     #     return self.update_shelter(shelter_id, new_shelter) #проксі до update_shelter
     
 
-    def delete_shelter(self, shelter_id: str) -> bool:
+    def remove_shelter(self, shelter_id: int) -> bool:
         db_shelter = self.get_shelter_by_id(shelter_id)
         if db_shelter:
             self._db.delete(db_shelter)

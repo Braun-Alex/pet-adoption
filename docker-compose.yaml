@@ -77,6 +77,7 @@ services:
       - POSTGRES_PASSWORD=${ANIMAL_POSTGRES_PASSWORD}
       - DATABASE_URI=postgresql://${ANIMAL_POSTGRES_USER}:${ANIMAL_POSTGRES_PASSWORD}@animal_db/${ANIMAL_POSTGRES_DB}
       - SHELTER_SERVICE_HOST_URL=http://shelter_service:8000/api/v1/shelter/
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
     depends_on:
       - animal_db
     networks:
