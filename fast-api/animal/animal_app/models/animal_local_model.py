@@ -17,6 +17,7 @@ class AnimalLocalOut(AnimalLocalIn):
 
 class AnimalLocalUpdate(BaseModel):
     name:       Optional[str] = None
+    photo:      Optional[str] = None
     type:       Optional[str] = None
     sex:        Optional[str] = None
     month:      Optional[str] = None
