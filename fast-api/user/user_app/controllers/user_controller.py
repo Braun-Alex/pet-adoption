@@ -1,5 +1,4 @@
 import os
-
 from abc import ABC, abstractmethod
 from typing import List, Optional
 from sqlalchemy.orm import Session
@@ -8,14 +7,19 @@ from user_app.models.user_local_model import UserLocalRegistration, UserLocalOtp
 from uuid import uuid4
 
 from user_app.utilities.converter import convert_from_user_db_to_local
-
 from user_app.utilities.encrypter.aes_encrypter import Encrypter
 from user_app.utilities.hasher import Hasher
-
 
 import logging
 
 logger = logging.getLogger(__name__)
+
+
+from abc import ABC, abstractmethod
+from typing import Optional
+from models.user_db_model import UserDB
+from models.user_local_model import UserLocalRegistration
+from user_app.models.user_db_model import UserDB
 
 
 class UserControllerInterface(ABC):
@@ -82,6 +86,9 @@ class UserController(UserControllerInterface):
             self._db.commit()
             self._db.refresh(db_user)
         return db_user
+
+
+
 
     def delete_user(self, user_id: str) -> bool:
         db_user = self.get_user_by_id(user_id)
