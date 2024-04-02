@@ -13,6 +13,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+BACKEND_HOSTNAME = os.environ['BACKEND_HOSTNAME']
+
 animals_router = APIRouter()
 
 db = SessionLocal()
@@ -55,7 +57,7 @@ async def add_animal(
     save_image(contents, image_name, image_extension)
     animal = AnimalLocalIn(
         name=name,
-        photo=f"https://api.takeapet.me/images/{image_name}",
+        photo=f"{BACKEND_HOSTNAME}/images/{image_name}",
         type=type,
         sex=sex,
         month=month,
