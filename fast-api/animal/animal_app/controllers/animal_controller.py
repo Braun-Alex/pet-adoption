@@ -63,7 +63,9 @@ class AnimalController(AnimalControllerInterface):
         return self._db.query(AnimalDB).filter(AnimalDB.shelter_id == shelter_id).all()
 
     def delete_animal(self, animal_id: int) -> bool:
-        return super().delete_animal(animal_id)
+        animal = self._db.query(AnimalDB).filter(AnimalDB.id == animal_id).delete()
+        self._db.commit()
+        return True
     
     def delete_all_animals_by_shelter(self, shelter_id: int):
         amount = self._db.query(AnimalDB).filter(AnimalDB.shelter_id == shelter_id).delete()

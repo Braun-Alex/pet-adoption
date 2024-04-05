@@ -50,6 +50,12 @@ def get_animal(id: int):
 def get_animals_by_shelter_id(shelter_id: int):
     return animal_service.get_animals_by_shelter_id(id=shelter_id)
 
+@animals_router.delete("/delete/{id}", response_model=bool)
+def delete_animal(id: int, shelter_token = Depends(get_current_shelter)):
+    logger.info(f"Handling /delete/{id}: shelter_id: {shelter_token.sub}")
+
+    return animal_service.delete_animal(id=id, shelter_id=int(shelter_token.sub))
+
 @animals_router.delete("/delete_all_by_shelter", response_model=bool)
 def delete_all_animals_by_shelter(token = Depends(get_current_shelter)):
     logger.info(f"Handling /delete_all_by_shelter: shelter_id: {token.sub}")
