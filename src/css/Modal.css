@@ -1,4 +1,4 @@
-.create-animal-modal {
+.modal {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -6,12 +6,10 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
-    background: rgb(255, 248, 240);
-    cursor: default;
-    color: #645A4C;
+    background: rgba(245, 238, 222, 0.78);
 }
 
-.create-animal-overlay {
+.overlay {
   display: none;
   position: fixed;
   top: 0;
@@ -21,13 +19,12 @@
   background: rgba(159, 133, 62, 0.311);
 }
 
-.create-animal-modal-content {  
+.modal-content {  
     display: flex;
     flex-direction: column;
-
 }
 
-.create-animal-close {
+.close {
   position: absolute;
   right: 20px;
   top: 5px;
@@ -35,7 +32,7 @@
   font-size: 25px;
 }
 
-.create-animal-header{
+.add-animal-header{
     color: rgba(36, 29, 17, 0.79);
     text-align: center;
     font-size: 21px;
@@ -45,7 +42,7 @@
 .animal-name{
     height: 50px;
     margin: 15px auto;
-    padding: 8px 0 0 10px;
+    padding: 8px 0 0 15px;
     text-align: left;
     width: 340px;
     border-radius: 4px;
@@ -61,7 +58,7 @@
 .animal-desc{   
     height: 100px;
     margin: 15px auto;
-    padding: 8px 0 0 10px;
+    padding: 8px 0 0 15px;
     text-align: left;
     width: 340px;
     border-radius: 4px;
@@ -105,45 +102,29 @@
 .select-date {
     display: flex;
     flex-direction: row;
-    align-items: center;
 }
-
 .year {
-    margin-left: 14px;
+    margin-left: 20px;
 }
 
-.month{
-    margin-left: 14px;
-}
 
-.create-animal-button-container{
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.create-animal-button{
-    padding: 8px 0px;
-    margin-top: 10px;
-    font-size: 16px;
-    color: #574d40;
-    width: 95%;
-    border-radius: 16px;
-    border: 1px solid #b6a892;    
-    background-color: #faf6ef;
+.create-animal-button {
+    background-color: #F2F1ED;
+    border: 1px solid #9e8e78;
+    color: #645A4C;
+    letter-spacing: 1px;
+    padding: 7px 0;
+    border-radius: 50px;
     cursor: pointer;
-    transition: all 500ms ease;
+    font-size: 16px;
 }
 
-.create-animal-button:hover {
-    transform: scale(1.02);
-    box-shadow: 0px 0px 2px 0px #cbbda3;
-}
 
 @media (max-width: 500px) {
     .modal{
         width:75%;
     }
+
     .animal-name{
         width: 95%;
     }
