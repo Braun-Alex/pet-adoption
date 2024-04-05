@@ -49,6 +49,7 @@ class AnimalList extends Component {
         return (
             <div className="animal-from-shelter">
                 <button
+                    aria-controls=''
                     onClick={() => this.setCreateAnimalVisible(true)}
                     className='add-animal-button'
                 >

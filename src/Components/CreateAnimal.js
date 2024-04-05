@@ -155,6 +155,9 @@ class CreateAnimal extends Component {
         const modalStyles = {
             display: show ? 'block' : 'none',
         };
+        const overlayStyles = {
+            display: show ? 'block' : 'none',
+        };
 
         const types = ['кіт', 'пес'];
         const sex = ['хлопчик', 'дівчинка'];
@@ -164,33 +167,33 @@ class CreateAnimal extends Component {
 
         return (
             <>
-                <div className="create-animal-overlay" style={modalStyles}>
+                <div className="overlay" style={overlayStyles}>
                     <Modal
                         isOpen={show}
                         onRequestClose={onHide}
-                        className="create-animal-modal"
+                        className="modal"
                         style={modalStyles}
                         centered
                     >
-                        <div className='create-animal-modal-content'>
-                            <span className="create-animal-close" onClick={onHide}>&times;</span>
+                        <div className='modal-content'>
+                            <span className="close" onClick={onHide}>&times;</span>
 
                             <div>
-                                <div className="create-animal-header">
+                                <div className="add-animal-header">
                                     Додати тваринку
                                 </div>
                             </div>
 
                             <div>
-                                <form className='create-animal-container'>
+                                <form className='add-animal-container'>
                                     <div className="animal-name">
                                         <label>Ім'я тваринки</label>
                                         <input type="text"
                                                onChange={(e) => this.handleInputChange('name', e.target.value)}/>
                                     </div>
 
-                                    <div>
-                                        <label>Фотографія: </label>
+                                    <div className="animal-image-upload">
+                                        <label htmlFor="animal-image">Фотографія: </label>
                                         <input
                                             type="file"
                                             id="animal-image"
@@ -216,13 +219,11 @@ class CreateAnimal extends Component {
                                             className="animal-sex"
                                             onChange={(option) => this.handleInputChange('sex', option.value)}/>
                                     </div>
-                                    
-                                    <div className="select-date">   
-                                        <div className="modal-text">Дата народження</div>                                     
+
+                                    <div className="select-date">
                                         <Dropdown options={mounths}
                                                   value={defaultOption}
                                                   placeholder="місяць"
-                                                  className='month'
                                                   onChange={(option) => this.handleInputChange('month', option.value)}/>
                                         <Dropdown
                                             options={years}
@@ -239,9 +240,8 @@ class CreateAnimal extends Component {
                                     </div>
                                 </form>
                             </div>
-                            <div className="create-animal-button-container">
-                                <button className="create-animal-button" onClick={this.registerAnimal}>Додати</button>
-                            </div>
+
+                            <button className="create-animal-button" onClick={this.registerAnimal}>Додати</button>
                         </div>
                     </Modal>
                 </div>
