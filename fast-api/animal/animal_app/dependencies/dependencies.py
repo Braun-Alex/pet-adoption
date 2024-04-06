@@ -10,12 +10,17 @@ from pydantic import ValidationError
 JWT_SECRET_KEY = os.environ['JWT_SECRET_KEY']
 ALGORITHM = "HS256"
 
+schema_valid = OAuth2PasswordBearer(
+    tokenUrl=os.environ['SHELTER_SERVICE_HOST_URL']+"login",
+    scheme_name="JWT"
+)
+
 class TokenPayload(BaseModel):
     sub: str = None
     exp: int = None
     is_shelter: bool = None
 
-def get_current_shelter(token: str) -> TokenPayload:
+def get_current_shelter(token:str = Depends(schema_valid)) -> TokenPayload:
     try:
         payload = jwt.decode(
             token, JWT_SECRET_KEY, algorithms=[ALGORITHM]

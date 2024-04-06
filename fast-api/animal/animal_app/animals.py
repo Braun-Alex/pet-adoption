@@ -1,6 +1,7 @@
 # user_service.py
 from fastapi import FastAPI, Depends, HTTPException, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import OAuth2PasswordBearer
 from animal_app.database import Base, engine, get_db, SessionLocal
 from animal_app.service.animal_service import AnimalService
 from animal_app.controllers.animal_controller import AnimalController
