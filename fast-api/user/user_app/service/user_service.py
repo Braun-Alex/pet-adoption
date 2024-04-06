@@ -82,4 +82,6 @@ def update_user(self, user_id: int, user_data: dict) -> Optional[UserLocalOtput]
         return None
     return convert_from_user_db_to_local(user_db=user_db)
 
+        # return(UserLocalOutput(id=user_db.id, full_name=user_db.full_name, email=self._user_controller._encrypter.decrypt_data(user_db.email)))
+       # return convert_from_user_db_to_local(user_db=user_db)
 
