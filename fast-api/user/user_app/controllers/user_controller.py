@@ -15,11 +15,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-from abc import ABC, abstractmethod
-from typing import Optional
-from models.user_db_model import UserDB
-from models.user_local_model import UserLocalRegistration
-from user_app.models.user_db_model import UserDB
 
 
 class UserControllerInterface(ABC):

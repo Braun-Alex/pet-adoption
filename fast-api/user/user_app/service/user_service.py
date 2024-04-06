@@ -1,5 +1,7 @@
 from typing import Optional
 from user_app.models.user_local_model import UserLocalBase, UserLocalOtput, UserLocalRegistration, UserLocalAuthorization
+from user_app.models.user_db_model import UserDB
+
 from user_app.controllers.user_controller import UserController
 from fastapi import status, HTTPException
 
