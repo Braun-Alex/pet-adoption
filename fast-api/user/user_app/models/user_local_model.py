@@ -8,10 +8,12 @@ class UserLocalBase(BaseModel):
     email: Optional[str] = None
     full_name: Optional[str] = None
     photo: Optional[str] = ""
-    description: Optional[str] = ""
+    description: Optional[str] = "" 
+
  
-class UserLocalOtput(UserLocalBase):
+class UserLocalOutput(UserLocalBase):
     id: int
+
 
 # Properties to receive via API on creation 
 class UserLocalRegistration(BaseModel):
@@ -33,5 +35,3 @@ class TokenPayload(BaseModel):
     sub: str = None
     exp: datetime = None
     is_shelter: bool = None
-
- 

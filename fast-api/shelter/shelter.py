@@ -1,8 +1,9 @@
+# from http.client import HTTPException
 from database import Base, engine, SessionLocal
 from service.shelter_service import ShelterService
 from controllers.shelter_controller import ShelterController
-from models.shelter_local_model import ShelterLocal, ShelterLocalOutput, ShelterLocalRegistration
-from fastapi import APIRouter, Depends
+from models.shelter_local_model import ShelterLocal, ShelterLocalOutput, ShelterLocalRegistration, ShelterLocalUpdate
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from dependencies.dependencies import get_current_shelter
 from utilities.utilities import TokenSchema
@@ -37,6 +38,7 @@ def register_user(shelter: ShelterLocalRegistration):
 
 @shelter_route.post("/login", response_model=TokenSchema)
 def authorize_user(shelter: OAuth2PasswordRequestForm = Depends()):
+    logger.info(f"Handling /login: {shelter=}")
     return shelter_service.authorize_shelter(shelter=shelter)
 
 
@@ -47,3 +49,20 @@ def get_curent_shelter(token_payload=Depends(get_current_shelter)):
 @shelter_route.get('/{id}', response_model=ShelterLocalOutput)
 def get_shelter(id: int):
     return shelter_service.get_shelter(shelter_id=id)
+
+@shelter_route.put("/update", response_model=bool)
+def update_shelter_info(new_shelter_info: ShelterLocal, token_payload=Depends(get_current_shelter)):
+    shelter_id = token_payload.sub
+    logger.info(f"Handling PUT: /shelter/update with {new_shelter_info=}")
+    try:
+        return shelter_service.update_shelter_info(new_shelter_info=ShelterLocalUpdate(**new_shelter_info.model_dump(), id=shelter_id))
+
+    except RuntimeError as error:
+        logger.error(f"RuntimeError: ")
+        raise HTTPException(status_code=404, detail=str(error))
+
+@shelter_route.delete("/delete", response_model=bool)
+def remove_shelter(token_payload=Depends(get_current_shelter)):
+    shelter_id = token_payload.sub
+    logger.info(f"Handling DELETE: /shelter/delete with {shelter_id=}")
+    return shelter_service.remove_shelter(shelter_id=shelter_id)
