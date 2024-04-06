@@ -18,7 +18,7 @@ class AnimaServicelInterface:
         pass
 
     @abstractmethod
-    def delete_animal(self, animal_local: AnimalLocalIn):
+    def delete_animal(self, id: int, shelter_id: int) -> bool:
         pass
 
     @abstractmethod
@@ -27,6 +27,8 @@ class AnimaServicelInterface:
 
     @abstractmethod
     def is_shelter_presented(shelter_id:int) -> bool:
+        pass
+    def delete_all_animals_by_shelter(self, shelter_id: int):
         pass
 
 class AnimalService(AnimaServicelInterface):
@@ -87,3 +89,15 @@ class AnimalService(AnimaServicelInterface):
         r = httpx.get(request)
         logger.info(f"{__name__} : {r.content=}")
         return True if r.status_code == 200 else False
+    
+    def delete_animal(self, id: int, shelter_id: int) -> bool:
+        logger.info(f"Deleting animal with id: {id} and shelter_id: {shelter_id}")
+        animal_db = self._animal_controller.get_animal(id)
+        if animal_db is not None and animal_db.shelter_id != shelter_id:
+            logger.warn(f"Shelter with shelter_id: {shelter_id} doesn't have an animal with id: {id}")
+            raise HTTPException(status_code=403, detail=f"Shelter with shelter_id: {shelter_id} doesn't have a permission to remove animal with id: {id}")
+        return self._animal_controller.delete_animal(animal_id=id)
+    
+    def delete_all_animals_by_shelter(self, shelter_id: int):
+        logger.info(f"Deleting all animals by shelter_id: {shelter_id}")
+        return self._animal_controller.delete_all_animals_by_shelter(shelter_id=shelter_id)

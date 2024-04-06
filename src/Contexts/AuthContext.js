@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import Swal from "sweetalert2";
-import {toast} from "react-toastify";
+import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 
 const initialState = {
     isAuthenticated: false,
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
                     try {
                         const response = await axios.get(apiUrl);
                         return response.data;
-                    } catch(error) {
+                    } catch (error) {
                         return null;
                     }
                 }

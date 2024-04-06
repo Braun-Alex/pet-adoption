@@ -3,7 +3,7 @@ import axios from 'axios';
 import { AuthContext } from '../Contexts/AuthContext';
 import { withShelterAuth } from '../Wrappers/WithShelterAuth';
 import '../css/List.css';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 class RequestList extends Component {
     static contextType = AuthContext;
@@ -25,12 +25,13 @@ class RequestList extends Component {
     fetchRequests = async () => {
         const { shelter } = this.context;
         const shelterId = shelter.shelterID;
-
         try {
             const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/applications/get/?shelter_id=${shelterId}`);
             this.setState({ requests: response.data });
-            this.loadUserNames(response.data);
-            this.loadAnimalNames(response.data);
+            if (response.data.length > 0 && response.data[0].id !== null) {
+                this.loadUserNames(response.data);
+                this.loadAnimalNames(response.data);
+            }
         } catch (error) {
             toast.error("Помилка при отриманні даних заявок!");
         }
@@ -43,14 +44,17 @@ class RequestList extends Component {
             const userPromises = requests.map(async (request) => {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/users/user/${request.user_id}`);
                 users[request.id] = response.data.full_name + " (" + response.data.email + ")";
-                console.log(users);
             });
             await Promise.all(userPromises);
             this.setState({ users });
         } catch (error) {
             try {
-                await tryLoginShelter();
-                await this.loadUserNames(requests);
+                const success = await tryLoginShelter();
+                if (success) {
+                    await this.loadUserNames(requests);
+                } else {
+                    toast.error("Ви вийшли з облікового запису. Вам необхідно знову увійти!");
+                }
             } catch (error) {
                 toast.error("Помилка при отриманні даних користувачів, що подали заявки!");
             }
@@ -99,33 +103,39 @@ class RequestList extends Component {
 
     render() {
         return (
-            <div className='request'>
-                <ul className='list'>
-                    {this.state.requests.map(requestItem => {
-                        const userName = this.state.users[requestItem.id] || 'Loading...';
-                        const animalName = this.state.animals[requestItem.id] || 'Loading...';
-                        return (
-                            <li key={requestItem.id} className='list-item-2'>
-                                <div className='user-animal'>
-                                    {`${userName} хоче прихистити ${animalName}`}
-                                </div>
+            <div>
+                {this.state.requests.length > 0 && this.state.requests[0].id ? (
+                    <ul className='list'>
+                        {this.state.requests.map(requestItem => {
+                            const userName = this.state.users[requestItem.id] || 'Завантаження...';
+                            const animalName = this.state.animals[requestItem.id] || 'Завантаження...';
+                            return (
+                                <li key={requestItem.id} className='list-item-2'>
+                                    <div className='user-animal'>
+                                        {`${userName} хоче прихистити ${animalName}`}
+                                    </div>
 
-                                {requestItem.status === 2 ? (
-                                        <div className='accept-reject'>
-                                            <button className='accept' onClick={() => this.handleAcceptReject(requestItem.id, 1)}>
-                                                &#x2713;
-                                            </button>
-                                            <button className='reject' onClick={() => this.handleAcceptReject(requestItem.id, 0)}>
-                                                &#x2716;
-                                            </button>
-                                        </div>
-                                    ):
-                                    requestItem.status === 1 ? <div>прийнято</div> : <div>відхилено</div>
-                                }
-                            </li>
-                        );
-                    })}
-                </ul>
+                                    {requestItem.status === 2 ? (
+                                            <div className='accept-reject'>
+                                                <button className='accept' onClick={() => this.handleAcceptReject(requestItem.id, 1)}>
+                                                    &#x2713;
+                                                </button>
+                                                <button className='reject' onClick={() => this.handleAcceptReject(requestItem.id, 0)}>
+                                                    &#x2716;
+                                                </button>
+                                            </div>
+                                        ):
+                                        requestItem.status === 1 ? <div>схвалено</div> : <div>відхилено</div>
+                                    }
+                                </li>
+                            );
+                        })}
+                    </ul>
+                ): (
+                    <div>
+                        Заявки на прихисток тваринок є відсутніми.
+                    </div>
+                )}
             </div>
         );
     }

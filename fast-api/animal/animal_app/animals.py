@@ -1,10 +1,12 @@
+
 import os
 import hashlib
-from fastapi import APIRouter, File, UploadFile, Form
+from fastapi import APIRouter, File, UploadFile, Form, Depends
 from animal_app.database import Base, engine, get_db, SessionLocal
 from animal_app.service.animal_service import AnimalService
 from animal_app.controllers.animal_controller import AnimalController
 from animal_app.models.animal_local_model import AnimalLocalIn, AnimalLocalOut
+from animal_app.dependencies.dependencies import get_current_shelter
 from typing import Optional
 
 from typing import List
@@ -12,6 +14,8 @@ from typing import List
 import logging
 
 logger = logging.getLogger(__name__)
+
+BACKEND_HOSTNAME = os.environ['BACKEND_HOSTNAME']
 
 animals_router = APIRouter()
 
@@ -55,7 +59,7 @@ async def add_animal(
     save_image(contents, image_name, image_extension)
     animal = AnimalLocalIn(
         name=name,
-        photo=f"https://api.takeapet.me/images/{image_name}",
+        photo=f"{BACKEND_HOSTNAME}/images/{image_name}",
         type=type,
         sex=sex,
         month=month,
@@ -80,3 +84,15 @@ def get_animal(id: int):
 @animals_router.get("/get/", response_model=List[AnimalLocalOut])
 def get_animals_by_shelter_id(shelter_id: int):
     return animal_service.get_animals_by_shelter_id(id=shelter_id)
+
+@animals_router.delete("/delete/{id}", response_model=bool)
+def delete_animal(id: int, shelter_token = Depends(get_current_shelter)):
+    logger.info(f"Handling /delete/{id}: shelter_id: {shelter_token.sub}")
+
+    return animal_service.delete_animal(id=id, shelter_id=int(shelter_token.sub))
+
+@animals_router.delete("/delete_all_by_shelter", response_model=bool)
+def delete_all_animals_by_shelter(token = Depends(get_current_shelter)):
+    logger.info(f"Handling /delete_all_by_shelter: shelter_id: {token.sub}")
+    animal_service.delete_all_animals_by_shelter(shelter_id=token.sub)
+    return True
