@@ -6,3 +6,4 @@ psycopg2
 PyYAML
 pytest
 python-jose
+python-multipart

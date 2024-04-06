@@ -72,9 +72,8 @@ class ShelterController(ShelterControllerInterface):
         random_id = str(uuid4())
         user_db = ShelterDB(
                                 email=shelter.email,
-                                name=shelter.name,
-                                password=shelter.password,
-                                # password=hash_data(shelter.password + random_salt),
+                                name=shelter.full_name,
+                                password=hash_data(shelter.password + random_salt),
                                 salt=random_salt
                             )
         self._db.add(user_db)

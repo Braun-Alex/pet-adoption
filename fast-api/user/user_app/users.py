@@ -1,14 +1,15 @@
-# user.py
 from fastapi import FastAPI, Depends, HTTPException, APIRouter, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel, Field
 from typing import Optional
 
-from user_app.dependencies.dependencies import get_current_user
 from user_app.utilities.utilities import TokenSchema, TokenPayload
 from user_app.models.user_local_model import UserLocalAuthorization, UserLocalBase, UserLocalOutput, UserLocalRegistration
 import logging  
+from user_app.dependencies.dependencies import get_current_user, get_current_user_by_shelter
+
+
 from user_app.config import config_service
 
 logger = logging.getLogger(__name__)
@@ -61,3 +62,8 @@ def authorize_user(user: OAuth2PasswordRequestForm = Depends()):
 def get_user(token_payload: TokenPayload = Depends(get_current_user)):
     logger.info(f"Handling {PROFILE_URL}: {token_payload=}")
     return user_service.get_user(user_id=token_payload.sub)
+
+@users_route.get("/user/{id}")
+def get_user_by_shelter(id: int, _: bool = Depends(get_current_user_by_shelter)):
+    logger.info(f"Getting user profile with id {id} by shelter")
+    return user_service.get_user(user_id=id)

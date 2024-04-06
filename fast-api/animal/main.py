@@ -5,15 +5,14 @@ import logging
 
 from animal_app.animals import animals_router
 
-# Rest of your code
 app = FastAPI(openapi_url="/api/v1/animals/openapi.json", docs_url="/api/v1/animals/docs")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # або "*" для дозволу всіх джерел
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Дозволяє всі методи
-    allow_headers=["*"],  # Дозволяє всі заголовки
+    allow_methods=["*"],
+    allow_headers=["*"]
 )
 
 logger = logging.getLogger(__name__)

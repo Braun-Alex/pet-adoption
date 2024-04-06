@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Optional, Union
+from fastapi import UploadFile
+from typing import Optional
 from animal_app.models.animal_local_model import AnimalLocalIn
 from animal_app.models.animal_db_model import AnimalDB
 from sqlalchemy.orm import Session
@@ -38,12 +39,6 @@ class AnimalController(AnimalControllerInterface):
         self._db = db
 
     def create_animal(self, animal: AnimalLocalIn) -> Optional[AnimalDB]:
-        # animal_db = AnimalDB(
-        #                 name=animal.name,
-        #                 breed=animal.breed,
-        #                 shelter_id=animal.shelter_id,
-        #                 description=animal.description,
-        #             )
         animal_db = AnimalDB(**animal.model_dump())
         self._db.add(animal_db)
         self._db.commit()
