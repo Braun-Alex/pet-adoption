@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
 from Crypto.Util.Padding import pad, unpad
+import httpx
 
 load_dotenv()
 
@@ -110,3 +111,16 @@ def create_access_token(subject: Union[str, Any], expires_delta: timedelta = Non
 def create_refresh_token(subject: Union[str, Any], expires_delta: timedelta = None) -> str:
     return create_jwt_token(subject, expires_delta,
                             JWTTokenTypeExpiration.REFRESH_TOKEN_EXPIRATION.value)
+
+
+# class RequestMethods(Enum):
+#     GET = "GET"
+#     POST = "POST"
+#     PUT = "PUT"
+#     DELETE = "DELETE"
+
+def send_http_request(url: str, method: str, headers: dict = None, data: dict = None) -> dict:
+    request = f'httpx.{method.lower()}("{url}", headers={headers}, json={data})'
+
+    httpx.request(method, url, headers=headers, json=data)
+
