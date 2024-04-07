@@ -1,5 +1,7 @@
 from typing import Optional
-from user_app.models.user_local_model import UserLocalBase, UserLocalOutput, UserLocalRegistration, UserLocalAuthorization, UserLocalOutput
+from user_app.models.user_local_model import UserLocalBase, UserLocalOutput, UserLocalRegistration, UserLocalAuthorization
+from user_app.models.user_db_model import UserDB
+
 from user_app.controllers.user_controller import UserController
 from fastapi import status, HTTPException
 
@@ -71,11 +73,13 @@ class UserService(UserServiceInterface):
         return user_output
 
         # return str(user_db)
-        # return(UserLocalOutput(id=user_db.id, full_name=user_db.full_name, email=self._user_controller._encrypter.decrypt_data(user_db.email)))
-       # return convert_from_user_db_to_local(user_db=user_db)
+        # return(UserLocalOtput(id=user_db.id, full_name=user_db.full_name, email=self._user_controller._encrypter.decrypt_data(user_db.email)))
+        return convert_from_user_db_to_local(user_db=user_db)
+    
+def update_user(self, user_id: int, user_data: dict) -> Optional[UserLocalOutput]:
+    user_db = self._user_controller.update_user(user_id, user_data)
+    if not user_db:
+        return None
+    return convert_from_user_db_to_local(user_db=user_db)
 
-    # def get_user(self, user_id: str) -> str:
-    #     user_db = self._user_controller.get_user_by_id(user_id)
-    #     if not user_db:
-    #         raise HTTPException(status.HTTP_404_NOT_FOUND)
-    #     return str(user_db)
+

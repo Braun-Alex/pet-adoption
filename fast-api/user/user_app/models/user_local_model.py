@@ -1,3 +1,4 @@
+import enum
 from pydantic import BaseModel
 from typing import Optional
 from datetime import datetime, timedelta
@@ -12,6 +13,9 @@ class UserLocalBase(BaseModel):
 
  
 class UserLocalOutput(UserLocalBase):
+    id: int
+
+class UserLocalUpdate(UserLocalBase):
     id: int
 
 
@@ -35,3 +39,12 @@ class TokenPayload(BaseModel):
     sub: str = None
     exp: datetime = None
     is_shelter: bool = None
+
+class UserErrors(str, enum.Enum):
+    USER_NOT_FOUND = "User not found"
+    USER_ALREADY_EXISTS = "User already exists"
+    INVALID_PASSWORD = "Invalid password"
+    INVALID_EMAIL = "Invalid email"
+    INVALID_ID = "Invalid id"
+    INVALID_FULL_NAME = "Invalid name"
+    INVALID_DESCRIPTION = "Invalid description"

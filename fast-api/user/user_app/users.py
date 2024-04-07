@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 from typing import Optional
 
 from user_app.utilities.utilities import TokenSchema, TokenPayload
-from user_app.models.user_local_model import UserLocalAuthorization, UserLocalBase, UserLocalOutput, UserLocalRegistration
+from user_app.models.user_local_model import UserLocalAuthorization, UserLocalBase, UserLocalOutput, UserLocalRegistration, UserLocalUpdate
 import logging  
 from user_app.dependencies.dependencies import get_current_user, get_current_user_by_shelter
 
@@ -67,3 +67,12 @@ def get_user(token_payload: TokenPayload = Depends(get_current_user)):
 def get_user_by_shelter(id: int, _: bool = Depends(get_current_user_by_shelter)):
     logger.info(f"Getting user profile with id {id} by shelter")
     return user_service.get_user(user_id=id)
+
+@users_route.put("/update/{id}", response_model=UserLocalUpdate)
+def update_user(id: int, user_data: dict, _: bool = Depends(get_current_user)):
+    logger.info(f"Updating user with id {id}: {user_data}")
+    updated_user = user_service.update_user(user_id=id, user_data=user_data)
+    if not updated_user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return updated_user
+
