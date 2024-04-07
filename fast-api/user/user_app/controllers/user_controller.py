@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from user_app.models.user_db_model import UserDB
-from user_app.models.user_local_model import UserLocalRegistration, UserLocalOutput, UserLocalAuthorization
+from user_app.models.user_local_model import UserLocalRegistration, UserLocalUpdate
 from uuid import uuid4
 
 from user_app.utilities.converter import convert_from_user_db_to_local
@@ -75,14 +75,35 @@ class UserController(UserControllerInterface):
         deterministically_encrypted_email = self._encrypter.deterministic_encrypt_data(email)
         return self._db.query(UserDB).filter(UserDB.email == deterministically_encrypted_email).first()
 
-    def update_user(self, user_id: str, user_data: dict) -> Optional[UserDB]:
-        db_user = self.get_user_by_id(user_id)
-        if db_user:
-            for key, value in user_data.items():
-                setattr(db_user, key, value)
+    def update_user(self, user_data:UserLocalUpdate ) -> bool:
+        db_user = self.get_user_by_id(user_id=user_data.id)
+        if not db_user:
+            return False  # Повертаємо False, якщо користувач не знайдений
+
+        # Перевірка, чи дані змінилися перед оновленням
+        updated_fields = {key: value for key, value in user_data.model_dump().items() if value is not None}
+        if not updated_fields:
+            return True  # Повертаємо True, якщо нічого не змінилося
+
+        # Оновлення полів користувача
+        for key, value in updated_fields.items():
+            setattr(db_user, key, value)
+
+        # Збереження змін у транзакції
+        with self._db.begin():
+            self._db.add(db_user)
             self._db.commit()
             self._db.refresh(db_user)
-        return db_user
+
+        return True
+
+        # if db_user:
+        #     for key, value in user_data.model_dump().items():
+        #         if value is not None:
+        #             setattr(db_user, key, value)
+        #     self._db.commit()
+        #     self._db.refresh(db_user)
+        # return True
 
 
 
