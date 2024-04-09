@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }) => {
         if (user) {
             return {
                 userID: user.id,
-                userFullName: user.full_name,
+                userFullName: user.name,
                 userEmail: user.email
             };
         }
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }) => {
         if (shelter) {
             return {
                 shelterID: shelter.id,
-                shelterName: shelter.full_name,
+                shelterName: shelter.name,
                 shelterEmail: shelter.email
             };
         }
