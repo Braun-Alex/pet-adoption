@@ -64,7 +64,7 @@ class UserAcc extends Component {
     };
 
     render() {
-        const { photo, showShelterAcc, showEditAcc, showAnimal } = this.state;
+        const { showShelterAcc, showEditAcc, showAnimal } = this.state;
         const { user } = this.context;
 
         if (!user) {

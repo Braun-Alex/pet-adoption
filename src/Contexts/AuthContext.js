@@ -110,6 +110,7 @@ export const AuthProvider = ({ children }) => {
             for (const application of applications) {
                 const animalResponse = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/animals/animal/${application.animal_id}`);
                 application.name = animalResponse.data.name;
+                application.photo = animalResponse.data.photo;
                 application.type = animalResponse.data.type;
                 application.sex = animalResponse.data.sex;
                 application.month = animalResponse.data.month;
