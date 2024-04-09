@@ -38,17 +38,16 @@ class UserService(UserServiceInterface):
         user_db = self._user_controller.get_user_by_email(user.email)
 
         if user_db:
-            logger.warn(error_msg:=f"User with email: {user.email} already exist")
+            logger.warn(f"User with email: {user.email} already exist")
             raise HTTPException(status.HTTP_409_CONFLICT)
 
-        user_data = {**user.dict(), "about_me": ""} 
+        user_data = {**user.dict(), "about_me": ""}
         return self._user_controller.create_user(UserLocalRegistration(**user_data))
 
 
 
     def authorize_user(self, user: OAuth2PasswordRequestForm) -> Optional[TokenSchema]:
         user_db = self._user_controller.get_user_by_email(user.username)
-        logger.info(f"{user.username=} {user.password=}")
         logger.info(f"{__class__.__name__}: {str(user_db)=}")
         logger.info(f"Authorizing user with email: {user.username}. User from db: {user_db=}")
         if not user_db or self._user_controller._hasher.hash_data(user.password, user_db.salt) != user_db.password:
@@ -66,13 +65,13 @@ class UserService(UserServiceInterface):
             logger.info(f"{__name__}: User with id: {user_id} doesn't exist.")
             raise HTTPException(status.HTTP_404_NOT_FOUND)
 
-        logger.info(f"{user_db.email= }, {user_db.full_name= }, {user_id=}")
-        user_output = UserLocalOutput(**user_db.__dict__())
-        return user_output
+        logger.info(f"{user_db.email= }, {user_db.name= }, {user_id=}")
+        # user_output = UserLocalOutput(**user_db.__dict__())
+        # return user_output
 
         # return str(user_db)
         # return(UserLocalOutput(id=user_db.id, full_name=user_db.full_name, email=self._user_controller._encrypter.decrypt_data(user_db.email)))
-       # return convert_from_user_db_to_local(user_db=user_db)
+        return convert_from_user_db_to_local(user_db=user_db)
 
     # def get_user(self, user_id: str) -> str:
     #     user_db = self._user_controller.get_user_by_id(user_id)

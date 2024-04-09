@@ -43,7 +43,7 @@ class RequestList extends Component {
         try {
             const userPromises = requests.map(async (request) => {
                 const response = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/users/user/${request.user_id}`);
-                users[request.id] = response.data.full_name + " (" + response.data.email + ")";
+                users[request.id] = response.data.name + " (" + response.data.email + ")";
             });
             await Promise.all(userPromises);
             this.setState({ users });

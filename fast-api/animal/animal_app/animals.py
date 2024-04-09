@@ -1,7 +1,6 @@
-
 import os
 import hashlib
-from fastapi import APIRouter, File, UploadFile, Form, Depends
+from fastapi import APIRouter, File, UploadFile, Form, Depends, HTTPException
 from animal_app.database import Base, engine, get_db, SessionLocal
 from animal_app.service.animal_service import AnimalService
 from animal_app.controllers.animal_controller import AnimalController
@@ -12,6 +11,11 @@ from typing import Optional
 from typing import List
 
 import logging
+
+from transformers import DetrImageProcessor, DetrForObjectDetection
+import torch
+from PIL import Image
+import io
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +28,9 @@ db = SessionLocal()
 Base.metadata.create_all(bind=engine)
 
 animal_service = AnimalService(AnimalController(db=db))
+
+processor = DetrImageProcessor.from_pretrained("facebook/detr-resnet-50", revision="no_timm")
+model = DetrForObjectDetection.from_pretrained("facebook/detr-resnet-50", revision="no_timm")
 
 
 def save_image(image: bytes, name: str, extension: str):
@@ -56,6 +63,49 @@ async def add_animal(
     contents = await image.read()
     image_name = hash_image(contents)
     image_extension = os.path.splitext(image.filename)[1]
+
+    pil_image = Image.open(io.BytesIO(contents))
+
+    inputs = processor(images=pil_image, return_tensors="pt")
+    outputs = model(**inputs)
+
+    target_sizes = torch.tensor([pil_image.size[::-1]])
+    results = processor.post_process_object_detection(outputs, target_sizes=target_sizes,
+                                                      threshold=0.69)[0]
+
+    dogs = 0
+    cats = 0
+
+    logger.info(f"Object detecting on image \"{image.filename}\"...")
+
+    for score, label, box in zip(results["scores"], results["labels"], results["boxes"]):
+        box = [round(i, 2) for i in box.tolist()]
+        if model.config.id2label[label.item()] == "dog":
+            dogs += 1
+        elif model.config.id2label[label.item()] == "cat":
+            cats += 1
+
+        logger.info(
+            f"Detected {model.config.id2label[label.item()]} with confidence "
+            f"{round(score.item(), 3)} at location {box}"
+        )
+
+    if type == "пес" and dogs == 0:
+        raise HTTPException(status_code=422,
+                            detail="На зображенні немає жодного песика!")
+
+    if type == "кіт" and cats == 0:
+        raise HTTPException(status_code=422,
+                            detail="На зображенні немає жодного котика!")
+
+    if type == "пес" and dogs > 1:
+        raise HTTPException(status_code=422,
+                            detail="На зображенні багато песиків: має бути лише ваш песик!")
+
+    if type == "кіт" and cats > 1:
+        raise HTTPException(status_code=422,
+                            detail="На зображенні багато котиків: має бути лише ваш котик!")
+
     save_image(contents, image_name, image_extension)
     animal = AnimalLocalIn(
         name=name,

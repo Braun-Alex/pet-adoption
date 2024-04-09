@@ -69,7 +69,7 @@ class ShelterController(ShelterControllerInterface):
 
     def create_shelter(self, shelter: ShelterLocalRegistration) -> bool:
         random_salt = os.urandom(32).hex()
-        random_id = str(uuid4())
+        # random_id = str(uuid4())
         user_db = ShelterDB(
                                 email=shelter.email,
                                 name=shelter.name,
@@ -80,7 +80,7 @@ class ShelterController(ShelterControllerInterface):
         self._db.commit()
         self._db.refresh(user_db)
         return True
-    
+
     def _get_shelter_by_id(self, shelter_id: int) -> Optional[ShelterDB]:
         return self._db.query(ShelterDB).filter(ShelterDB.id == shelter_id).first()
 
@@ -113,11 +113,11 @@ class ShelterController(ShelterControllerInterface):
         logger.debug(f"{str(db_shelter)=} after updating")
         self._db.refresh(db_shelter)
         return True
-    
+
 
     # def update_shelter_info(self, shelter_id: str, new_shelter: dict) -> Optional[ShelterDB]:
     #     return self.update_shelter(shelter_id, new_shelter) #проксі до update_shelter
-    
+
 
     def remove_shelter(self, shelter_id: int) -> bool:
         db_shelter = self.get_shelter_by_id(shelter_id)

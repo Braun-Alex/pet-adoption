@@ -9,7 +9,6 @@ class ShelterLocal(BaseModel):
     address: Optional[str] = None
     phone_number: Optional[str] = None
     description: Optional[str] = None
-    address: Optional[str] = None
 
 
 class ShelterLocalRegistration(BaseModel):
@@ -39,10 +38,10 @@ class ShelterErrors(str, enum.Enum):
     INVALID_PHONE_NUMBER = "Invalid phone number"
     INVALID_DESCRIPTION = "Invalid description"
     INVALID_TYPE = "Invalid type"
-  
 
 
 
 
 
-    
+
+

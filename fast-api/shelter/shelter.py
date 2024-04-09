@@ -31,19 +31,19 @@ def read_root():
 
 
 @shelter_route.post(SIGNUP_URL, response_model=bool)
-def register_user(shelter: ShelterLocalRegistration):
+def register_shelter(shelter: ShelterLocalRegistration):
     logger.info(f"Handling {SIGNUP_URL}: {shelter=}")
     return shelter_service.register_shelter(shelter=shelter)
 
 
 @shelter_route.post("/login", response_model=TokenSchema)
-def authorize_user(shelter: OAuth2PasswordRequestForm = Depends()):
+def authorize_shelter(shelter: OAuth2PasswordRequestForm = Depends()):
     logger.info(f"Handling /login: {shelter=}")
     return shelter_service.authorize_shelter(shelter=shelter)
 
 
 @shelter_route.get('/profile', response_model=ShelterLocalOutput)
-def get_curent_shelter(token_payload=Depends(get_current_shelter)):
+def get_current_shelter(token_payload=Depends(get_current_shelter)):
     return shelter_service.get_shelter(token_payload.sub)
 
 @shelter_route.get('/{id}', response_model=ShelterLocalOutput)
@@ -58,7 +58,7 @@ def update_shelter_info(new_shelter_info: ShelterLocal, token_payload=Depends(ge
         return shelter_service.update_shelter_info(new_shelter_info=ShelterLocalUpdate(**new_shelter_info.model_dump(), id=shelter_id))
 
     except RuntimeError as error:
-        logger.error(f"RuntimeError: ")
+        logger.error(f"RuntimeError: {error}")
         raise HTTPException(status_code=404, detail=str(error))
 
 @shelter_route.delete("/delete", response_model=bool)

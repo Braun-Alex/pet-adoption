@@ -6,24 +6,24 @@ from datetime import datetime, timedelta
 #shared properties
 class UserLocalBase(BaseModel):
     email: Optional[str] = None
-    full_name: Optional[str] = None
+    name: Optional[str] = None
     photo: Optional[str] = ""
-    description: Optional[str] = "" 
+    description: Optional[str] = ""
 
- 
+
 class UserLocalOutput(UserLocalBase):
     id: int
 
 
-# Properties to receive via API on creation 
+# Properties to receive via API on creation
 class UserLocalRegistration(BaseModel):
-    email: str 
-    full_name: str
+    email: str
+    name: str
     password: str
 
 # Properties to receive via API on authorization
 class UserLocalAuthorization(BaseModel):
-    email: str 
+    email: str
     password: str
 
 class TokenSchema(BaseModel):
