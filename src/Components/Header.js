@@ -26,6 +26,7 @@ function Header() {
                     <div className="header-left">
                         <Link to="/">Головна</Link>
                         <Link to="/animal-main">Знайти друга</Link>
+                        <Link to="/donate">Підтримати проєкт</Link>
                     </div>
 
                     <div className="header-right">
