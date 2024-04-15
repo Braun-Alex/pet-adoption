@@ -27,6 +27,10 @@ class ApplicationList extends Component {
                         {userApplications.map(animal =>
                             <li className="list-item">
                                 <p><strong>Ім'я тваринки:</strong> {animal.name}</p>
+                                <p><strong>Фотографія тваринки:</strong></p>
+                                <div>
+                                    <img src={animal.photo} alt={'Фото ' + animal.type} className="animal-photo" />
+                                </div>
                                 <p><strong>Вид тваринки:</strong> {animal.type}</p>
                                 <p><strong>Стать тваринки:</strong> {animal.sex}</p>
                                 <p><strong>Дата народження тваринки:</strong> {animal.month + "." + animal.year}</p>
@@ -44,4 +48,5 @@ class ApplicationList extends Component {
         );
     }
 }
+
 export default withUserAuth(ApplicationList);

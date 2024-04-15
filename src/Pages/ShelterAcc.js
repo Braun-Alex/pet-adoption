@@ -153,12 +153,12 @@ class ShelterAcc extends Component {
                         <form className="shelter-edit-info">
                             <div className="shelterEditInfo-field">
                                 <label><strong>Ім'я</strong></label>
-                                <input type="text" name="shelterName" />
+                                <input type="text" name="shelterName" value={shelter.shelterName} />
                             </div>
 
                             <div className="shelterEditInfo-field">
                                 <label><strong>Електронна пошта</strong></label>
-                                <input type="tel" name="shelterPhone" />
+                                <input type="tel" name="shelterPhone" value={shelter.shelterEmail} disabled />
                             </div>
 
                             <div className="shelterEditInfo-field">

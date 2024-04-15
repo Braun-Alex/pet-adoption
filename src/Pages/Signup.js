@@ -66,19 +66,15 @@ class Signup extends Component {
 
         if (showUserReg) {
             entity = 'users';
-            entityData = {
-                full_name: name,
-                email: email,
-                password: password
-            }
         } else if (showShelterReg) {
             entity = 'shelter';
-            entityData = {
-                full_name: name,
+        }
+
+        entityData = {
+                name: name,
                 email: email,
                 password: password
             }
-        }
 
         const SIGNUP_API_URL = `${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/${entity}/signup`;
 

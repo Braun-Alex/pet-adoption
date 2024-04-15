@@ -114,11 +114,29 @@ class CreateAnimal extends Component {
                     cancelButtonText: 'Ні, відмінити додавання'
                 }).then(async (finalResult) => {
                     if (finalResult.isConfirmed) {
+                        let animal;
+
+                        if (type === 'пес') {
+                            animal = 'песика';
+                        } else if (type === 'кіт') {
+                            animal = 'котика';
+                        }
+
+                        Swal.fire({
+                            title: `Розпізнавання вашого ${animal} на зображенні...`,
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
                         await axios.post(API_URL, formData, {
                             headers: {
                                 'Content-Type': 'multipart/form-data'
                             }
                         });
+
                         await Swal.fire({
                             title: 'Тваринку було успішно додано!',
                             icon: 'success',
@@ -136,10 +154,21 @@ class CreateAnimal extends Component {
                         });
                     }
                 });
+
                 this.props.onHide();
             } catch (error) {
                 if (error.response) {
-                    toast.error("Сервер відхилив виконання запиту на додавання тваринки!");
+                    const errorMessage = error.response.data.detail ?
+                        error.response.data.detail :
+                        "Сервер відхилив виконання запиту на додавання тваринки!";
+
+                    await Swal.fire({
+                            title: errorMessage,
+                            icon: 'error',
+                            showConfirmButton: false,
+                            timer: 5000,
+                            timerProgressBar: true
+                        });
                 } else if (error.request) {
                     toast.error("Сервер не відповідає на запити!");
                 } else {

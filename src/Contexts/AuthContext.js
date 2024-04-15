@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from 'axios';
-import Swal from "sweetalert2";
-import {toast} from "react-toastify";
+import Swal from 'sweetalert2';
+import { toast } from 'react-toastify';
 
 const initialState = {
     isAuthenticated: false,
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
                     try {
                         const response = await axios.get(apiUrl);
                         return response.data;
-                    } catch(error) {
+                    } catch (error) {
                         return null;
                     }
                 }
@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }) => {
         if (user) {
             return {
                 userID: user.id,
-                userFullName: user.full_name,
+                userFullName: user.name,
                 userEmail: user.email
             };
         }
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }) => {
         if (shelter) {
             return {
                 shelterID: shelter.id,
-                shelterName: shelter.full_name,
+                shelterName: shelter.name,
                 shelterEmail: shelter.email
             };
         }
@@ -110,6 +110,7 @@ export const AuthProvider = ({ children }) => {
             for (const application of applications) {
                 const animalResponse = await axios.get(`${process.env.REACT_APP_BACKEND_HOSTNAME}/api/v1/animals/animal/${application.animal_id}`);
                 application.name = animalResponse.data.name;
+                application.photo = animalResponse.data.photo;
                 application.type = animalResponse.data.type;
                 application.sex = animalResponse.data.sex;
                 application.month = animalResponse.data.month;

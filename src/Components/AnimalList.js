@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import '../css/List.css';
-import CreateAnimal from "./CreateAnimal";
-import { Link } from 'react-router-dom';
+import CreateAnimal from './CreateAnimal';
 import { AuthContext } from '../Contexts/AuthContext';
 import { withShelterAuth } from '../Wrappers/WithShelterAuth';
 import axios from 'axios';
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
 class AnimalList extends Component {
     static contextType = AuthContext;
@@ -62,7 +61,7 @@ class AnimalList extends Component {
                                 <p><strong>Ім'я:</strong> {animal.name}</p>
                                 <p><strong>Фотографія:</strong></p>
                                 <div>
-                                    <img src={animal.photo} alt={'Фото ' + animal.type} className="animal-photo"/>
+                                    <img src={animal.photo} alt={'Фото ' + animal.type} className="animal-photo" />
                                 </div>
                                 <p><strong>Вид тваринки:</strong> {animal.type}</p>
                                 <p><strong>Стать:</strong> {animal.sex}</p>

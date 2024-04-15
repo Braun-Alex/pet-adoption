@@ -1,9 +1,11 @@
 from controllers.shelter_controller import ShelterController
-from models.shelter_local_model import ShelterLocal, ShelterLocalRegistration
+from models.shelter_local_model import ShelterLocal, ShelterLocalRegistration, ShelterLocalUpdate
 from utilities.utilities import hash_data
 from fastapi import status, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from utilities.utilities import TokenSchema, create_access_token, create_refresh_token
+import httpx
+import os
 
 
 class ShelterServiceInterface:
@@ -14,6 +16,12 @@ class ShelterServiceInterface:
         pass
 
     def get_shelter(self, shelter: str):
+        pass
+
+    def update_shelter_info(self, new_shelter_info: ShelterLocalUpdate) -> bool:
+        pass
+
+    def remove_shelter(self, shelter_id: int) -> bool:
         pass
 
 
@@ -39,8 +47,22 @@ class ShelterService(ShelterServiceInterface):
             "refresh_token": create_refresh_token(shelter_db.id),
         }
 
-    def get_shelter(self, shelter_id: str) -> str:
+    def get_shelter(self, shelter_id: int) -> str:
         shelter_local = self._shelter_controller.get_shelter_by_id(shelter_id)
         if not shelter_local:
             raise HTTPException(status.HTTP_404_NOT_FOUND)
         return shelter_local
+
+
+    def update_shelter_info(self, new_shelter_info: ShelterLocalUpdate) -> bool:
+        return self._shelter_controller.update_shelter_info(shelter_data=new_shelter_info)
+    
+    def remove_shelter(self, shelter_id: int) -> bool:
+        pass
+
+    def delete_all_animals(self, shelter_id: int, token: str):
+        request = f"{os.getenv('ANIMAL_SERVICE_HOST_URL')}/delete_all_by_shelter"
+
+        
+
+        

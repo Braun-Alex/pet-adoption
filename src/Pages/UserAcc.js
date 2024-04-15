@@ -64,7 +64,7 @@ class UserAcc extends Component {
     };
 
     render() {
-        const { photo, showShelterAcc, showEditAcc, showAnimal } = this.state;
+        const { showShelterAcc, showEditAcc, showAnimal } = this.state;
         const { user } = this.context;
 
         if (!user) {
@@ -98,7 +98,7 @@ class UserAcc extends Component {
                 </div>
 
                 <div className="shelter-options-open">
-                    
+
                         {showShelterAcc && (
                             <>
                                 <div className="shelter-greeting">Вітаємо, {user.userFullName}!</div>
@@ -115,24 +115,24 @@ class UserAcc extends Component {
                                 </div>
                             </>
                         )}
-                    
 
-                    
+
+
                         {showEditAcc && (
                                 <form className="shelter-edit-info">
                                     <div className="shelterEditInfo-field">
                                         <label><strong>Ім'я</strong></label>
-                                        <input type="text" name="shelterName" />
+                                        <input type="text" name="shelterName" value={user.userFullName} />
                                     </div>
 
                                     <div className="shelterEditInfo-field">
                                         <label><strong>Електронна пошта</strong></label>
-                                        <input type="tel" name="shelterPhone" />
+                                        <input type="tel" name="shelterEmail" value={user.userEmail} disabled />
                                     </div>
                                     <button className='shelterEditInfo-button'>Зберегти зміни</button>
                                 </form>
                         )}
-                    
+
 
                     {showAnimal && <ApplicationList />}
 

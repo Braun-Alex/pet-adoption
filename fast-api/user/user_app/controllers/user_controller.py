@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from user_app.models.user_db_model import UserDB
-from user_app.models.user_local_model import UserLocalRegistration, UserLocalOtput, UserLocalAuthorization
+from user_app.models.user_local_model import UserLocalRegistration, UserLocalOutput, UserLocalAuthorization
 from uuid import uuid4
 
 from user_app.utilities.converter import convert_from_user_db_to_local
@@ -49,13 +49,14 @@ class UserController(UserControllerInterface):
 
     def create_user(self, user: UserLocalRegistration) -> bool:
         random_salt = os.urandom(32).hex()
-        random_id = str(uuid4())
+        # random_id = str(uuid4())
         user_db = UserDB(
                             email=self._encrypter.deterministic_encrypt_data(user.email),
-                            full_name=self._encrypter.deterministic_encrypt_data(user.full_name),
+                            name=self._encrypter.deterministic_encrypt_data(user.name),
+                            # description=self._encrypter.deterministic_encrypt_data(user.description),
                             password=self._hasher.hash_data(data=user.password, salt=random_salt),
                             salt=random_salt
-                        )            
+                        )
         try:
             self._db.add(user_db)
             self._db.commit()
@@ -65,10 +66,10 @@ class UserController(UserControllerInterface):
             return False
         return True
 
-    def get_user_by_id(self, user_id: int) -> Optional[UserLocalOtput]:
+    def get_user_by_id(self, user_id: int) -> Optional[UserDB]:
         return self._db.query(UserDB).filter(UserDB.id == user_id).first()
 
-        
+
 
     def get_user_by_email(self, email: str) -> Optional[UserDB]:
         deterministically_encrypted_email = self._encrypter.deterministic_encrypt_data(email)
