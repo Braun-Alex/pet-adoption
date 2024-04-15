@@ -1,24 +1,20 @@
 import React, {useContext, useState} from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../Contexts/AuthContext';
+import { AuthContext } from "../Contexts/AuthContext";
 import '../css/Header.css';
 import Menu from './Menu';
 
 function Header() {
     const [menuActive, setMenuActive] = useState(false);
-    const { isAuthenticated, entityType, entityName, logoutValidEntity } = useContext(AuthContext);
+    const { isAuthenticated, entityType, entityName, logout } = useContext(AuthContext);
     let registrationPath;
-    if (entityType === "shelter") {
-        registrationPath = "/shelter-account";
-    } else {
-        registrationPath = "/user-account";
-    }
+    {entityType === "shelter" ? registrationPath = '/shelter-account': registrationPath = '/user-account'}
     return (
         <>
             <header>
-                <div className="header-container">
+                <div className='header-container'>
                     <div className="mob-menu">
-                        <div className="burger-btn" onClick={() => setMenuActive(!menuActive)}>
+                        <div class="burger-btn" onClick={() => setMenuActive(!menuActive)}> 
                             <span/>
                         </div>
                     </div>
@@ -33,7 +29,7 @@ function Header() {
                         {isAuthenticated ? (
                             <>
                                 <Link to={registrationPath} className="userName-header">{entityName}</Link>
-                                <Link to="/" className="logout-button" onClick={logoutValidEntity}>Вийти</Link>
+                                <Link to="/" className="logout-button" onClick={logout}>Вийти</Link>
                             </>
                         ): (
                             <>
@@ -43,9 +39,10 @@ function Header() {
                         )}
                     </div>
                 </div>
-            </header>
+            </header>        
             <Menu menuActive={menuActive} setMenuActive={setMenuActive}/>
         </>
+        
     );
 }
 
