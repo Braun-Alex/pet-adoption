@@ -17,14 +17,19 @@
 
 import os
 
+import logging
+
 from abc import ABC, abstractmethod
 from typing import List, Optional
 from sqlalchemy.orm import Session
 from models.shelter_db_model import ShelterDB
-from models.shelter_local_model import ShelterLocal, ShelterLocalRegistration, ShelterLocalOutput
+from models.shelter_local_model import ShelterLocal, ShelterLocalRegistration, ShelterLocalOutput, ShelterLocalUpdate, ShelterErrors
+
 from utilities.utilities import hash_data
 from utilities.converter import convert_from_shelter_db_to_local
 from uuid import uuid4
+
+logger = logging.getLogger(__name__)
 
 
 class ShelterControllerInterface(ABC):
@@ -49,11 +54,11 @@ class ShelterControllerInterface(ABC):
         pass
 
     @abstractmethod
-    def update_shelter(self, shelter_id: str, shelter_data: dict) -> Optional[ShelterDB]:
+    def update_shelter_info(self, shelter_id: str, shelter_data: dict) -> bool:
         pass
 
     @abstractmethod
-    def delete_shelter(self, shelter_id: str) -> bool:
+    def remove_shelter(self, shelter_id: int) -> bool:
         pass
 
 
@@ -64,12 +69,11 @@ class ShelterController(ShelterControllerInterface):
 
     def create_shelter(self, shelter: ShelterLocalRegistration) -> bool:
         random_salt = os.urandom(32).hex()
-        random_id = str(uuid4())
+        # random_id = str(uuid4())
         user_db = ShelterDB(
                                 email=shelter.email,
-                                name=shelter.full_name,
-                                password=shelter.password,
-                                #password=hash_data(shelter.password + random_salt),
+                                name=shelter.name,
+                                password=hash_data(shelter.password + random_salt),
                                 salt=random_salt
                             )
         self._db.add(user_db)
@@ -77,12 +81,16 @@ class ShelterController(ShelterControllerInterface):
         self._db.refresh(user_db)
         return True
 
-    def get_shelter_by_id(self, shelter_id: str) -> Optional[ShelterLocalOutput]:
-        shelter_bd = self._db.query(ShelterDB).filter(ShelterDB.id == shelter_id).first()
-        return convert_from_shelter_db_to_local(shelter_db=shelter_bd)
+    def _get_shelter_by_id(self, shelter_id: int) -> Optional[ShelterDB]:
+        return self._db.query(ShelterDB).filter(ShelterDB.id == shelter_id).first()
+
+    def get_shelter_by_id(self, shelter_id: int) -> Optional[ShelterLocalOutput]:
+        shelter_bd = self._get_shelter_by_id(shelter_id)
+        return ShelterLocalOutput(**shelter_bd.__dict__) if shelter_bd else None
+        # return convert_from_shelter_db_to_local(shelter_db=shelter_bd)
 
     def get_shelter_by_name(self, shelter_name: str) -> Optional[ShelterDB]:
-        return self._db.query(ShelterDB).filter(ShelterDB.id == shelter_name).first()
+        return self._db.query(ShelterDB).filter(ShelterDB.name == shelter_name).first()
 
     def get_shelter_by_email(self, email: str) -> Optional[ShelterDB]:
         return self._db.query(ShelterDB).filter(ShelterDB.email == email).first()
@@ -90,16 +98,28 @@ class ShelterController(ShelterControllerInterface):
     def get_all_shelters(self, skip: int = 0, limit: int = 100) -> List[ShelterDB]:
         return self._db.query(ShelterDB).offset(skip).limit(limit).all()
 
-    def update_shelter(self, shelter_id: str, shelter_data: dict) -> Optional[ShelterDB]:
-        db_shelter = self.get_shelter_by_id(shelter_id)
-        if db_shelter:
-            for key, value in shelter_data.items():
+    def update_shelter_info(self, shelter_data: ShelterLocalUpdate) -> bool:
+        logger.info(f"Updating shelter with id: {shelter_data.id}")
+        db_shelter = self._get_shelter_by_id(shelter_id=shelter_data.id)
+        logger.debug(f"{str(db_shelter)=}")
+        if not db_shelter:
+            raise(RuntimeError(ShelterErrors.SHELTER_NOT_FOUND.name))
+        for key, value in shelter_data.model_dump().items():
+            logger.debug(f"Changing {key} --> {value} ")
+            if value is not None:
+                logger.info(f"Setting {key} to {value}")
                 setattr(db_shelter, key, value)
-            self._db.commit()
-            self._db.refresh(db_shelter)
-        return db_shelter
+        self._db.commit()
+        logger.debug(f"{str(db_shelter)=} after updating")
+        self._db.refresh(db_shelter)
+        return True
 
-    def delete_shelter(self, shelter_id: str) -> bool:
+
+    # def update_shelter_info(self, shelter_id: str, new_shelter: dict) -> Optional[ShelterDB]:
+    #     return self.update_shelter(shelter_id, new_shelter) #проксі до update_shelter
+
+
+    def remove_shelter(self, shelter_id: int) -> bool:
         db_shelter = self.get_shelter_by_id(shelter_id)
         if db_shelter:
             self._db.delete(db_shelter)

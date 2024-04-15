@@ -8,19 +8,20 @@ class UserDB(Base):
 
     id = Column(Integer, primary_key=True, index=True, autoincrement=True)
     email = Column(String, unique=True, index=True)
-    
-    full_name = Column(String)
+
+    name = Column(String)
     password = Column(String)
     salt = Column(String)
 
     photo = Column(String, nullable=True)
     description =Column(String, nullable=True)
 
+
     def to_dict(self):
         return {
             "id": self.id,
             "email": self.email,
-            "full_name": self.full_name
+            "name": self.name
         }
 
     def to_json(self):

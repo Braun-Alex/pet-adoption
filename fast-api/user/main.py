@@ -8,16 +8,15 @@ import logging
 
 from user_app.users import users_route
 
-# Rest of your code
 app = FastAPI(openapi_url="/api/v1/users/openapi.json", docs_url="/api/v1/users/docs")
 
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # або "*" для дозволу всіх джерел
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Дозволяє всі методи
-    allow_headers=["*"],  # Дозволяє всі заголовки
+    allow_methods=["*"],
+    allow_headers=["*"]
 )
 
 logger = logging.getLogger(__name__)

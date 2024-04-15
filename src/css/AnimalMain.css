@@ -1,0 +1,110 @@
+.animal-main-container {
+    display: flex;
+    flex-direction: column;
+    padding-top: 30px;
+    cursor: default;
+}
+
+.title-animal-main {
+    color: #50473A;
+    font-size: 40px;
+    font-weight: 300px;
+}
+
+.animal-table-container {
+    display: flex;
+    width: 84%;
+    align-self: center;
+
+}
+
+.animal-table {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.animal-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid #b5a78d;
+    border-radius: 20px;
+    margin: 12px 1vw; 
+    padding: 20px 20px;
+    background-color: #F2F1ED;
+    color: #3f382e;
+    font-size: 17px;
+    transition: all 500ms ease;
+}
+
+.animal-item:hover {
+    transform: scale(1.01);
+    box-shadow: 0px 0px 6px 0px #b5a78d;
+}
+
+.animal-photo-container {
+    display: flex;
+    width: 160px;
+    height: 160px;
+    justify-content: center;
+    overflow: hidden;
+    margin: 8px 0px;
+}
+
+.animal-photo {
+    display: flex;
+    object-fit: contain;
+    height: 160px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #F2F1ED;
+}
+
+
+.group-animal-info {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 90%;
+}
+
+.animal-info-button {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0px;
+    margin-top: 10px;
+    font-size: 16px;
+    color: #574d40;
+    width: 80%;
+    border-radius: 10px;
+    border: 1px solid #92846F;    
+    background-color: #faf6ef;
+    cursor: pointer;
+    transition: all 500ms ease;
+}
+
+.animal-info-button:hover {
+    transform: scale(1.03);
+}
+
+@media (min-width: 700px) {
+    .animal-item {
+        width: 15.9vw;
+    }
+    .title-animal-main {
+        margin: 0 0 24px 15vw;
+    }
+}
+@media (max-width: 700px) {
+    .animal-table {
+        justify-content: center;
+    }
+    .title-animal-main {
+        align-self: center;
+        margin: 24px 0 10px 0;
+    }
+    .animal-item {
+        width: 60vw;
+    }
+}

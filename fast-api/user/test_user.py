@@ -6,7 +6,7 @@ import json
 
 from fastapi.testclient import TestClient
 
-from user_app.models.user_local_model import UserLocalRegistration, UserLocalAuthorization, UserLocalOtput
+from user_app.models.user_local_model import UserLocalRegistration, UserLocalAuthorization, UserLocalOutput
 
 import random
 import string
@@ -99,10 +99,10 @@ def authorization_header(jwt_token:str) -> str:
 @pytest.fixture(scope="function") 
 def expected_user_profile(jwt_token:str, signup_user_fixture:UserLocalRegistration):
     user_id=get_current_user(token=jwt_token).sub
-    return UserLocalOtput(id=user_id, email=signup_user_fixture.email, full_name=signup_user_fixture.full_name)
+    return UserLocalOutput(id=user_id, email=signup_user_fixture.email, full_name=signup_user_fixture.full_name)
 
 
-def test_get_info_by_token(authorization_header:dict, client: TestClient, expected_user_profile: UserLocalOtput):
+def test_get_info_by_token(authorization_header:dict, client: TestClient, expected_user_profile: UserLocalOutput):
     logger.info(f"test_get_info_by_token")
 
     logger.info(f"{expected_user_profile=}")

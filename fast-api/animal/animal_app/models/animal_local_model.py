@@ -3,6 +3,7 @@ from typing import Optional
 
 class AnimalLocalIn(BaseModel):
     name:       str
+    photo:      str
     type:       str
     sex:        str
     month:      Optional[str] = None
