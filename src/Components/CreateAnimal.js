@@ -184,9 +184,6 @@ class CreateAnimal extends Component {
         const modalStyles = {
             display: show ? 'block' : 'none',
         };
-        const overlayStyles = {
-            display: show ? 'block' : 'none',
-        };
 
         const types = ['кіт', 'пес'];
         const sex = ['хлопчик', 'дівчинка'];
@@ -196,33 +193,33 @@ class CreateAnimal extends Component {
 
         return (
             <>
-                <div className="overlay" style={overlayStyles}>
+                <div className="create-animal-overlay" style={modalStyles}>
                     <Modal
                         isOpen={show}
                         onRequestClose={onHide}
-                        className="modal"
+                        className="create-animal-modal"
                         style={modalStyles}
                         centered
                     >
-                        <div className='modal-content'>
-                            <span className="close" onClick={onHide}>&times;</span>
+                        <div className='create-animal-modal-content'>
+                            <span className="create-animal-close" onClick={onHide}>&times;</span>
 
                             <div>
-                                <div className="add-animal-header">
+                                <div className="create-animal-header">
                                     Додати тваринку
                                 </div>
                             </div>
 
                             <div>
-                                <form className='add-animal-container'>
+                                <form className='create-animal-container'>
                                     <div className="animal-name">
                                         <label>Ім'я тваринки</label>
                                         <input type="text"
                                                onChange={(e) => this.handleInputChange('name', e.target.value)}/>
                                     </div>
 
-                                    <div className="animal-image-upload">
-                                        <label htmlFor="animal-image">Фотографія: </label>
+                                    <div>
+                                        <label>Фотографія: </label>
                                         <input
                                             type="file"
                                             id="animal-image"
@@ -248,11 +245,13 @@ class CreateAnimal extends Component {
                                             className="animal-sex"
                                             onChange={(option) => this.handleInputChange('sex', option.value)}/>
                                     </div>
-
-                                    <div className="select-date">
+                                    
+                                    <div className="select-date">   
+                                        <div className="modal-text">Дата народження</div>                                     
                                         <Dropdown options={mounths}
                                                   value={defaultOption}
                                                   placeholder="місяць"
+                                                  className='month'
                                                   onChange={(option) => this.handleInputChange('month', option.value)}/>
                                         <Dropdown
                                             options={years}
@@ -269,8 +268,9 @@ class CreateAnimal extends Component {
                                     </div>
                                 </form>
                             </div>
-
-                            <button className="create-animal-button" onClick={this.registerAnimal}>Додати</button>
+                            <div className="create-animal-button-container">
+                                <button className="create-animal-button" onClick={this.registerAnimal}>Додати</button>
+                            </div>
                         </div>
                     </Modal>
                 </div>
