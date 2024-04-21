@@ -2,7 +2,7 @@ name: Docker Image CI
 
 on: 
   push:
-    branches: [ "main" ]
+    branches: [ "*" ]
   pull_request:
     branches: [ "main" ]
 
@@ -29,6 +29,9 @@ jobs:
       - name: Run tests for user_service (replace with your testing commands)
         run: |
           docker exec user_service pytest
+      -name: Run Python script 
+        run: |
+          cd fast-api/; pip install -r requirements.txt; pytest -s test.py 
 
       - name: Stop Docker Compose Services
         run: docker-compose down

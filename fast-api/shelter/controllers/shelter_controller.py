@@ -120,9 +120,10 @@ class ShelterController(ShelterControllerInterface):
 
 
     def remove_shelter(self, shelter_id: int) -> bool:
-        db_shelter = self.get_shelter_by_id(shelter_id)
+        db_shelter = self._get_shelter_by_id(shelter_id)
         if db_shelter:
             self._db.delete(db_shelter)
             self._db.commit()
+            self._db.refresh(db_shelter)
             return True
         return False

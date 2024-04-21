@@ -6,6 +6,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 from utilities.utilities import TokenSchema, create_access_token, create_refresh_token
 import httpx
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ShelterServiceInterface:
@@ -57,11 +60,18 @@ class ShelterService(ShelterServiceInterface):
     def update_shelter_info(self, new_shelter_info: ShelterLocalUpdate) -> bool:
         return self._shelter_controller.update_shelter_info(shelter_data=new_shelter_info)
     
-    def remove_shelter(self, shelter_id: int) -> bool:
-        pass
+    def remove_shelter(self, token:str, shelter_id: int) -> bool:
+        self.delete_all_animals(token=token)
+        return self._shelter_controller.remove_shelter(shelter_id=shelter_id)
 
-    def delete_all_animals(self, shelter_id: int, token: str):
-        request = f"{os.getenv('ANIMAL_SERVICE_HOST_URL')}/delete_all_by_shelter"
+    def delete_all_animals(self, token: str)->bool:
+        # request = f"{os.getenv('ANIMAL_SERVICE_HOST_URL')}delete_all_by_shelter"
+        request = f"http://animal_service:8000/api/v1/animals/delete_all_by_shelter"
+        
+        headers = {"Authorization": f"Bearer {token}"}
+        logger.info(f"Sending DELETE request to {request=}")
+        return httpx.delete(request, headers=headers)
+
 
         
 
