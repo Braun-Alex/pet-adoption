@@ -152,6 +152,7 @@ services:
       - DATABASE_URI=postgresql://${SHELTER_POSTGRES_USER}:${SHELTER_POSTGRES_PASSWORD}@shelter_db/${SHELTER_POSTGRES_DB}
       - JWT_SECRET_KEY=${JWT_SECRET_KEY}
       - AES_SECRET_KEY=${AES_SECRET_KEY}
+      # - ANIMAL_SERVICE_HOST_URL=http://localhost:8080/api/v1/animals/
     depends_on:
       - shelter_db
     networks:
