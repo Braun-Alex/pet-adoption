@@ -66,8 +66,8 @@ class ShelterService(ShelterServiceInterface):
 
     def delete_all_animals(self, token: str)->bool:
         # request = f"{os.getenv('ANIMAL_SERVICE_HOST_URL')}delete_all_by_shelter"
+        # request = f"http://animal_service:8000/api/v1/animals/delete_all_by_shelter"
         request = f"http://animal_service:8000/api/v1/animals/delete_all_by_shelter"
-        
         headers = {"Authorization": f"Bearer {token}"}
         logger.info(f"Sending DELETE request to {request=}")
         return httpx.delete(request, headers=headers)

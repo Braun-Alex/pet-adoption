@@ -124,6 +124,4 @@ class ShelterController(ShelterControllerInterface):
         if db_shelter:
             self._db.delete(db_shelter)
             self._db.commit()
-            self._db.refresh(db_shelter)
-            return True
-        return False
+        return True
