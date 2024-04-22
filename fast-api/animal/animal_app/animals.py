@@ -49,7 +49,7 @@ def read_root():
     return {"Hello": "animal"}
 
 
-@animals_router.post("/add")
+@animals_router.post("/add", response_model=AnimalLocalOut)
 async def add_animal(
     name: str = Form(...),
     type: str = Form(...),

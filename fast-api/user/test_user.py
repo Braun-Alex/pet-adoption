@@ -15,7 +15,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 
 from user_app.dependencies.dependencies import get_current_user
 
-from pytest_lazyfixture import lazy_fixture
+# from pytest_lazyfixture import lazy_fixture
 
 from main import app 
 
@@ -64,9 +64,10 @@ def log_in(user:dict, client:TestClient) ->Response:
 @pytest.mark.parametrize(
                             "signup_user, login_user, registration_status_code, login_status_code", 
                             [
-                                pytest.param(lazy_fixture("signup_user_fixture"), lazy_fixture("login_user_valid_fixture"),200,200, id="ValidLogIn"),
-                                pytest.param(lazy_fixture("signup_user_fixture"), lazy_fixture("login_user_invalid_fixture"),200,401, id="InValidLogIn"),
+                                pytest.param("signup_user_fixture", "login_user_valid_fixture", 200, 200, id="ValidLogIn"),
+                                pytest.param("signup_user_fixture", "login_user_invalid_fixture", 200, 401, id="InValidLogIn"),
                             ],
+                            indirect=["signup_user_fixture", "login_user_fixture"],
                         )
 def test_registration_and_login(client: TestClient, signup_user: UserLocalRegistration, login_user, registration_status_code, login_status_code):
     # Registration test
