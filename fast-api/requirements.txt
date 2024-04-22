@@ -1,0 +1,13 @@
+fastapi
+SQLAlchemy
+uvicorn
+httpx
+PyYAML
+python-jose
+pycryptodome
+python-dotenv
+python-multipart
+pytest
+httpx_auth
+requests
+psycopg2

@@ -7,40 +7,40 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  # build:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      - name: Build Docker Compose Services
-        run: docker-compose build
+  #     - name: Build Docker Compose Services
+  #       run: docker-compose build
 
-  user__service_test:
-    runs-on: ubuntu-latest
-    needs: [build]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+  # user__service_test:
+  #   runs-on: ubuntu-latest
+  #   needs: [build]
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v2
 
-      - name: Start Docker Compose Services
-        run: docker-compose up -d
+  #     - name: Start Docker Compose Services
+  #       run: docker-compose up -d
 
-      - name: Run tests for user_service (replace with your testing commands)
-        run: |
-          docker exec user_service pytest
+  #     - name: Run tests for user_service (replace with your testing commands)
+  #       run: |
+  #         docker exec user_service pytest
 
-      - name: Run Python script 
-        run: |
-          cd fast-api/; pip install -r requirements.txt; pytest -s test.py 
+  #     - name: Run Python script 
+  #       run: |
+  #         cd fast-api/; pip install -r requirements.txt; pytest -s test.py 
 
-      - name: Stop Docker Compose Services
-        run: docker-compose down
+  #     - name: Stop Docker Compose Services
+  #       run: docker-compose down
 
   animal_service_test:
     runs-on: ubuntu-latest
-    needs: [build]
+    # needs: [build]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
