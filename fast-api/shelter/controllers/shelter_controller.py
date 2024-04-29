@@ -92,8 +92,12 @@ class ShelterController(ShelterControllerInterface):
     def get_shelter_by_name(self, shelter_name: str) -> Optional[ShelterDB]:
         return self._db.query(ShelterDB).filter(ShelterDB.name == shelter_name).first()
 
-    def get_shelter_by_email(self, email: str) -> Optional[ShelterDB]:
+    def _get_shelter_by_email(self, email: str) -> Optional[ShelterDB]:
         return self._db.query(ShelterDB).filter(ShelterDB.email == email).first()
+    
+    def get_shelter_by_email(self, email: str) -> Optional[ShelterLocalOutput]:
+        shelter_bd = self._get_shelter_by_email(email)
+        return ShelterLocalOutput(**shelter_bd.__dict__) if shelter_bd else None
 
     def get_all_shelters(self, skip: int = 0, limit: int = 100) -> List[ShelterDB]:
         return self._db.query(ShelterDB).offset(skip).limit(limit).all()

@@ -7,22 +7,24 @@ from fastapi import FastAPI
 
 from shelter import shelter_route
 
-app = FastAPI(openapi_url="/api/v1/shelter/openapi.json", docs_url="/api/v1/shelter/docs")
+if __name__ == "__main__":
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],  # або "*" для дозволу всіх джерел
-    allow_credentials=True,
-    allow_methods=["*"],  # Дозволяє всі методи
-    allow_headers=["*"],  # Дозволяє всі заголовки
-)
+    app = FastAPI(openapi_url="/api/v1/shelter/openapi.json", docs_url="/api/v1/shelter/docs")
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],  # або "*" для дозволу всіх джерел
+        allow_credentials=True,
+        allow_methods=["*"],  # Дозволяє всі методи
+        allow_headers=["*"],  # Дозволяє всі заголовки
+    )
 
 
-app.include_router(shelter_route, prefix='/api/v1/shelter', tags=["shelter"])
+    app.include_router(shelter_route, prefix='/api/v1/shelter', tags=["shelter"])
 
-@app.get("/")
-def biba():
-    return {"message": "Biba handler"}
+    @app.get("/")
+    def biba():
+        return {"message": "Biba handler"}
 # db = SessionLocal()
 
 # shelter_service = ShelterService(shelter_controller=ShelterController(db=db))

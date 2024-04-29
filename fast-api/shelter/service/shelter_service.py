@@ -33,15 +33,15 @@ class ShelterService(ShelterServiceInterface):
         self._shelter_controller = shelter_controller
 
     def register_shelter(self, shelter: ShelterLocalRegistration) -> bool:
-        shelter_db = self._shelter_controller.get_shelter_by_email(shelter.email)
+        shelter_local = self._shelter_controller.get_shelter_by_email(shelter.email)
 
-        if shelter_db:
+        if shelter_local:
             raise HTTPException(status.HTTP_409_CONFLICT)
 
         return self._shelter_controller.create_shelter(shelter)
 
     def authorize_shelter(self, shelter: OAuth2PasswordRequestForm) -> TokenSchema:
-        shelter_db = self._shelter_controller.get_shelter_by_email(shelter.username)
+        shelter_db = self._shelter_controller._get_shelter_by_email(shelter.username)
         if not shelter_db or hash_data(shelter.password + shelter_db.salt) != shelter_db.password:
             raise HTTPException(status.HTTP_401_UNAUTHORIZED)
 
