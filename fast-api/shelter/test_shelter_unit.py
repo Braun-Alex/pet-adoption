@@ -16,7 +16,7 @@ import logging.config
 with open('logger_conf.yaml', 'r') as stream:
     config = yaml.load(stream, Loader=yaml.FullLoader)
 
-logger = logging.config.dictConfig(config)
+logging.config.dictConfig(config)
 
 logger = logging.getLogger(__name__)
 

@@ -43,7 +43,7 @@ def create_application(application: ApplicationIn):
 @application_router.get("/get/", response_model=List[ApplicationOut])
 def get_application(shelter_id: int = None, user_id: int = None):
     logger.info(f"Handling get request {shelter_id=}")
-    if shelter_id is not None and user_id is not None:
+    if (shelter_id is not None and user_id is not None) or (shelter_id is None and user_id is None):
         logger.warn(f"Request has 2 parameters {shelter_id=} and {user_id=}. Expect only 1.")
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
     

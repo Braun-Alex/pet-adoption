@@ -35,3 +35,5 @@ class TokenPayload(BaseModel):
     sub: str = None
     exp: datetime = None
     is_shelter: bool = None
+
+
