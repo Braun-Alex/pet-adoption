@@ -51,6 +51,29 @@ def setup_animal_controller_mock(mock_animal_controller, animal_controller_data:
     ]
 )
 def test_delete_animal(mock_animal_controller, animal_controller_data: AnimalControllerData, animal_id, sheler_id, expected_result):
+    """
+    Test the delete_animal method of the AnimalService class.
+
+    Parameters:
+    - mock_animal_controller: A mock object of the AnimalController class.
+    - animal_controller_data: An instance of the AnimalControllerData class containing data for the animal controller.
+    - animal_id: The ID of the animal to be deleted.
+    - shelter_id: The ID of the shelter where the animal is located.
+    - expected_result: The expected result of the delete operation.
+
+    Returns:
+    - None
+
+    Raises:
+    - AssertionError: If the result of the delete operation does not match the expected result.
+    - HTTPException: If an HTTP exception occurs during the delete operation.
+
+    Test Points:
+    - Shelter who owned an animal should be able to delete an animal successfully.
+    - Shelter who does not own an animal should not be able to delete the animal.
+    - Shelter who does not exist should not be able to delete the animal.
+
+    """
     setup_animal_controller_mock(mock_animal_controller, animal_controller_data)
     animal_service = AnimalService(animal_controller=mock_animal_controller)
     try:
@@ -58,43 +81,3 @@ def test_delete_animal(mock_animal_controller, animal_controller_data: AnimalCon
         assert result == expected_result, f"Expected {expected_result}, but got {result}"
     except HTTPException as e:
         assert e.status_code == expected_result, f"Expected {expected_result}, but got {e.status_code}"
-
-# @pytest.fixture()
-# def user_app_client() -> TestClient:
-#     logger.info(f"FIXTURE")
-#     return TestClient(app)
-
-# @pytest.fixture()
-# def new_user() -> UserLocalRegistration:
-#     return UserLocalRegistration(email="autotest", full_name="autotest", password="autotest")
-
-# def test_signup(user_app_client: TestClient,):
-#     test_client = user_app_client
-#     logger.info("Test started")
-#     logger.debug("DEBUG")
-#     logger.warning("warning")
-#     logger.error("error")
-
-#     logger.info(f"Model to JSON: ")
-#     # animal: AnimalLocalIn = AnimalLocalIn(name=)
-#     # response = test_client.get("/api/v1/users/exists/1")
-#     response  = test_client.post(
-#                                     "/api/v1/animals/add",
-                                   
-#                                     # json=new_user.model_dump_json(),
-#                                     json={
-#                                         "name": "animal_test",
-#                                         "type": "animal_test",
-#                                         "sex": "animal_test",
-#                                         "shelter_id": 5
-#                                         },
-#                                 )
-#     logger.info(f"{response=}")
-
-# def test_pass():
-#     logger.info("DUMMY TEST")
-#     assert True
-
-# def test_fail():
-#     logger.info("DUMMY TEST")
-#     assert False
