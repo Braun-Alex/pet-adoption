@@ -46,7 +46,7 @@ def setup_animal_controller_mock(mock_animal_controller, animal_controller_data:
     [
         pytest.param(AnimalControllerData(get_animal=animal, delete_animal=True), 1, 1, True, id="Delete animal happy path"),
         pytest.param(AnimalControllerData(get_animal=animal, delete_animal=False), 1, 2, status.HTTP_403_FORBIDDEN, id="Unauthorized delete animal"),
-        pytest.param(AnimalControllerData(get_animal=None, delete_animal=False), 1, None, True, id="Shelter is None"),
+        pytest.param(AnimalControllerData(get_animal=animal, delete_animal=False), 1, None, status.HTTP_403_FORBIDDEN, id="Shelter is None"),
        
     ]
 )

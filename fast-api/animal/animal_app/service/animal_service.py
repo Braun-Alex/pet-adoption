@@ -92,7 +92,7 @@ class AnimalService(AnimaServicelInterface):
     def delete_animal(self, id: int, shelter_id: int) -> bool:
         logger.info(f"Deleting animal with id: {id} and shelter_id: {shelter_id}")
         animal_db = self._animal_controller.get_animal(id)
-        if animal_db is not None and animal_db.shelter_id != shelter_id:
+        if (animal_db is not None and animal_db.shelter_id != shelter_id) or shelter_id is None :
             logger.warn(f"Shelter with shelter_id: {shelter_id} doesn't have an animal with id: {id}")
             raise HTTPException(status_code=403, detail=f"Shelter with shelter_id: {shelter_id} doesn't have a permission to remove animal with id: {id}")
         return self._animal_controller.delete_animal(animal_id=id)
