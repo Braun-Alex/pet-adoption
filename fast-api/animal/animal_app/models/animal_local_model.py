@@ -2,10 +2,10 @@ from pydantic import BaseModel
 from typing import Optional
 
 class AnimalLocalIn(BaseModel):
-    name:       str
-    photo:      str
-    type:       str
-    sex:        str
+    name:       Optional[str] = None
+    photo:      Optional[str] = None
+    type:       Optional[str] = None
+    sex:        Optional[str] = None
     month:      Optional[str] = None
     year:       Optional[str] = None
     shelter_id: int
