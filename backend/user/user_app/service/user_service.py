@@ -72,6 +72,9 @@ class UserService(UserServiceInterface):
         # return str(user_db)
         # return(UserLocalOutput(id=user_db.id, full_name=user_db.full_name, email=self._user_controller._encrypter.decrypt_data(user_db.email)))
         return convert_from_user_db_to_local(user_db=user_db)
+    
+    def delete_user(self, user_id: int) -> bool:
+        return self._user_controller.delete_user(user_id=user_id)
 
     # def get_user(self, user_id: str) -> str:
     #     user_db = self._user_controller.get_user_by_id(user_id)

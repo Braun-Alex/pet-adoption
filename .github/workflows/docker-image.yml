@@ -46,7 +46,7 @@ jobs:
 
   #     - name: Run Python script 
   #       run: |
-  #         cd fast-api/; pip install -r requirements.txt; pytest -s test.py 
+  #         cd backend/; pip install -r requirements.txt; pytest -s test.py
 
   #     - name: Stop Docker Compose Services
   #       run: docker-compose down

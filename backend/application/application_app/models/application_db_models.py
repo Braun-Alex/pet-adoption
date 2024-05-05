@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, Enum as EnumType
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 
-from utilities.common import ApplicationStatus
+from application_app.models.application_local_models import ApplicationStatus
 
 from application_app.db.database import Base
 

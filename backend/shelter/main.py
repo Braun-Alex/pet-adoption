@@ -13,10 +13,8 @@ app = FastAPI(openapi_url="/api/v1/shelter/openapi.json", docs_url="/api/v1/shel
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # або "*" для дозволу всіх джерел
     allow_origins=["*"],  # або "*" для дозволу всіх дж ерел
     allow_credentials=True,
-    allow_methods=["*"],  # Дозволяє всі методи
     allow_headers=["*"],  # Дозволяє всі заголовки
 )
 

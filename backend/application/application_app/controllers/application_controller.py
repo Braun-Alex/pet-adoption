@@ -168,6 +168,12 @@ class ApplicationController(ApplicationControllerInterface):
             self._db.commit()
             return ApplicationOut(**application.__dict__)
         return None
+    
+    def get_application_by_id(self, application_id: int) -> Optional[ApplicationOut]:
+        application = self.__get_application(id=application_id)
+        # if application:
+        return ApplicationOut(**application.__dict__)
+        # return None
 
     def list_applications(self) -> List[ApplicationOut]:
         applications = self._db.query(ApplicationDB).all()

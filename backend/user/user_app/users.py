@@ -67,3 +67,8 @@ def get_user(token_payload: TokenPayload = Depends(get_current_user)):
 def get_user_by_shelter(id: int, _: bool = Depends(get_current_user_by_shelter)):
     logger.info(f"Getting user profile with id {id} by shelter")
     return user_service.get_user(user_id=id)
+
+@users_route.delete("/delete", response_model=bool)
+def delete_user(token_payload: TokenPayload = Depends(get_current_user)):
+    logger.info(f"Handling DELETE: /user/delete with {token_payload=}")
+    return user_service.delete_user(user_id=token_payload.sub)

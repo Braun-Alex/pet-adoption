@@ -26,12 +26,12 @@ services:
 
 
   user_service:
-    build: ./fast-api/user
+    build: backend/user
     container_name: user_service
     # command: /usr/local/bin/db-check.sh user_db 5432 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
     volumes:
-      - ./fast-api/user/:/app/
+      - ./backend/user/:/app/
     ports:
       - "8000:8000"
     environment:
@@ -65,12 +65,12 @@ services:
       - my-network
 
   animal_service:
-    build: ./fast-api/animal
+    build: backend/animal
     container_name: animal_service
     # command: /usr/local/bin/db-check.sh animal_db 5432 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
     volumes:
-      - ./fast-api/animal/:/app/
+      - ./backend/animal/:/app/
       - ./data/images/:/app/data/images/
     ports:
       - "8001:8000"
@@ -137,12 +137,12 @@ services:
       - my-network
 
   shelter_service:
-    build: ./fast-api/shelter
+    build: backend/shelter
     container_name: shelter_service
     # command: /usr/local/bin/db-check.sh shelter_db 5432 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
     volumes:
-      - ./fast-api/shelter/:/app/
+      - ./backend/shelter/:/app/
     ports:
       - "8002:8000"
     environment:
@@ -161,12 +161,12 @@ services:
 
 
   application_service:
-    build: ./fast-api/application
+    build: backend/application
     container_name: application
     # command: /usr/local/bin/db-check.sh application_db 5432 uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000 --log-config=logger_conf.yaml
     volumes:
-      - ./fast-api/application:/app/
+      - ./backend/application:/app/
     ports:
       - "8003:8000"
     environment:

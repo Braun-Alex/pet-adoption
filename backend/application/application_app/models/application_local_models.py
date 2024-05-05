@@ -1,12 +1,16 @@
+from enum import Enum
 from typing import Optional
 from pydantic import BaseModel
 
-from utilities.common import ApplicationStatus
-
+# from utilities.common import ApplicationStatus
+class ApplicationStatus(Enum):
+    REJECTED = 0
+    ACCEPTED = 1
+    CREATED  = 2
 class ApplicationIn(BaseModel):
     """
         At this moment status:
-        1. status=2: application is opened
+        1. status=2: application is opened`
         2. status=1: application is accepted
         3. status=0: application is rejected
     """
@@ -34,3 +38,6 @@ class ApplicationUpdate(BaseModel):
     id: int
     status: ApplicationStatus
     shelter_id: int
+
+
+

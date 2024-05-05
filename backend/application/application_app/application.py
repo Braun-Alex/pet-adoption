@@ -41,16 +41,20 @@ def create_application(application: ApplicationIn):
     return application_service.add_application(application_in=application)
 
 @application_router.get("/get/", response_model=List[ApplicationOut])
-def get_application(shelter_id: int = None, user_id: int = None):
+def get_application(shelter_id: int = None, user_id: int = None, application_id: int = None):
     logger.info(f"Handling get request {shelter_id=}")
-    if (shelter_id is not None and user_id is not None) or (shelter_id is None and user_id is None):
-        logger.warn(f"Request has 2 parameters {shelter_id=} and {user_id=}. Expect only 1.")
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+
+    not_none_count = sum(x is not None for x in [shelter_id, user_id, application_id])
+    if not_none_count != 1:
+        logger.warn(f"Request has not 1 parameters {shelter_id=} and {user_id=}, {application_id=}. Expect only 1.")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)        
     
     if shelter_id is not None: 
         applications = application_service.get_application_by_shelter_id(shelter_id=shelter_id) 
-    else: # user_id not None
+    elif user_id is not None: # user_id not None
         applications = application_service.get_application_by_user_id(user_id=user_id)
+    else: # application_id not None
+        pass
     logger.info(f"Get applications from DB: {applications}")
 
     return applications if applications else [ApplicationOut]

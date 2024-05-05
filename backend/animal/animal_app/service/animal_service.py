@@ -37,7 +37,7 @@ class AnimalService(AnimaServicelInterface):
         self._animal_controller = animal_controller
         self._shelter_url = os.getenv('SHELTER_SERVICE_HOST_URL')
 
-    def add_animal(self, animal_local: AnimalLocalIn) -> Optional[AnimalLocalOut]:
+    def  add_animal(self, animal_local: AnimalLocalIn) -> Optional[AnimalLocalOut]:
         # logger.info(f"Verifying if shelter with shelter_id: {animal_local.shelter_id} exists...")
         # if not self.is_shelter_presented(animal_local.shelter_id):
             # logger.warn(f"Shelter with shelter_id: {animal_local.shelter_id} doesn't exist")
@@ -64,6 +64,11 @@ class AnimalService(AnimaServicelInterface):
     def get_animal(self, animal_id: int) -> AnimalLocalOut:
         # Retrieve animal from the database using the AnimalController
         animal_db = self._animal_controller.get_animal(animal_id)
+
+        logger.info(f"Animal with id: {animal_id} is {animal_db=}")
+
+        if animal_db is None:
+            raise HTTPException(status_code=404, detail=f"Animal with id: {animal_id} not found")
 
         # Convert AnimalDB object to AnimalLocalOut
         animal_local = AnimalLocalOut(**animal_db.__dict__)

@@ -105,7 +105,7 @@ class ApplicationService(ApplicationServiceInterface):
         if  self.user_exists(user_id=application_in.user_id) == False or \
             self.shelter_exists(shelter_id=application_in.shelter_id)==False:
 
-         raise HTTPException(status.HTTP_400_BAD_REQUEST)
+            raise HTTPException(status.HTTP_400_BAD_REQUEST)
 
         return self._controller.create_application(application_in)
 
@@ -120,6 +120,10 @@ class ApplicationService(ApplicationServiceInterface):
     def get_application_by_user_id(self, user_id: int) -> Optional[ApplicationOut]:
         logger.info(f"Application Service: {user_id=}")
         return self._controller.get_application_by_user_id(user_id=user_id)
+    
+    def get_application_by_id(self, application_id: int) -> Optional[ApplicationOut]:
+        logger.info(f"Application Service: {application_id=}")
+        return self._controller.get_application_by_id(application_id=application_id)
 
     def update_application(self, application_update: ApplicationUpdate) -> Optional[ApplicationOut]:
         updated_application = self._controller.update_application(application_update)
