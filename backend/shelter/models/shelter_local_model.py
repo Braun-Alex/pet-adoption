@@ -12,8 +12,8 @@ class ShelterLocal(BaseModel):
 
 
 class ShelterLocalRegistration(BaseModel):
-    email: str
     name: str
+    email: str
     password: str
 
 class ShelterLocaAuthorization(BaseModel):

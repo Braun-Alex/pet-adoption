@@ -123,7 +123,7 @@ class ApplicationService(ApplicationServiceInterface):
     
     def get_application_by_id(self, application_id: int) -> Optional[ApplicationOut]:
         logger.info(f"Application Service: {application_id=}")
-        return self._controller.get_application_by_id(application_id=application_id)
+        return self._controller.get_application(application_id=application_id)
 
     def update_application(self, application_update: ApplicationUpdate) -> Optional[ApplicationOut]:
         updated_application = self._controller.update_application(application_update)

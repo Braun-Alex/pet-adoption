@@ -64,6 +64,18 @@ class ApplicationControllerInterface(ABC):
         """
 
     @abstractmethod
+    def get_application_by_id(self, application_id: int) -> Optional[ApplicationOut]:
+        """
+        Get information about an application by its ID.
+
+        Args:
+            application_id (int): The ID of the application to retrieve.
+
+        Returns:
+            Optional[ApplicationOut]: Information about the application if found, else None.
+        """
+
+    @abstractmethod
     def update_application(self, application_update: ApplicationUpdate) -> Optional[ApplicationOut]:
         """
         Update information about an application and return the updated information.
@@ -106,17 +118,17 @@ class ApplicationController(ApplicationControllerInterface):
         return self._db.query(ApplicationDB).filter(ApplicationDB.id == id).first()
         
 
-    def create_application(self, application_in: ApplicationIn) -> bool:
+    def create_application(self, application_in: ApplicationIn) -> int:
         new_application = ApplicationDB(**application_in.model_dump())
         self._db.add(new_application)
         self._db.commit()
         self._db.refresh(new_application)
-        return True
+        return new_application.id
 
     def get_application(self, application_id: int) -> Optional[ApplicationOut]:
         application = self.__get_application(id=application_id)
         if application:
-            return ApplicationOut(**application.__dict__)
+            return [ApplicationOut(**application.__dict__)]
         return None
 
     def get_application_by_shelter_id(self, shelter_id: int) -> Optional[List[ApplicationOut]]:

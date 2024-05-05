@@ -113,7 +113,11 @@ class ApplicationUtils:
     
     @staticmethod
     def get_application(application_id: int):
-        return requests.get(url=f"http://localhost:8080/api/v1/applications/{application_id}")
+        return requests.get(url=f"http://localhost:8080/api/v1/applications/get/?application_id={application_id}")
+    
+    @staticmethod
+    def update_application(application_data: ApplicationUpdate):
+        return requests.post(url="http://localhost:8080/api/v1/applications/update_status", json={"id": application_data.id, "status": application_data.status.value, "shelter_id": application_data.shelter_id, "id": application_data.id})
     
 class UserUtils:
     def __init__(self):
@@ -147,7 +151,7 @@ class UserUtils:
 
     @staticmethod
     def user_id(jwt_token: str):
-        return __class__.get_user_profile(jwt_token=jwt_token).json()['id']
+        return __class__.get_user_profile(jwt_token=jwt_token).id
 
     @staticmethod
     def remove_user(jwt_token: str):
