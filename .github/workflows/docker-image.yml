@@ -46,7 +46,7 @@ jobs:
 
       - name: Run Python script 
         run: |
-          cd backend/; pip install -r requirements.txt; pytest -sv test.py
+          cd backend/; pip install -r requirements.txt; cd tests/; pytest -sv test.py
 
       - name: Stop Docker Compose Services
         run: docker-compose down
