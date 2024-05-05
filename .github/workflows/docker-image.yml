@@ -34,22 +34,22 @@ jobs:
       - name: Stop Docker Compose Services
         run: docker-compose down
 
-  # animal_shelter_service_test:
-  #   runs-on: ubuntu-latest
-  #   needs: [build]
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v2
+  end_to_end_test:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-  #     - name: Start Docker Compose Services
-  #       run: docker-compose up -d
+      - name: Start Docker Compose Services
+        run: docker-compose up -d
 
-  #     - name: Run Python script 
-  #       run: |
-  #         cd backend/; pip install -r requirements.txt; pytest -s test.py
+      - name: Run Python script 
+        run: |
+          cd backend/; pip install -r requirements.txt; pytest -sv test.py
 
-  #     - name: Stop Docker Compose Services
-  #       run: docker-compose down
+      - name: Stop Docker Compose Services
+        run: docker-compose down
 
   animal_service_unit_test:
     runs-on: ubuntu-latest
