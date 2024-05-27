@@ -1,13 +1,15 @@
+import pytest
+
 from application_app.service.application_service import ApplicationService
 from application_app.controllers.application_controller import ApplicationController
 from application_app.models.application_local_models import  ApplicationOut, ApplicationStatus
-from application_app.application import get_application
+from  application_app.application import get_application
 import yaml
 import logging.config
 
 from fastapi import status, HTTPException
 
-import pytest
+
 from unittest.mock import patch
 
 with open('/app/logger_conf.yaml', 'r') as stream:

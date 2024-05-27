@@ -1,18 +1,18 @@
 from typing import Optional
 from pydantic import BaseModel
-from backend.shelter.models.shelter_local_model import ShelterLocalRegistration, ShelterLocalOutput
-from backend.animal.animal_app.models.animal_local_model import AnimalLocalOut
+from shelter.models.shelter_local_model import ShelterLocalRegistration, ShelterLocalOutput
+from animal.animal_app.models.animal_local_model import AnimalLocalOut
 # from backend.animal.main import app 
 
-from backend.user.user_app.models.user_local_model import UserLocalOutput, UserLocalRegistration
+from user.user_app.models.user_local_model import UserLocalOutput, UserLocalRegistration
 # from backend.user.user_app.users import register_user, authorize_user, get_user
 
-from backend.application.application_app.models.application_local_models import ApplicationIn, ApplicationStatus, ApplicationUpdate, ApplicationOut
+from application.application_app.models.application_local_models import ApplicationIn, ApplicationStatus, ApplicationUpdate, ApplicationOut
 
 import pytest
 import logging
 
-from backend.tests.utils import ShelterUtils, AnimalsUtils, ApplicationUtils, UserUtils
+from tests.utils import ShelterUtils, AnimalsUtils, ApplicationUtils, UserUtils
 
 import requests
 
